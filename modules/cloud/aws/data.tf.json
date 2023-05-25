@@ -1,0 +1,10 @@
+{
+  "data": {
+    "aws_caller_identity": {
+      "provider": {}
+    },
+    "aws_region": {
+      "provider": {}
+    }
+  }
+}
