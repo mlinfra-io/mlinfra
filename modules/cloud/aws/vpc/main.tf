@@ -1,8 +1,8 @@
 module "vpc_subnet_module" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "4.0.2"
+  version = "5.0.0"
 
-  name = "my-vpc"
+  name = "ultimate-mlops-stack-vpc"
   cidr = "10.0.0.0/16"
 
   azs             = local.azs
