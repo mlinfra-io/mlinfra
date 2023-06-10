@@ -35,3 +35,5 @@ terraform.rc
 
 # Ignore terraform lock files
 .terraform.lock.hcl
+
+.mlops_stack/
