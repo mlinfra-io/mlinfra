@@ -1,17 +1,19 @@
-module "vpc_subnet_module" {
+module "vpc_module" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.0.0"
 
-  name = "ultimate-mlops-stack-vpc"
-  cidr = "10.0.0.0/16"
+  depends_on = [aws_s3_bucket.vpc_logs_bucket]
+
+  name = var.name
+  cidr = var.cidr_block
 
   azs             = local.azs
-  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k)]
-  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 4)]
+  private_subnets = var.private_subnet_cidr
+  public_subnets  = var.public_subnet_cidr
 
   enable_nat_gateway     = true
   single_nat_gateway     = false
-  one_nat_gateway_per_az = false
+  one_nat_gateway_per_az = var.one_nat_gateway_per_az
 
   enable_vpn_gateway = false
 
