@@ -65,7 +65,3 @@ module "ec2_instance" {
 
   tags = var.tags
 }
-
-output "ec2_dns_address" {
-  value = module.ec2_instance.public_dns
-}
