@@ -119,10 +119,11 @@ class Terraform:
                 # )
                 json.dump(data, tf_json, ensure_ascii=False, indent=2)
 
-    # probably don't need this function
-    def _read_config_data(self, module_name: str, extension: str = "yaml") -> json:
+    def _read_config_file(
+        self, stack_type: str, application_name: str, extension: str = "yaml"
+    ) -> json:
         with open(
-            f"modules/cloud/aws/{module_name}/{module_name.replace('_','-')}.{extension}",
+            f"modules/applications/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}",
             "r",
             encoding="utf-8",
         ) as tf_config:
@@ -169,15 +170,17 @@ class Terraform:
                 }
             )
 
-            # output_schema = self._read_config_data(module_name=name)
-            # if output_schema is not None and "outputs" in output_schema:
-            #     for o in output_schema["outputs"]:
-            #         if o["export"]:
-            #             output_val = (
-            #                 "${ %s }" % f"module.{module['module_name']}.{o['name']}"
-            #             )
+            application_config = self._read_config_file(
+                stack_type=stack_type, application_name=name
+            )
+            if application_config is not None and "outputs" in application_config:
+                for output in application_config["outputs"]:
+                    if output["export"]:
+                        output_val = "${ %s }" % f"module.{name}.{output['name']}"
 
-            #             self.output["output"].append({o["name"]: {"value": output_val}})
+                        self.output["output"].append(
+                            {output["name"]: {"value": output_val}}
+                        )
 
             # fetching json schema from module and adding the missing variables
             # to the module definition before applying terraform plan

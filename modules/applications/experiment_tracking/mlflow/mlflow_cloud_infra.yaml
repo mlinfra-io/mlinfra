@@ -1,0 +1,27 @@
+inputs:
+  - name: vpc_id
+    user_facing: false
+    description: VPC id
+    default: None
+  - name: default_vpc_sg
+    user_facing: false
+    description: Default VPC security group
+    default: None
+  - name: subnet_id
+    user_facing: false
+    description: VPC Subnet ID for EC2
+    default: None
+  - name: mlflow_version
+    user_facing: true
+    description: MLFlow pypa version
+    default: "2.4.0"
+  - name: ec2_application_port
+    user_facing: true
+    description: Application port for MLFlow application
+    default: 80
+outputs:
+  - name: mlflow_server_address
+    description: MLFlow server address. Right now its composed of EC2 instance IP address, with http scheme.
+    export: true
+clouds:
+  - aws
