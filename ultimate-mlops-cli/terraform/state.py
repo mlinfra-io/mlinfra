@@ -1,14 +1,3 @@
-"""
-This work is created with help and reference from
-https://github.com/run-x/opta/blob/main/opta/core/terraform.py#L704
-The idea is to store the terraform state in a S3 bucket and DynamoDB table
-in a secure and reliable way. This is done by creating a S3 bucket with
-versioning and lifecycle rules enabled. The lifecycle rules are set to
-send the non current state files versions after 30 days to S3 GLACIER Storage
-class where they expire after 60 days of storage. The DynamoDB table is used to
-store the state lock information. This is done to prevent concurrent state operations.
-"""
-
 import time
 
 from boto3 import client
