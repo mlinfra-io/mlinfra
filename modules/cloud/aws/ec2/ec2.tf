@@ -50,7 +50,7 @@ module "ec2_instance" {
 
   ami = data.aws_ami.amazon_linux_2023.id
 
-  create_spot_instance        = true
+  create_spot_instance        = var.ec2_spot_instance
   associate_public_ip_address = true
 
   root_block_device = [

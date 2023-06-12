@@ -25,6 +25,11 @@ variable "ec2_instance_type" {
   default = "t2.micro"
 }
 
+variable "ec2_spot_instance" {
+  type    = bool
+  default = true
+}
+
 variable "ec2_user_data" {
   type    = string
   default = <<-EOF
