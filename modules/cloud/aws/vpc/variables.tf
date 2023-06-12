@@ -26,6 +26,20 @@ variable "private_subnet_cidr" {
   ]
 }
 
+variable "create_database_subnets" {
+  type    = bool
+  default = false
+}
+
+variable "database_subnets" {
+  type = list(string)
+  default = [
+    "10.0.64.0/20",
+    "10.0.80.0/20",
+    "10.0.96.0/20"
+  ]
+}
+
 variable "one_nat_gateway_per_az" {
   type    = bool
   default = false

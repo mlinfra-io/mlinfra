@@ -1,3 +1,7 @@
+locals {
+  db_subnets = var.create_database_subnets ? var.database_subnets : []
+}
+
 module "vpc_module" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.0.0"
@@ -7,9 +11,12 @@ module "vpc_module" {
   name = var.name
   cidr = var.cidr_block
 
-  azs             = local.azs
-  private_subnets = var.private_subnet_cidr
-  public_subnets  = var.public_subnet_cidr
+  azs              = local.azs
+  private_subnets  = var.private_subnet_cidr
+  public_subnets   = var.public_subnet_cidr
+  database_subnets = local.db_subnets
+
+  create_database_subnet_group = var.create_database_subnets
 
   enable_nat_gateway     = true
   single_nat_gateway     = false
