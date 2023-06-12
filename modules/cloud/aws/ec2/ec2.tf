@@ -1,3 +1,33 @@
+resource "aws_security_group" "ec2_security_group" {
+  name        = "${var.ec2_instance_name}-security-group"
+  description = "Security group for ${var.ec2_instance_name}"
+
+  vpc_id = var.vpc_id
+
+  dynamic "ingress" {
+    for_each = local.ingress_rules
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+      description = ingress.value.description
+    }
+  }
+
+  # Allows instance to access the internet
+  dynamic "egress" {
+    for_each = local.egress_rules
+    content {
+      from_port   = egress.value.from_port
+      to_port     = egress.value.to_port
+      protocol    = egress.value.protocol
+      cidr_blocks = egress.value.cidr_blocks
+      description = egress.value.description
+    }
+  }
+}
+
 data "aws_ami" "amazon_linux_2023" {
   most_recent = true
   owners      = ["amazon"]
@@ -8,42 +38,12 @@ data "aws_ami" "amazon_linux_2023" {
   }
 }
 
-resource "aws_security_group" "mlflow_sg" {
-  name        = "${var.ec2_instance_name}-security-group"
-  description = "Security group for ${var.ec2_instance_name}"
-
-  vpc_id = var.vpc_id
-
-  # Allows SSH access from AWS Console for trouble shooting
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = var.ec2_application_port
-    to_port     = var.ec2_application_port
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  # Allows instance to access the internet
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "5.0.0"
 
   subnet_id              = var.ec2_subnet_id
-  vpc_security_group_ids = [var.default_vpc_sg, aws_security_group.mlflow_sg.id]
+  vpc_security_group_ids = [var.default_vpc_sg, resource.aws_security_group.ec2_security_group.id]
 
   name          = var.ec2_instance_name
   instance_type = var.ec2_instance_type

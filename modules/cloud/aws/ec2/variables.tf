@@ -8,6 +8,10 @@ variable "default_vpc_sg" {
   # module.vpc_subnet_module.default_security_group_id
 }
 
+variable "vpc_cidr_block" {
+  type = string
+}
+
 variable "ec2_subnet_id" {
   type = string
 }
@@ -40,4 +44,9 @@ variable "tags" {
 
 variable "ec2_application_port" {
   type = number
+}
+
+variable "enable_rds_ingress_rule" {
+  type    = bool
+  default = false
 }
