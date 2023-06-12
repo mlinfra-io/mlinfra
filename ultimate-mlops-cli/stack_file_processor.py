@@ -167,6 +167,8 @@ class Terraform:
                     "vpc_id": "${module.vpc.vpc_id}",
                     "subnet_id": "${module.vpc.subnet_id[0]}",
                     "default_vpc_sg": "${module.vpc.default_vpc_sg}",
+                    "vpc_cidr_block": "${module.vpc.vpc_cidr_block}",
+                    "db_subnet_group_name": "${module.vpc.database_subnet_group}",
                 }
             )
 
