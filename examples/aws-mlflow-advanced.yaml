@@ -5,8 +5,8 @@ provider:
   region: "eu-central-1"
   deployment_type: cloud_infra
 stacks:
-  experiment_tracking:
-    name: mlflow
-    parameters:
-      MlflowS3BucketName: mlflow-test-bucket
-      MlflowS3BucketKmsKeyArn: "arn:aws:kms:eu-central-1"
+  - experiment_tracking:
+      name: mlflow
+      params:
+        MlflowS3BucketName: mlflow-test-bucket
+        MlflowS3BucketKmsKeyArn: "arn:aws:kms:eu-central-1"
