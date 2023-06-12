@@ -11,6 +11,14 @@ inputs:
     user_facing: false
     description: VPC Subnet ID for EC2
     default: None
+  - name: vpc_cidr_block
+    user_facing: false
+    description: VPC CIDR block required for SG of RDS
+    default: None
+  - name: db_subnet_group_name
+    user_facing: false
+    description: DB Subnet group name
+    default: None
   - name: mlflow_version
     user_facing: true
     description: MLFlow pypa version
@@ -19,6 +27,10 @@ inputs:
     user_facing: true
     description: Application port for MLFlow application
     default: 80
+  - name: remote_tracking
+    user_facing: true
+    description: Deployed an external RDS server as backend store and S3 as artifact store for MLFlow. More info on [MLFlow official site](https://mlflow.org/docs/latest/tracking.html#scenario-4-mlflow-with-remote-tracking-server-backend-and-artifact-stores)
+    default: false
 outputs:
   - name: mlflow_server_address
     description: MLFlow server address. Right now its composed of EC2 instance IP address, with http scheme.
