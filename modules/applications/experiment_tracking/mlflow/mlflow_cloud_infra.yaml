@@ -35,5 +35,8 @@ outputs:
   - name: mlflow_server_address
     description: MLFlow server address. Right now its composed of EC2 instance IP address, with http scheme.
     export: true
+  - name: mlflow_server_dns_address
+    description: MLFlow server DNS address.
+    export: true
 clouds:
   - aws

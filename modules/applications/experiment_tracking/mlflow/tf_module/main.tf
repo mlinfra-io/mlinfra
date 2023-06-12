@@ -23,13 +23,14 @@ module "mlflow_rds_backend" {
   tags           = var.tags
 }
 
-module "mlflow_application" {
+module "mlflow" {
   source                  = "../../../../cloud/aws/ec2"
   vpc_id                  = var.vpc_id
   default_vpc_sg          = var.default_vpc_sg
   vpc_cidr_block          = var.vpc_cidr_block
   ec2_subnet_id           = var.subnet_id
   ec2_instance_name       = "mlflow-server"
+  ec2_spot_instance       = var.ec2_spot_instance
   ec2_application_port    = var.ec2_application_port
   enable_rds_ingress_rule = var.remote_tracking
 
