@@ -27,6 +27,10 @@ inputs:
     user_facing: true
     description: Application port for MLFlow application
     default: 80
+  - name: ec2_spot_instance
+    user_facing: true
+    description: Configures the deployment of either an on demand or spot instance.
+    default: true
   - name: remote_tracking
     user_facing: true
     description: Deployed an external RDS server as backend store and S3 as artifact store for MLFlow. More info on [MLFlow official site](https://mlflow.org/docs/latest/tracking.html#scenario-4-mlflow-with-remote-tracking-server-backend-and-artifact-stores)
