@@ -1,34 +1,36 @@
 import json
 import os
-import shutil
 import yaml
 
-from enums.provider import Provider
-from enums.deployment_type import DeploymentType
+from .enums.provider import Provider
+from .enums.deployment_type import DeploymentType
 
-tf_path = "./.mlops_stack"
+from .utils.constants import TF_PATH
+from .utils.utils import clean_tf_directory
 
 
-class Terraform:
+class StackfileProcessor:
     def __init__(self, stack_config_path):
         self.stack = stack_config_path
         self.stack_name = ""
         self.account_id = ""
         self.provider = "aws"
         self.deployment_type = ""
-        self.state = ""
+        self.state_file_name = ""
         self.is_stack_component = True
         self.stack_config = self.init_stack_config()
         self.output = {"output": []}
 
-    def get_state(self):
-        return self.state
+    def get_state_file_name(self):
+        return self.state_file_name
+
+    def get_region(self):
+        return self.region
 
     def init_stack_config(self):
-        if os.path.isdir(tf_path):
-            shutil.rmtree(tf_path)
+        clean_tf_directory()
 
-        os.makedirs(tf_path, mode=0o777)
+        os.makedirs(TF_PATH, mode=0o777)
         with open(self.stack, "r") as stack_config:
             config = yaml.safe_load(stack_config.read())
             self.stack_name = config["name"]
@@ -40,7 +42,7 @@ class Terraform:
                 self.deployment_type = DeploymentType(
                     config["provider"]["deployment_type"]
                 )
-                self.state = f"tfstate-{self.stack_name}-{self.region}"
+            self.state_file_name = f"tfstate-{self.stack_name}-{self.region}"
             return config
 
     def prepare_common_configuration(self):
@@ -52,7 +54,7 @@ class Terraform:
                 contains_kubernetes = True
 
         with open("modules/cloud/aws/data.tf.json", "r") as data_json:
-            with open(f"./{tf_path}/data.tf.json", "w", encoding="utf-8") as tf_json:
+            with open(f"./{TF_PATH}/data.tf.json", "w", encoding="utf-8") as tf_json:
                 json_data = json.load(data_json)
 
                 if contains_kubernetes:
@@ -65,9 +67,9 @@ class Terraform:
                         "parent": {
                             "backend": "s3",
                             "config": {
-                                "bucket": self.state,
+                                "bucket": self.state_file_name,
                                 "key": "ultimate-mlops-stack",
-                                "dynamodb_table": self.state,
+                                "dynamodb_table": self.state_file_name,
                                 "region": self.region,
                             },
                         }
@@ -76,7 +78,7 @@ class Terraform:
 
         with open("modules/cloud/aws/provider.tf.json", "r") as data_json:
             with open(
-                f"./{tf_path}/provider.tf.json", "w", encoding="utf-8"
+                f"./{TF_PATH}/provider.tf.json", "w", encoding="utf-8"
             ) as tf_json:
                 data = json.load(data_json)
                 data["provider"]["aws"]["region"] = self.region
@@ -98,25 +100,26 @@ class Terraform:
 
         with open("modules/cloud/aws/terraform.tf.json", "r") as data_json:
             with open(
-                f"./{tf_path}/terraform.tf.json", "w", encoding="utf-8"
+                f"./{TF_PATH}/terraform.tf.json", "w", encoding="utf-8"
             ) as tf_json:
                 data = json.load(data_json)
 
                 if contains_kubernetes:
                     print("Add helm and kubernetes provider")
 
-                # data["terraform"].update(
-                #     {
-                #         "backend": {
-                #             "s3": {
-                #                 "bucket": self.state,
-                #                 "key": "ultimate-mlops-stack",
-                #                 "dynamodb_table": self.state,
-                #                 "region": self.region,
-                #             }
-                #         }
-                #     }
-                # )
+                data["terraform"].update(
+                    {
+                        "backend": {
+                            "s3": {
+                                "bucket": self.state_file_name,
+                                "key": "ultimate-mlops-stack",
+                                "dynamodb_table": self.state_file_name,
+                                "region": self.region,
+                                "encrypt": True,
+                            }
+                        }
+                    }
+                )
                 json.dump(data, tf_json, ensure_ascii=False, indent=2)
 
     def _read_config_file(
@@ -139,12 +142,13 @@ class Terraform:
             json_module["module"][name]["name"] = f"{self.stack_name}-vpc"
             json_module["module"][name]["source"] = f"../modules/cloud/aws/{name}"
 
-            with open(f"./{tf_path}/{name}.tf.json", "w", encoding="utf-8") as tf_json:
+            with open(f"./{TF_PATH}/{name}.tf.json", "w", encoding="utf-8") as tf_json:
                 json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
         elif self.provider == Provider.GCP:
             pass
 
         for module in self.stack_config["stacks"]:
+            # extracting stack type
             stack_type = [key for key in module.keys()][0]
 
             if "name" in module[stack_type]:
@@ -160,48 +164,48 @@ class Terraform:
                 "source"
             ] = f"../modules/applications/{stack_type}/{name}/tf_module"
 
-            # TODO: stitch together the inputs from vpc or other deployment type
-            # stack
-            json_module["module"][name].update(
-                {
-                    "vpc_id": "${module.vpc.vpc_id}",
-                    "subnet_id": "${module.vpc.subnet_id[0]}",
-                    "default_vpc_sg": "${module.vpc.default_vpc_sg}",
-                    "vpc_cidr_block": "${module.vpc.vpc_cidr_block}",
-                    "db_subnet_group_name": "${module.vpc.database_subnet_group}",
-                }
-            )
-
+            # Reading inputs and outputs from the config file
+            # placed in the applications/application folder and
+            # adding them to json config for the application module
             application_config = self._read_config_file(
                 stack_type=stack_type, application_name=name
             )
-            if application_config is not None and "outputs" in application_config:
-                for output in application_config["outputs"]:
-                    if output["export"]:
-                        output_val = "${ %s }" % f"module.{name}.{output['name']}"
+            if application_config is not None:
+                if "inputs" in application_config:
+                    inputs = {}
+                    for input in application_config["inputs"]:
+                        if not input["user_facing"]:
+                            input_name = input["name"]
+                            input_value = "${ %s }" % f"{input['value']}"
+                            inputs.update({input_name: input_value})
+                        json_module["module"][name].update(inputs)
 
-                        self.output["output"].append(
-                            {output["name"]: {"value": output_val}}
-                        )
+                if "outputs" in application_config:
+                    for output in application_config["outputs"]:
+                        if output["export"]:
+                            output_val = "${ %s }" % f"module.{name}.{output['name']}"
 
-            # fetching json schema from module and adding the missing variables
-            # to the module definition before applying terraform plan
-            # module_json_schema = self._read_config_data(
-            #     module_name=module_name, extension="json"
-            # )
-            # if module_json_schema is not None and "message" not in module_json_schema:
-            #     if "properties" in module_json_schema:
-            #         for item in module_json_schema["properties"]:
-            #             if (
-            #                 item not in json_module["module"][name]
-            #                 and "enum" not in module_json_schema["properties"][item]
-            #             ):
-            #                 json_module["module"][name][item] = module_json_schema[
-            #                     "properties"
-            #                 ][item].get("default")
+                            self.output["output"].append(
+                                {output["name"]: {"value": output_val}}
+                            )
+
+            # Checks if there are params in the config file which can be
+            # passed to the application module. Params are checked against
+            # the application module yaml file
+            if "params" in module[stack_type]:
+                # TODO: throw error for a param not existing in the yaml config
+                params = {}
+                for key, value in module[stack_type]["params"].items():
+                    for input in application_config["inputs"]:
+                        if key == input["name"]:
+                            if input["user_facing"]:
+                                params.update({key: value})
+                            else:
+                                raise KeyError(f"{key} is not a user facing parameter")
+                json_module["module"][name].update(params)
 
             with open(
-                f"./{tf_path}/stack_{stack_type}.tf.json", "w", encoding="utf-8"
+                f"./{TF_PATH}/stack_{stack_type}.tf.json", "w", encoding="utf-8"
             ) as tf_json:
                 json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
 
@@ -228,7 +232,7 @@ class Terraform:
         return k8s_module_name
 
     def prepare_stack_outputs(self):
-        self.output["output"].append({"state_storage": {"value": self.state}})
+        self.output["output"].append({"state_storage": {"value": self.state_file_name}})
         self.output["output"].append(
             {
                 "providers": {
@@ -241,7 +245,7 @@ class Terraform:
                 }
             }
         )
-        with open(f"./{tf_path}/output.tf.json", "w", encoding="utf-8") as tf_json:
+        with open(f"./{TF_PATH}/output.tf.json", "w", encoding="utf-8") as tf_json:
             json.dump(self.output, tf_json, ensure_ascii=False, indent=2)
 
     def _common_service_input(self) -> any:
@@ -291,7 +295,7 @@ class Terraform:
             json_output["variable"].extend(self._default_config_input())
 
             with open(
-                f"./{tf_path}/variable.tf.json", "w", encoding="utf-8"
+                f"./{TF_PATH}/variable.tf.json", "w", encoding="utf-8"
             ) as tf_json:
                 json.dump(json_output, tf_json, ensure_ascii=False, indent=2)
 
@@ -303,5 +307,5 @@ class Terraform:
 
 
 if __name__ == "__main__":
-    tf = Terraform(stack_config_path="examples/aws-mlflow.yaml")
+    tf = StackfileProcessor(stack_config_path="examples/aws-mlflow.yaml")
     tf.generate()
