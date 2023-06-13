@@ -7,7 +7,6 @@ from .enums.deployment_type import DeploymentType
 
 from .utils.constants import TF_PATH
 from .utils.utils import clean_tf_directory
-from .terraform.terraform_state_helper import TerraformStateHelper
 
 
 class StackfileProcessor:
@@ -164,45 +163,30 @@ class StackfileProcessor:
                 "source"
             ] = f"../modules/applications/{stack_type}/{name}/tf_module"
 
-            # TODO: stitch together the inputs from vpc or other deployment type
-            # stack
-            json_module["module"][name].update(
-                {
-                    "vpc_id": "${module.vpc.vpc_id}",
-                    "subnet_id": "${module.vpc.subnet_id[0]}",
-                    "default_vpc_sg": "${module.vpc.default_vpc_sg}",
-                    "vpc_cidr_block": "${module.vpc.vpc_cidr_block}",
-                    "db_subnet_group_name": "${module.vpc.database_subnet_group}",
-                }
-            )
-
+            # Reading inputs and outputs from the config file
+            # placed in the applications/application folder and
+            # adding them to json config for the application module
             application_config = self._read_config_file(
                 stack_type=stack_type, application_name=name
             )
-            if application_config is not None and "outputs" in application_config:
-                for output in application_config["outputs"]:
-                    if output["export"]:
-                        output_val = "${ %s }" % f"module.{name}.{output['name']}"
+            if application_config is not None:
+                if "inputs" in application_config:
+                    inputs = {}
+                    for input in application_config["inputs"]:
+                        if not input["user_facing"]:
+                            input_name = input["name"]
+                            input_value = "${ %s }" % f"{input['value']}"
+                            inputs.update({input_name: input_value})
+                        json_module["module"][name].update(inputs)
 
-                        self.output["output"].append(
-                            {output["name"]: {"value": output_val}}
-                        )
+                if "outputs" in application_config:
+                    for output in application_config["outputs"]:
+                        if output["export"]:
+                            output_val = "${ %s }" % f"module.{name}.{output['name']}"
 
-            # fetching json schema from module and adding the missing variables
-            # to the module definition before applying terraform plan
-            # module_json_schema = self._read_config_data(
-            #     module_name=module_name, extension="json"
-            # )
-            # if module_json_schema is not None and "message" not in module_json_schema:
-            #     if "properties" in module_json_schema:
-            #         for item in module_json_schema["properties"]:
-            #             if (
-            #                 item not in json_module["module"][name]
-            #                 and "enum" not in module_json_schema["properties"][item]
-            #             ):
-            #                 json_module["module"][name][item] = module_json_schema[
-            #                     "properties"
-            #                 ][item].get("default")
+                            self.output["output"].append(
+                                {output["name"]: {"value": output_val}}
+                            )
 
             with open(
                 f"./{TF_PATH}/stack_{stack_type}.tf.json", "w", encoding="utf-8"
@@ -308,8 +292,4 @@ class StackfileProcessor:
 
 if __name__ == "__main__":
     tf = StackfileProcessor(stack_config_path="examples/aws-mlflow.yaml")
-    state_helper = TerraformStateHelper(
-        state=tf.get_state_file_name(), region=tf.get_region()
-    )
-    state_helper.manage_aws_state_storage()
     tf.generate()
