@@ -148,6 +148,7 @@ class StackfileProcessor:
             pass
 
         for module in self.stack_config["stacks"]:
+            # extracting stack type
             stack_type = [key for key in module.keys()][0]
 
             if "name" in module[stack_type]:
@@ -187,6 +188,21 @@ class StackfileProcessor:
                             self.output["output"].append(
                                 {output["name"]: {"value": output_val}}
                             )
+
+            # Checks if there are params in the config file which can be
+            # passed to the application module. Params are checked against
+            # the application module yaml file
+            if "params" in module[stack_type]:
+                # TODO: throw error for a param not existing in the yaml config
+                params = {}
+                for key, value in module[stack_type]["params"].items():
+                    for input in application_config["inputs"]:
+                        if key == input["name"]:
+                            if input["user_facing"]:
+                                params.update({key: value})
+                            else:
+                                raise KeyError(f"{key} is not a user facing parameter")
+                json_module["module"][name].update(params)
 
             with open(
                 f"./{TF_PATH}/stack_{stack_type}.tf.json", "w", encoding="utf-8"
