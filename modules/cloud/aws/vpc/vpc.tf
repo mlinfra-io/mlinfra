@@ -1,7 +1,3 @@
-locals {
-  db_subnets = var.create_database_subnets ? var.database_subnets : []
-}
-
 resource "aws_s3_bucket" "vpc_logs_bucket" {
   count = var.enable_flow_log ? 1 : 0
 
@@ -33,6 +29,11 @@ resource "aws_s3_bucket_lifecycle_configuration" "flow_logs_lifecycle" {
   }
 }
 
+locals {
+  db_subnets               = var.create_database_subnets ? var.database_subnets : []
+  flow_log_destination_arn = var.enable_flow_log ? aws_s3_bucket.vpc_logs_bucket[0].arn : ""
+}
+
 
 module "vpc_module" {
   source  = "terraform-aws-modules/vpc/aws"
@@ -61,7 +62,7 @@ module "vpc_module" {
 
   enable_flow_log                   = var.enable_flow_log
   flow_log_destination_type         = "s3"
-  flow_log_destination_arn          = aws_s3_bucket.vpc_logs_bucket[0].arn
+  flow_log_destination_arn          = local.flow_log_destination_arn
   flow_log_max_aggregation_interval = 600
 
   manage_default_network_acl = true
