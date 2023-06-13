@@ -1,0 +1,43 @@
+from invoke import task
+from ultimate_mlops_cli.utils.constants import TF_PATH
+from ultimate_mlops_cli.utils.utils import clean_tf_directory
+from ultimate_mlops_cli.stack_file_processor import StackfileProcessor
+from ultimate_mlops_cli.terraform.terraform_state_helper import TerraformStateHelper
+
+
+@task(
+    pre=[],
+    help={
+        "stack_config_path": "Path of the config file",
+        "action": "Allowed actions are plan, destroy, apply, force-unlock",
+    },
+)
+def terraform(
+    ctx,
+    stack_config_path: str,
+    action: str = "plan",
+    args: str = "",
+):
+    # clean the tf directory before init
+    clean_tf_directory()
+
+    tf = StackfileProcessor(stack_config_path=stack_config_path)
+
+    state_helper = TerraformStateHelper(
+        state=tf.get_state_file_name(), region=tf.get_region()
+    )
+    state_helper.manage_aws_state_storage()
+
+    tf.generate()
+
+    ctx.run(f"cd {TF_PATH} && terraform init")
+
+    if action in ["apply", "destroy"]:
+        action += " -auto-approve"
+    elif action == "force-unlock":
+        tf.force_unlock()
+        action = f"plan {args} -lock=false"
+    elif action == "plan":
+        action += " -lock=false"
+
+    ctx.run(f"cd {TF_PATH} && terraform {action} {args}")
