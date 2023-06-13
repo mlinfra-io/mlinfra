@@ -43,7 +43,7 @@ class StackfileProcessor:
                 self.deployment_type = DeploymentType(
                     config["provider"]["deployment_type"]
                 )
-                self.state_file_name = f"tfstate-{self.stack_name}-{self.region}"
+            self.state_file_name = f"tfstate-{self.stack_name}-{self.region}"
             return config
 
     def prepare_common_configuration(self):
@@ -108,18 +108,19 @@ class StackfileProcessor:
                 if contains_kubernetes:
                     print("Add helm and kubernetes provider")
 
-                # data["terraform"].update(
-                #     {
-                #         "backend": {
-                #             "s3": {
-                #                 "bucket": self.state,
-                #                 "key": "ultimate-mlops-stack",
-                #                 "dynamodb_table": self.state,
-                #                 "region": self.region,
-                #             }
-                #         }
-                #     }
-                # )
+                data["terraform"].update(
+                    {
+                        "backend": {
+                            "s3": {
+                                "bucket": self.state_file_name,
+                                "key": "ultimate-mlops-stack",
+                                "dynamodb_table": self.state_file_name,
+                                "region": self.region,
+                                "encrypt": True,
+                            }
+                        }
+                    }
+                )
                 json.dump(data, tf_json, ensure_ascii=False, indent=2)
 
     def _read_config_file(
