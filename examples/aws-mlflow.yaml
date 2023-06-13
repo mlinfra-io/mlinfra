@@ -7,5 +7,5 @@ provider:
 stacks:
   - experiment_tracking:
       name: mlflow
-      # params:
-      #   remote_tracking: true
+      params:
+        remote_tracking: false
