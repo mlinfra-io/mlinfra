@@ -5,7 +5,7 @@ import yaml
 from .enums.provider import Provider
 from .enums.deployment_type import DeploymentType
 
-from .utils.constants import TF_PATH
+from .utils.constants import TF_PATH, CREATE_VPC_DB_SUBNET
 from .utils.utils import clean_tf_directory
 
 
@@ -135,17 +135,7 @@ class StackfileProcessor:
             return json.loads(tf_config.read())
 
     def prepare_stack_modules(self):
-        # inject vpc module
-        if self.provider == Provider.AWS:
-            name = "vpc"
-            json_module = {"module": {name: {}}}
-            json_module["module"][name]["name"] = f"{self.stack_name}-vpc"
-            json_module["module"][name]["source"] = f"../modules/cloud/aws/{name}"
-
-            with open(f"./{TF_PATH}/{name}.tf.json", "w", encoding="utf-8") as tf_json:
-                json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
-        elif self.provider == Provider.GCP:
-            pass
+        create_vpc_database_subnets: bool = False
 
         for module in self.stack_config["stacks"]:
             # extracting stack type
@@ -200,6 +190,14 @@ class StackfileProcessor:
                         if key == input["name"]:
                             if input["user_facing"]:
                                 params.update({key: value})
+
+                                # check if configuration exists to create
+                                # vpc database subnets. This currently handles
+                                # the case where the key is boolean and value
+                                # is true. This is a temporary solution and
+                                # will be updated in the future.
+                                if key in CREATE_VPC_DB_SUBNET and value:
+                                    create_vpc_database_subnets = True
                             else:
                                 raise KeyError(f"{key} is not a user facing parameter")
                 json_module["module"][name].update(params)
@@ -208,6 +206,21 @@ class StackfileProcessor:
                 f"./{TF_PATH}/stack_{stack_type}.tf.json", "w", encoding="utf-8"
             ) as tf_json:
                 json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
+
+        # inject vpc module
+        if self.provider == Provider.AWS:
+            name = "vpc"
+            json_module = {"module": {name: {}}}
+            json_module["module"][name]["name"] = f"{self.stack_name}-vpc"
+            json_module["module"][name]["source"] = f"../modules/cloud/aws/{name}"
+            json_module["module"][name][
+                "create_database_subnets"
+            ] = create_vpc_database_subnets
+
+            with open(f"./{TF_PATH}/{name}.tf.json", "w", encoding="utf-8") as tf_json:
+                json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
+        elif self.provider == Provider.GCP:
+            pass
 
     def get_eks_module_refs(self, k8s_module_name: str = None) -> dict:
         module_source = (
