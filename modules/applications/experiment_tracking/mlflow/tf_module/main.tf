@@ -11,8 +11,6 @@ module "mlflow_rds_backend" {
 
   create_rds = var.remote_tracking
 
-  # TODO: pass these variables generically
-  # via the json file
   vpc_id               = var.vpc_id
   db_subnet_group_name = var.db_subnet_group_name
   vpc_cidr_block       = var.vpc_cidr_block
