@@ -53,6 +53,8 @@ module "ec2_instance" {
   create_spot_instance        = var.ec2_spot_instance
   associate_public_ip_address = true
 
+  iam_instance_profile = var.iam_instance_profile
+
   root_block_device = [
     {
       encrypted   = true

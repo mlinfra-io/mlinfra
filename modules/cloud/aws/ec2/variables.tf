@@ -30,6 +30,11 @@ variable "ec2_spot_instance" {
   default = true
 }
 
+variable "iam_instance_profile" {
+  type    = string
+  default = null
+}
+
 variable "ec2_user_data" {
   type    = string
   default = <<-EOF
