@@ -3,17 +3,17 @@ module "rds_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
 
-  name        = "POSTGRES_SG"
-  description = "RDS Postgres security group"
+  name        = "RDS_SG"
+  description = "${var.rds_identifier} security group"
   vpc_id      = var.vpc_id
 
   # ingress
   ingress_with_cidr_blocks = [
     {
-      from_port   = 5432
-      to_port     = 5432
+      from_port   = var.rds_port
+      to_port     = var.rds_port
       protocol    = "tcp"
-      description = "PostgreSQL access from within VPC"
+      description = "${var.rds_identifier} access from within VPC"
       cidr_blocks = var.vpc_cidr_block
     },
   ]
@@ -34,11 +34,11 @@ module "rds" {
 
   # All available versions:
   # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts
-  engine               = "postgres"
-  engine_version       = "14"
-  family               = "postgres14" # DB parameter group
-  major_engine_version = "14"         # DB option group
-  instance_class       = "db.t4g.medium"
+  engine               = var.rds_engine
+  engine_version       = var.rds_engine_version
+  family               = var.rds_family               # DB parameter group
+  major_engine_version = var.rds_major_engine_version # DB option group
+  instance_class       = var.rds_instance_class
 
   allocated_storage = var.allocated_storage
 
@@ -47,7 +47,7 @@ module "rds" {
   # user cannot be used as it is a reserved word used by the engine"
   db_name  = var.db_name
   username = var.db_username
-  port     = 5432
+  port     = var.rds_port
 
   db_subnet_group_name   = var.db_subnet_group_name
   vpc_security_group_ids = [module.rds_security_group.security_group_id]

@@ -20,6 +20,31 @@ variable "rds_identifier" {
   default = "postgres-rds-instance"
 }
 
+variable "rds_engine" {
+  type    = string
+  default = "postgres"
+}
+
+variable "rds_engine_version" {
+  type    = string
+  default = "14"
+}
+
+variable "rds_family" {
+  type    = string
+  default = "postgres14"
+}
+
+variable "rds_major_engine_version" {
+  type    = string
+  default = "14"
+}
+
+variable "rds_instance_class" {
+  type    = string
+  default = "db.t4g.medium"
+}
+
 variable "allocated_storage" {
   type    = number
   default = 20
@@ -28,12 +53,17 @@ variable "allocated_storage" {
 variable "db_name" {
   type        = string
   description = "Name of the database to create. *Note*: DBName must begin with a letter and contain only alphanumeric characters"
-  default     = "ultimate-postgres-db"
+  default     = "ultimatepostgresdb"
 }
 
 variable "db_username" {
   type    = string
   default = "ultimate_postgres_user"
+}
+
+variable "rds_port" {
+  type    = number
+  default = 5432
 }
 
 variable "backup_retention_period" {
