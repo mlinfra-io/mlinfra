@@ -12,7 +12,7 @@ docker volume create --driver local --opt type=none --opt device=/home/$USER/wan
 nohup wandb server start --port ${ec2_application_port} \
     -e AWS_REGION=${aws_region} \
     -e MYSQL=mysql://${db_instance_username}:${db_instance_password}@${db_instance_endpoint}/${db_instance_name} \
-    # -e BUCKET=s3://${bucket_id} \
-    # -e BUCKET_QUEUE= \
+    -e BUCKET=s3://${bucket_id} \
+    -e BUCKET_QUEUE=${bucket_queue} \
     -v /home/$USER/wandb_diskspace:/vol \
     --daemon &
