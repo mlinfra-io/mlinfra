@@ -5,7 +5,54 @@ resource "aws_s3_bucket" "wandb_artifacts_bucket" {
   tags   = var.tags
 }
 
+resource "random_pet" "file_storage" {
+  length = 2
+}
+
+resource "aws_sqs_queue" "file_storage" {
+  count = var.remote_tracking ? 1 : 0
+  name  = "wandb-file-storage-${random_pet.file_storage.id}"
+
+  # Enable long-polling
+  receive_wait_time_seconds = 10
+}
+
+resource "aws_sqs_queue_policy" "file_storage" {
+  count = var.remote_tracking ? 1 : 0
+
+  queue_url = aws_sqs_queue.file_storage.0.id
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : ["sqs:SendMessage"],
+        "Resource" : "arn:aws:sqs:*:*:${aws_sqs_queue.file_storage.0.name}",
+        "Condition" : {
+          "ArnEquals" : { "aws:SourceArn" : "${aws_s3_bucket.wandb_artifacts_bucket[0].arn}" }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_s3_bucket_notification" "file_storage" {
+  count = var.remote_tracking ? 1 : 0
+
+  depends_on = [aws_sqs_queue_policy.file_storage]
+
+  bucket = aws_s3_bucket.wandb_artifacts_bucket[0].id
+
+  queue {
+    queue_arn = aws_sqs_queue.file_storage.0.arn
+    events    = ["s3:ObjectCreated:*"]
+  }
+}
+
 resource "aws_iam_policy" "s3_access_iam_policy" {
+  count       = var.remote_tracking ? 1 : 0
   name        = "S3AccessPolicy"
   description = "Allows access to S3 bucket"
 
@@ -31,7 +78,8 @@ EOF
 }
 
 resource "aws_iam_role" "ec2_iam_role" {
-  name = "EC2RoleWithS3Access"
+  count = var.remote_tracking ? 1 : 0
+  name  = "EC2RoleWithS3Access"
 
   assume_role_policy = <<EOF
 {
@@ -51,13 +99,15 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "s3_access_attachment" {
-  role       = aws_iam_role.ec2_iam_role.name
-  policy_arn = aws_iam_policy.s3_access_iam_policy.arn
+  count      = var.remote_tracking ? 1 : 0
+  role       = aws_iam_role.ec2_iam_role[0].name
+  policy_arn = aws_iam_policy.s3_access_iam_policy[0].arn
 }
 
 resource "aws_iam_instance_profile" "wandb_instance_profile" {
-  name = "wandb_instance_profile"
-  role = aws_iam_role.ec2_iam_role.name
+  count = var.remote_tracking ? 1 : 0
+  name  = "wandb_instance_profile"
+  role  = aws_iam_role.ec2_iam_role[0].name
 }
 
 # create rds instance
@@ -92,13 +142,14 @@ module "wandb" {
   ec2_instance_name       = "wandb-server"
   ec2_spot_instance       = var.ec2_spot_instance
   ec2_application_port    = var.ec2_application_port
-  iam_instance_profile    = var.remote_tracking ? aws_iam_instance_profile.wandb_instance_profile.name : null
+  iam_instance_profile    = var.remote_tracking ? aws_iam_instance_profile.wandb_instance_profile[0].name : null
   enable_rds_ingress_rule = var.remote_tracking
 
   ec2_user_data = var.remote_tracking ? templatefile("${path.module}/remote-cloud-init.tpl", {
     wandb_version        = var.wandb_version
     ec2_application_port = var.ec2_application_port
     aws_region           = data.aws_region.current.name
+    bucket_queue         = aws_sqs_queue.file_storage[0].url
     db_instance_username = module.wandb_rds_backend.db_instance_username
     db_instance_password = module.wandb_rds_backend.db_instance_password
     db_instance_endpoint = module.wandb_rds_backend.db_instance_endpoint
