@@ -24,6 +24,10 @@ inputs:
     description: DB Subnet group name
     value: module.vpc.database_subnet_group
     default: None
+  - name: rds_instance_class
+    user_facing: true
+    description: RDS instance class to deploy MLFlow backend on
+    default: "db.t4g.medium"
   - name: mlflow_version
     user_facing: true
     description: MLFlow pypa version

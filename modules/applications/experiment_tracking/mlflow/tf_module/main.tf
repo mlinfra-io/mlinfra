@@ -14,6 +14,7 @@ module "mlflow_rds_backend" {
   vpc_id               = var.vpc_id
   db_subnet_group_name = var.db_subnet_group_name
   vpc_cidr_block       = var.vpc_cidr_block
+  rds_instance_class   = var.rds_instance_class
 
   rds_identifier = "mlflow-backend"
   db_name        = "mlflowbackend"
