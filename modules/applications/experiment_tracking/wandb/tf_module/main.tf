@@ -124,6 +124,8 @@ module "wandb_rds_backend" {
   rds_family               = "mysql8.0" # DB parameter group
   rds_major_engine_version = "8.0"      # DB option group
   rds_port                 = 3306
+  rds_instance_class       = var.rds_instance_class
+
 
   rds_identifier = "wandb-backend"
   db_name        = "wandbbackend"

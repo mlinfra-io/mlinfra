@@ -20,6 +20,11 @@ variable "db_subnet_group_name" {
   default = null
 }
 
+variable "rds_instance_class" {
+  type    = string
+  default = "db.t4g.medium"
+}
+
 variable "wandb_version" {
   type    = string
   default = "0.15.4"
