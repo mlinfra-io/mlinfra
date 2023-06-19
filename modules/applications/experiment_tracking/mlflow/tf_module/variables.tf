@@ -20,6 +20,11 @@ variable "db_subnet_group_name" {
   default = null
 }
 
+variable "rds_instance_class" {
+  type    = string
+  default = "db.t4g.medium"
+}
+
 variable "mlflow_version" {
   type    = string
   default = "2.4.0"
@@ -28,6 +33,11 @@ variable "mlflow_version" {
 variable "ec2_application_port" {
   type    = number
   default = 80
+}
+
+variable "ec2_instance_type" {
+  type    = string
+  default = "t2.micro"
 }
 
 variable "ec2_spot_instance" {

@@ -124,6 +124,8 @@ module "wandb_rds_backend" {
   rds_family               = "mysql8.0" # DB parameter group
   rds_major_engine_version = "8.0"      # DB option group
   rds_port                 = 3306
+  rds_instance_class       = var.rds_instance_class
+
 
   rds_identifier = "wandb-backend"
   db_name        = "wandbbackend"
@@ -143,6 +145,7 @@ module "wandb" {
   ec2_spot_instance       = var.ec2_spot_instance
   ec2_application_port    = var.ec2_application_port
   iam_instance_profile    = var.remote_tracking ? aws_iam_instance_profile.wandb_instance_profile[0].name : null
+  ec2_instance_type       = var.ec2_instance_type
   enable_rds_ingress_rule = var.remote_tracking
 
   ec2_user_data = var.remote_tracking ? templatefile("${path.module}/remote-cloud-init.tpl", {

@@ -14,6 +14,7 @@ module "mlflow_rds_backend" {
   vpc_id               = var.vpc_id
   db_subnet_group_name = var.db_subnet_group_name
   vpc_cidr_block       = var.vpc_cidr_block
+  rds_instance_class   = var.rds_instance_class
 
   rds_identifier = "mlflow-backend"
   db_name        = "mlflowbackend"
@@ -30,6 +31,7 @@ module "mlflow" {
   ec2_instance_name       = "mlflow-server"
   ec2_spot_instance       = var.ec2_spot_instance
   ec2_application_port    = var.ec2_application_port
+  ec2_instance_type       = var.ec2_instance_type
   enable_rds_ingress_rule = var.remote_tracking
 
   ec2_user_data = var.remote_tracking ? templatefile("${path.module}/remote-cloud-init.tpl", {
