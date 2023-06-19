@@ -1,8 +1,9 @@
-# TODO: Replace with module from Anton Babenko
-resource "aws_s3_bucket" "wandb_artifacts_bucket" {
+module "wandb_artifacts_bucket" {
+  source = "../../../../cloud/aws/s3"
   count  = var.remote_tracking ? 1 : 0
-  bucket = "ultimate-wandb-artifacts-storage-bucket"
-  tags   = var.tags
+
+  bucket_name = "ultimate-wandb-artifacts-storage-bucket"
+  tags        = var.tags
 }
 
 resource "random_pet" "file_storage" {
@@ -31,7 +32,7 @@ resource "aws_sqs_queue_policy" "file_storage" {
         "Action" : ["sqs:SendMessage"],
         "Resource" : "arn:aws:sqs:*:*:${aws_sqs_queue.file_storage.0.name}",
         "Condition" : {
-          "ArnEquals" : { "aws:SourceArn" : "${aws_s3_bucket.wandb_artifacts_bucket[0].arn}" }
+          "ArnEquals" : { "aws:SourceArn" : "${module.wandb_artifacts_bucket[0].bucket_arn}" }
         }
       }
     ]
@@ -43,7 +44,7 @@ resource "aws_s3_bucket_notification" "file_storage" {
 
   depends_on = [aws_sqs_queue_policy.file_storage]
 
-  bucket = aws_s3_bucket.wandb_artifacts_bucket[0].id
+  bucket = module.wandb_artifacts_bucket[0].bucket_id
 
   queue {
     queue_arn = aws_sqs_queue.file_storage.0.arn
@@ -68,8 +69,8 @@ resource "aws_iam_policy" "s3_access_iam_policy" {
         "s3:PutObject"
       ],
       "Resource": [
-        "${aws_s3_bucket.wandb_artifacts_bucket[0].arn}",
-        "${aws_s3_bucket.wandb_artifacts_bucket[0].arn}/*"
+        "${module.wandb_artifacts_bucket[0].bucket_arn}",
+        "${module.wandb_artifacts_bucket[0].bucket_arn}/*"
       ]
     }
   ]
@@ -157,11 +158,11 @@ module "wandb" {
     db_instance_password = module.wandb_rds_backend.db_instance_password
     db_instance_endpoint = module.wandb_rds_backend.db_instance_endpoint
     db_instance_name     = module.wandb_rds_backend.db_instance_name
-    bucket_id            = aws_s3_bucket.wandb_artifacts_bucket[0].id
+    bucket_id            = module.wandb_artifacts_bucket[0].bucket_id
     }) : templatefile("${path.module}/simple-cloud-init.tpl", {
     wandb_version        = var.wandb_version
     ec2_application_port = var.ec2_application_port
   })
 
-  depends_on = [resource.aws_s3_bucket.wandb_artifacts_bucket, module.wandb_rds_backend]
+  depends_on = [module.wandb_artifacts_bucket, module.wandb_rds_backend]
 }
