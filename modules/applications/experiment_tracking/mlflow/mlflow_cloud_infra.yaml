@@ -32,6 +32,10 @@ inputs:
     user_facing: true
     description: Application port for MLFlow application
     default: 80
+  - name: ec2_instance_type
+    user_facing: true
+    description: AWS Instance type to deploy MLFlow application on
+    default: "t2.micro"
   - name: ec2_spot_instance
     user_facing: true
     description: Configures the deployment of either an on demand or spot instance.
