@@ -1,8 +1,10 @@
 # TODO: Replace with module from Anton Babenko
-resource "aws_s3_bucket" "mlflow_artifacts_bucket" {
+module "mlflow_artifacts_bucket" {
+  source = "../../../../cloud/aws/s3"
   count  = var.remote_tracking ? 1 : 0
-  bucket = "ultimate-mlflow-artifacts-storage-bucket"
-  tags   = var.tags
+
+  bucket_name = "ultimate-mlflow-artifacts-storage-bucket"
+  tags        = var.tags
 }
 
 # create rds instance
@@ -41,11 +43,11 @@ module "mlflow" {
     db_instance_password = module.mlflow_rds_backend.db_instance_password
     db_instance_endpoint = module.mlflow_rds_backend.db_instance_endpoint
     db_instance_name     = module.mlflow_rds_backend.db_instance_name
-    bucket_id            = aws_s3_bucket.mlflow_artifacts_bucket[0].id
+    bucket_id            = module.mlflow_artifacts_bucket[0].bucket_id
     }) : templatefile("${path.module}/simple-cloud-init.tpl", {
     mlflow_version       = var.mlflow_version
     ec2_application_port = var.ec2_application_port
   })
 
-  depends_on = [resource.aws_s3_bucket.mlflow_artifacts_bucket, module.mlflow_rds_backend]
+  depends_on = [module.mlflow_artifacts_bucket, module.mlflow_rds_backend]
 }
