@@ -148,6 +148,7 @@ module "wandb" {
   iam_instance_profile    = var.remote_tracking ? aws_iam_instance_profile.wandb_instance_profile[0].name : null
   ec2_instance_type       = var.ec2_instance_type
   enable_rds_ingress_rule = var.remote_tracking
+  rds_type                = "mysql"
 
   ec2_user_data = var.remote_tracking ? templatefile("${path.module}/remote-cloud-init.tpl", {
     wandb_version        = var.wandb_version
