@@ -182,7 +182,12 @@ class StackfileProcessor:
                     for input in application_config["inputs"]:
                         if not input["user_facing"]:
                             input_name = input["name"]
-                            input_value = "${ %s }" % f"{input['value']}"
+                            # need to come up with mode solid logic than this
+                            input_value = (
+                                input["value"]
+                                if type(input["default"]) is not None
+                                else "${ %s }" % f"{input['value']}"
+                            )
                             inputs.update({input_name: input_value})
                         json_module["module"][name].update(inputs)
 
