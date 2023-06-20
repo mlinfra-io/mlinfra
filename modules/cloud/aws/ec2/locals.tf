@@ -25,13 +25,21 @@ locals {
     },
   ]
 
-  rds_ingress_rules = [{
+  rds_postgres_ingress_rules = [{
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    description = "Allow RDS access from within VPC"
+    description = "Allow Postgres RDS access from within VPC"
     cidr_blocks = [var.vpc_cidr_block]
   }]
 
-  ingress_rules = var.enable_rds_ingress_rule ? concat(local.common_ingress_rules, local.rds_ingress_rules) : local.common_ingress_rules
+  rds_mysql_ingress_rules = [{
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    description = "Allow MySQL RDS access from within VPC"
+    cidr_blocks = [var.vpc_cidr_block]
+  }]
+
+  ingress_rules = var.enable_rds_ingress_rule ? (var.rds_type == "postgres" ? concat(local.common_ingress_rules, local.rds_postgres_ingress_rules) : concat(local.common_ingress_rules, local.rds_mysql_ingress_rules)) : local.common_ingress_rules
 }
