@@ -24,36 +24,40 @@ inputs:
     description: DB Subnet group name
     value: module.vpc.database_subnet_group
     default: None
+  - name: remote_tracking
+    user_facing: false
+    description: Deploys an external Postgres RDS server as backend store and S3 as artifact store for LakeFS.
+    default: true
   - name: rds_instance_class
     user_facing: true
-    description: RDS instance class to deploy MLFlow backend on
+    description: RDS instance class to deploy LakeFS backend on
     default: "db.t4g.medium"
-  - name: mlflow_version
+  - name: LakeFS_version
     user_facing: true
-    description: MLFlow pypa version
-    default: "2.4.0"
+    description: LakeFS pypa version
+    default: "0.104.0"
   - name: ec2_application_port
     user_facing: true
-    description: Application port for MLFlow application
+    description: Application port for LakeFS application
     default: 80
   - name: ec2_instance_type
     user_facing: true
-    description: AWS Instance type to deploy MLFlow application on
+    description: AWS Instance type to deploy LakeFS application on
     default: "t2.micro"
   - name: ec2_spot_instance
     user_facing: true
     description: Configures the deployment of either an on demand or spot instance.
     default: true
-  - name: remote_tracking
+  - name: database_type
     user_facing: true
-    description: Deploys an external Postgres RDS server as backend store and S3 as artifact store for LakeFS.
+    description: Configures the deployment of either an on demand or spot instance.
     default: true
 outputs:
   - name: lakefs_server_address
-    description: MLFlow server address. Right now its composed of EC2 instance IP address, with http scheme.
+    description: LakeFS server address. Right now its composed of EC2 instance IP address, with http scheme.
     export: true
   - name: lakefs_server_dns_address
-    description: MLFlow server DNS address.
+    description: LakeFS server DNS address.
     export: true
 clouds:
   - aws
