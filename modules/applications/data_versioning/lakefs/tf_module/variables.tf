@@ -47,12 +47,17 @@ variable "ec2_spot_instance" {
 
 variable "remote_tracking" {
   type    = bool
-  default = true
+  default = false
 }
 
 variable "database_type" {
   type    = string
-  default = "postgres"
+  default = null
+
+  validation {
+    condition     = (var.database_type == "dynamodb" || var.database_type == "postgres" || var.database_type == null)
+    error_message = "database_type must be either 'dynamodb' or 'postgres'"
+  }
 }
 
 variable "tags" {
