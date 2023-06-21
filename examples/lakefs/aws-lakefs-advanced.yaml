@@ -8,5 +8,5 @@ stacks:
   - data_versioning:
       name: lakefs
       params:
-        MlflowS3BucketName: mlflow-test-bucket
-        MlflowS3BucketKmsKeyArn: "arn:aws:kms:eu-central-1"
+        remote_tracking: true
+        database_type: "postgres"
