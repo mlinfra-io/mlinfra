@@ -36,17 +36,80 @@ locals {
   lakefs_config_filename = var.remote_tracking && (var.database_type != null) ? "lakefs-${var.database_type}-config.tpl" : null
 }
 
-module "lakefs" {
-  source               = "../../../../cloud/aws/ec2"
-  vpc_id               = var.vpc_id
-  default_vpc_sg       = var.default_vpc_sg
-  vpc_cidr_block       = var.vpc_cidr_block
-  ec2_subnet_id        = var.subnet_id
-  ec2_instance_name    = "lakefs-server"
-  ec2_spot_instance    = var.ec2_spot_instance
-  ec2_application_port = var.ec2_application_port
-  ec2_instance_type    = var.ec2_instance_type
+resource "aws_iam_policy" "lakefs_s3_iam_policy" {
+  count       = var.remote_tracking ? 1 : 0
+  name        = "LakeFSS3AccessPolicy"
+  description = "Allows LakeFS server access to the S3 bucket"
 
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "lakeFSBucketAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:AbortMultipartUpload",
+        "s3:ListMultipartUploadParts"
+      ],
+      "Resource": [
+        "${module.lakefs_data_artifacts_bucket[0].bucket_arn}",
+        "${module.lakefs_data_artifacts_bucket[0].bucket_arn}/*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "lakefs_ec2_iam_role" {
+  count = var.remote_tracking ? 1 : 0
+  name  = "EC2RoleForLakeFSWithS3Access"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LakeFSRoleTrust",
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      }
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "s3_access_attachment" {
+  count      = var.remote_tracking ? 1 : 0
+  role       = aws_iam_role.lakefs_ec2_iam_role[0].name
+  policy_arn = aws_iam_policy.lakefs_s3_iam_policy[0].arn
+}
+
+resource "aws_iam_instance_profile" "lakefs_instance_profile" {
+  count = var.remote_tracking ? 1 : 0
+  name  = "lakefs_instance_profile"
+  role  = aws_iam_role.lakefs_ec2_iam_role[0].name
+}
+
+module "lakefs" {
+  source                  = "../../../../cloud/aws/ec2"
+  vpc_id                  = var.vpc_id
+  default_vpc_sg          = var.default_vpc_sg
+  vpc_cidr_block          = var.vpc_cidr_block
+  ec2_subnet_id           = var.subnet_id
+  ec2_instance_name       = "lakefs-server"
+  ec2_spot_instance       = var.ec2_spot_instance
+  ec2_application_port    = var.ec2_application_port
+  ec2_instance_type       = var.ec2_instance_type
+  iam_instance_profile    = var.remote_tracking ? aws_iam_instance_profile.lakefs_instance_profile[0].name : null
   enable_rds_ingress_rule = var.remote_tracking
   rds_type                = var.remote_tracking ? var.database_type : null
 
@@ -59,7 +122,6 @@ module "lakefs" {
       db_instance_endpoint = module.lakefs_rds_backend.db_instance_endpoint
       db_instance_name     = module.lakefs_rds_backend.db_instance_name
       auth_secret_key      = resource.random_password.auth_key[0].result
-      s3_path              = module.lakefs_data_artifacts_bucket[0].bucket_id
       region               = data.aws_region.current.name
     }) : null
     }) : templatefile("${path.module}/simple-cloud-init.tpl", {
