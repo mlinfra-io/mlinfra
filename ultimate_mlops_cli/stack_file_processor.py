@@ -182,10 +182,11 @@ class StackfileProcessor:
                     for input in application_config["inputs"]:
                         if not input["user_facing"]:
                             input_name = input["name"]
-                            # need to come up with mode solid logic than this
+                            # handle the input from the yaml config
+                            # if the input value is not a string
                             input_value = (
-                                input["value"]
-                                if type(input["default"]) is not None
+                                input["default"]
+                                if input["default"] != "None"
                                 else "${ %s }" % f"{input['value']}"
                             )
                             inputs.update({input_name: input_value})
