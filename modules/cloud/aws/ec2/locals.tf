@@ -8,6 +8,13 @@ locals {
       cidr_blocks = ["0.0.0.0/0"]
     },
     {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      description = "HTTPS Access allowed from anywhere"
+      cidr_blocks = [var.vpc_cidr_block]
+    },
+    {
       from_port   = var.ec2_application_port
       to_port     = var.ec2_application_port
       protocol    = "tcp"
