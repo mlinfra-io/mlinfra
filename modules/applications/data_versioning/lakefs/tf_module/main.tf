@@ -30,12 +30,6 @@ module "lakefs_rds_backend" {
   tags           = var.tags
 }
 
-data "aws_region" "current" {}
-
-locals {
-  lakefs_config_filename = var.remote_tracking && (var.database_type != null) ? "lakefs-${var.database_type}-config.tpl" : null
-}
-
 resource "aws_iam_policy" "lakefs_s3_iam_policy" {
   count       = var.remote_tracking ? 1 : 0
   name        = "LakeFSS3AccessPolicy"
@@ -60,6 +54,48 @@ resource "aws_iam_policy" "lakefs_s3_iam_policy" {
         "${module.lakefs_data_artifacts_bucket[0].bucket_arn}",
         "${module.lakefs_data_artifacts_bucket[0].bucket_arn}/*"
       ]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "lakefs_dynamodb_iam_policy" {
+  count       = (var.remote_tracking && var.database_type == "dynamodb") ? 1 : 0
+  name        = "LakeFSDynamodbAccessPolicy"
+  description = "Allows LakeFS server access to the Dynamodb"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+        "Sid": "ListAndDescribe",
+        "Effect": "Allow",
+        "Action": [
+            "dynamodb:List*",
+            "dynamodb:DescribeReservedCapacity*",
+            "dynamodb:DescribeLimits",
+            "dynamodb:DescribeTimeToLive"
+        ],
+        "Resource": "*"
+    },
+    {
+        "Sid": "kvstore",
+        "Effect": "Allow",
+        "Action": [
+            "dynamodb:BatchGet*",
+            "dynamodb:DescribeTable",
+            "dynamodb:Get*",
+            "dynamodb:Query",
+            "dynamodb:Scan",
+            "dynamodb:BatchWrite*",
+            "dynamodb:CreateTable",
+            "dynamodb:Delete*",
+            "dynamodb:Update*",
+            "dynamodb:PutItem"
+        ],
+        "Resource": "arn:aws:dynamodb:*:*:table/kvstore"
     }
   ]
 }
@@ -93,10 +129,20 @@ resource "aws_iam_role_policy_attachment" "s3_access_attachment" {
   policy_arn = aws_iam_policy.lakefs_s3_iam_policy[0].arn
 }
 
+resource "aws_iam_role_policy_attachment" "dynamodb_access_attachment" {
+  count      = (var.remote_tracking && var.database_type == "dynamodb") ? 1 : 0
+  role       = aws_iam_role.lakefs_ec2_iam_role[0].name
+  policy_arn = aws_iam_policy.lakefs_dynamodb_iam_policy[0].arn
+}
+
 resource "aws_iam_instance_profile" "lakefs_instance_profile" {
   count = var.remote_tracking ? 1 : 0
   name  = "lakefs_instance_profile"
   role  = aws_iam_role.lakefs_ec2_iam_role[0].name
+}
+
+locals {
+  lakefs_config_filename = var.remote_tracking && (var.database_type != null) ? "lakefs-${var.database_type}-config.tpl" : null
 }
 
 module "lakefs" {
@@ -122,8 +168,10 @@ module "lakefs" {
       db_instance_endpoint = module.lakefs_rds_backend.db_instance_endpoint
       db_instance_name     = module.lakefs_rds_backend.db_instance_name
       auth_secret_key      = resource.random_password.auth_key[0].result
-      region               = data.aws_region.current.name
-    }) : null
+      }) : templatefile("${path.module}/${local.lakefs_config_filename}", {
+      ec2_application_port = var.ec2_application_port
+      auth_secret_key      = resource.random_password.auth_key[0].result
+    })
     }) : templatefile("${path.module}/simple-cloud-init.tpl", {
     ec2_application_port = var.ec2_application_port
   })
