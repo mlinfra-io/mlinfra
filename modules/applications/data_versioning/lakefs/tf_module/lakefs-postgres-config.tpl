@@ -13,9 +13,4 @@ auth:
 blockstore:
   type: s3
   s3:
-    endpoint: s3://${s3_path}
-    region: ${region}
-
-gateways:
-  s3:
     region: ${region}
