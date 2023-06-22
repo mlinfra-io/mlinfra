@@ -28,6 +28,10 @@ inputs:
     user_facing: true
     description: RDS instance class to deploy MLFlow backend on
     default: "db.t4g.medium"
+  - name: mlflow_artifacts_bucket_name
+    user_facing: true
+    description: MLFlow artifacts destination bucket name
+    default: "ultimate-mlflow-artifacts-storage-bucket"
   - name: mlflow_version
     user_facing: true
     description: MLFlow pypa version

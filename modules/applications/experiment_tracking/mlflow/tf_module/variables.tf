@@ -25,6 +25,11 @@ variable "rds_instance_class" {
   default = "db.t4g.medium"
 }
 
+variable "mlflow_artifacts_bucket_name" {
+  type    = string
+  default = "ultimate-mlflow-artifacts-storage-bucket"
+}
+
 variable "mlflow_version" {
   type    = string
   default = "2.4.0"
