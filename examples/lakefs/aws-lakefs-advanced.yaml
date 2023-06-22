@@ -9,4 +9,6 @@ stacks:
       name: lakefs
       params:
         remote_tracking: true
-        database_type: "postgres"
+        database_type: "dynamodb"
+        lakefs_data_bucket_name: "lakefs-repository-data-bucket"
+        dynamodb_table_name: "lakefs_kvstore"
