@@ -20,6 +20,11 @@ variable "db_subnet_group_name" {
   default = null
 }
 
+variable "lakefs_data_bucket_name" {
+  type    = string
+  default = "ultimate-lakefs-data-bucket"
+}
+
 variable "rds_instance_class" {
   type    = string
   default = "db.t4g.medium"
@@ -58,6 +63,11 @@ variable "database_type" {
     condition     = (var.database_type == "dynamodb" || var.database_type == "postgres" || var.database_type == null)
     error_message = "database_type must be either 'dynamodb' or 'postgres'"
   }
+}
+
+variable "dynamodb_table_name" {
+  type    = string
+  default = "kvstore"
 }
 
 variable "tags" {

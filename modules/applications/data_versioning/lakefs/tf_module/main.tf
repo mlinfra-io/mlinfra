@@ -10,7 +10,7 @@ module "lakefs_data_artifacts_bucket" {
   source = "../../../../cloud/aws/s3"
   count  = var.remote_tracking ? 1 : 0
 
-  bucket_name = "ultimate-lakefs-data-artifacts-bucket"
+  bucket_name = var.lakefs_data_bucket_name
   tags        = var.tags
 }
 
@@ -60,6 +60,25 @@ resource "aws_iam_policy" "lakefs_s3_iam_policy" {
 EOF
 }
 
+resource "aws_dynamodb_table" "dynamodb_table" {
+  count        = (var.remote_tracking && var.database_type == "dynamodb") ? 1 : 0
+  name         = var.dynamodb_table_name
+  billing_mode = "PAY_PER_REQUEST"
+
+  attribute {
+    name = "PartitionKey"
+    type = "B"
+  }
+
+  attribute {
+    name = "ItemKey"
+    type = "B"
+  }
+
+  hash_key  = "PartitionKey"
+  range_key = "ItemKey"
+}
+
 resource "aws_iam_policy" "lakefs_dynamodb_iam_policy" {
   count       = (var.remote_tracking && var.database_type == "dynamodb") ? 1 : 0
   name        = "LakeFSDynamodbAccessPolicy"
@@ -81,7 +100,7 @@ resource "aws_iam_policy" "lakefs_dynamodb_iam_policy" {
         "Resource": "*"
     },
     {
-        "Sid": "kvstore",
+        "Sid": "DynamodbTableAccess",
         "Effect": "Allow",
         "Action": [
             "dynamodb:BatchGet*",
@@ -95,7 +114,7 @@ resource "aws_iam_policy" "lakefs_dynamodb_iam_policy" {
             "dynamodb:Update*",
             "dynamodb:PutItem"
         ],
-        "Resource": "arn:aws:dynamodb:*:*:table/kvstore"
+        "Resource": "arn:aws:dynamodb:*:*:table/${var.dynamodb_table_name}"
     }
   ]
 }
@@ -145,6 +164,8 @@ locals {
   lakefs_config_filename = var.remote_tracking && (var.database_type != null) ? "lakefs-${var.database_type}-config.tpl" : null
 }
 
+data "aws_region" "current" {}
+
 module "lakefs" {
   source                  = "../../../../cloud/aws/ec2"
   vpc_id                  = var.vpc_id
@@ -168,9 +189,12 @@ module "lakefs" {
       db_instance_endpoint = module.lakefs_rds_backend.db_instance_endpoint
       db_instance_name     = module.lakefs_rds_backend.db_instance_name
       auth_secret_key      = resource.random_password.auth_key[0].result
+      region               = data.aws_region.current.name
       }) : templatefile("${path.module}/${local.lakefs_config_filename}", {
       ec2_application_port = var.ec2_application_port
       auth_secret_key      = resource.random_password.auth_key[0].result
+      dynamodb_table_name  = var.dynamodb_table_name
+      region               = data.aws_region.current.name
     })
     }) : templatefile("${path.module}/simple-cloud-init.tpl", {
     ec2_application_port = var.ec2_application_port
