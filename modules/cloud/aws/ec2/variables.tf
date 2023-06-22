@@ -60,3 +60,8 @@ variable "enable_rds_ingress_rule" {
   type    = bool
   default = false
 }
+
+variable "rds_type" {
+  type    = string
+  default = "postgres"
+}

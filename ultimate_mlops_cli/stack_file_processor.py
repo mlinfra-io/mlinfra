@@ -89,6 +89,13 @@ class StackfileProcessor:
                 data["provider"]["aws"]["default_tags"]["tags"]["region"] = self.region
                 data["provider"]["aws"]["default_tags"]["tags"]["stack"] = self.stack
 
+                # add random provider
+                with open(
+                    "modules/terraform_providers/random/provider.tf.json", "r"
+                ) as random_provider:
+                    random_provider_json = json.load(random_provider)
+                data["provider"].update(random_provider_json["provider"])
+
                 if contains_kubernetes:
                     data["provider"]["helm"]["kubernetes"][
                         "host"
@@ -106,6 +113,15 @@ class StackfileProcessor:
 
                 if contains_kubernetes:
                     print("Add helm and kubernetes provider")
+
+                # add random provider
+                with open(
+                    "modules/terraform_providers/random/terraform.tf.json", "r"
+                ) as random_tf:
+                    random_tf_json = json.load(random_tf)
+                data["terraform"]["required_providers"].update(
+                    random_tf_json["terraform"]["required_providers"]
+                )
 
                 data["terraform"].update(
                     {
@@ -166,7 +182,13 @@ class StackfileProcessor:
                     for input in application_config["inputs"]:
                         if not input["user_facing"]:
                             input_name = input["name"]
-                            input_value = "${ %s }" % f"{input['value']}"
+                            # handle the input from the yaml config
+                            # if the input value is not a string
+                            input_value = (
+                                input["default"]
+                                if input["default"] != "None"
+                                else "${ %s }" % f"{input['value']}"
+                            )
                             inputs.update({input_name: input_value})
                         json_module["module"][name].update(inputs)
 

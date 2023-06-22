@@ -1,0 +1,71 @@
+inputs:
+  - name: vpc_id
+    user_facing: false
+    description: VPC id
+    value: module.vpc.vpc_id
+    default: None
+  - name: subnet_id
+    user_facing: false
+    description: VPC Subnet ID for EC2
+    value: module.vpc.subnet_id[0]
+    default: None
+  - name: default_vpc_sg
+    user_facing: false
+    description: Default VPC security group
+    value: module.vpc.default_vpc_sg
+    default: None
+  - name: vpc_cidr_block
+    user_facing: false
+    description: VPC CIDR block required for SG of RDS
+    value: module.vpc.vpc_cidr_block
+    default: None
+  - name: db_subnet_group_name
+    user_facing: false
+    description: DB Subnet group name
+    value: module.vpc.database_subnet_group
+    default: None
+  - name: remote_tracking
+    user_facing: true
+    description: Deploys an external Postgres RDS server as backend store and S3 as artifact store for LakeFS.
+    default: true
+  - name: rds_instance_class
+    user_facing: true
+    description: RDS instance class to deploy LakeFS backend on
+    default: "db.t4g.medium"
+  - name: lakefs_version
+    user_facing: true
+    description: LakeFS pypa version
+    default: "0.104.0"
+  - name: ec2_application_port
+    user_facing: true
+    description: Application port for LakeFS application
+    default: 80
+  - name: ec2_instance_type
+    user_facing: true
+    description: AWS Instance type to deploy LakeFS application on
+    default: "t2.micro"
+  - name: ec2_spot_instance
+    user_facing: true
+    description: Configures the deployment of either an on demand or spot instance.
+    default: true
+  - name: database_type
+    user_facing: true
+    description: Configures the type of database backend for lakefs. Possible options are postgres, dynamodb or null
+    default: null
+  - name: lakefs_data_bucket_name
+    user_facing: true
+    description: LakeFS S3 data bucket name
+    default: "ultimate-lakefs-data-bucket"
+  - name: dynamodb_table_name
+    user_facing: true
+    description: LakeFS dynamodb table name
+    default: "kvstore"
+outputs:
+  - name: lakefs_server_address
+    description: LakeFS server address. Right now its composed of EC2 instance IP address, with http scheme.
+    export: true
+  - name: lakefs_server_dns_address
+    description: LakeFS server DNS address.
+    export: true
+clouds:
+  - aws
