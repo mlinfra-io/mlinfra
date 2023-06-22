@@ -52,6 +52,14 @@ inputs:
     user_facing: true
     description: Configures the type of database backend for lakefs. Possible options are postgres, dynamodb or null
     default: null
+  - name: lakefs_data_bucket_name
+    user_facing: true
+    description: LakeFS S3 data bucket name
+    default: "ultimate-lakefs-data-bucket"
+  - name: dynamodb_table_name
+    user_facing: true
+    description: LakeFS dynamodb table name
+    default: "kvstore"
 outputs:
   - name: lakefs_server_address
     description: LakeFS server address. Right now its composed of EC2 instance IP address, with http scheme.
