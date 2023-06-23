@@ -3,11 +3,6 @@ variable "secret_name" {
   default = "awesome-secret"
 }
 
-variable "json_secret" {
-  type    = bool
-  default = false
-}
-
 variable "secret_value" {
-  type = string
+  type = map(string)
 }
