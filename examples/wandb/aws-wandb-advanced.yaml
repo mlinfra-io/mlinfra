@@ -8,5 +8,6 @@ stacks:
   - experiment_tracking:
       name: mlflow
       params:
-        MlflowS3BucketName: mlflow-test-bucket
-        MlflowS3BucketKmsKeyArn: "arn:aws:kms:eu-central-1"
+        remote_tracking: true
+        wandb_artifacts_bucket_name: "wandb-artifacts-test-bucket"
+        ec2_application_port: 8000
