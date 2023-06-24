@@ -53,7 +53,8 @@ module "mlflow" {
 }
 
 module "secrets_manager" {
-  source = "../../../../cloud/aws/secret_manager"
+  source = "../../../../cloud/aws/secrets_manager"
+  count  = var.remote_tracking ? 1 : 0
 
   secret_name = "mlflow-secrets"
   secret_value = {
