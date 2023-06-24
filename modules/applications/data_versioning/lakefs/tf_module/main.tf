@@ -203,3 +203,21 @@ module "lakefs" {
   tags       = var.tags
   depends_on = [module.lakefs_data_artifacts_bucket, module.lakefs_rds_backend]
 }
+
+module "secrets_manager" {
+  source = "../../../../cloud/aws/secrets_manager"
+  count  = var.remote_tracking ? 1 : 0
+
+  secret_name = "lakefs-secrets"
+  secret_value = {
+    db_instance_username      = module.lakefs_rds_backend.db_instance_username
+    db_instance_password      = module.lakefs_rds_backend.db_instance_password
+    db_instance_endpoint      = module.lakefs_rds_backend.db_instance_endpoint
+    db_instance_name          = module.lakefs_rds_backend.db_instance_name
+    auth_secret_key           = resource.random_password.auth_key[0].result
+    bucket_id                 = module.lakefs_data_artifacts_bucket[0].bucket_id
+    mlflow_server_dns_address = module.lakefs.public_dns
+  }
+
+  depends_on = [module.lakefs]
+}
