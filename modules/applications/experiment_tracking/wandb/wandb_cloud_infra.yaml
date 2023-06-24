@@ -32,6 +32,10 @@ inputs:
     user_facing: true
     description: WandB pypa version
     default: "0.15.4"
+  - name: wandb_artifacts_bucket_name
+    user_facing: true
+    description: WandB artifacts destination bucket name
+    default: "ultimate-wandb-artifacts-storage-bucket"
   - name: ec2_application_port
     user_facing: true
     description: Application port for WandB application

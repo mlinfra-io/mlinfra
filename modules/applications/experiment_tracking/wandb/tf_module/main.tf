@@ -2,7 +2,7 @@ module "wandb_artifacts_bucket" {
   source = "../../../../cloud/aws/s3"
   count  = var.remote_tracking ? 1 : 0
 
-  bucket_name = "ultimate-wandb-artifacts-storage-bucket"
+  bucket_name = var.wandb_artifacts_bucket_name
   tags        = var.tags
 }
 

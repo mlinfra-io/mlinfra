@@ -25,6 +25,11 @@ variable "rds_instance_class" {
   default = "db.t4g.medium"
 }
 
+variable "wandb_artifacts_bucket_name" {
+  type    = string
+  default = "ultimate-wandb-artifacts-storage-bucket"
+}
+
 variable "wandb_version" {
   type    = string
   default = "0.15.4"
