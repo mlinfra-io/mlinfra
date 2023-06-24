@@ -51,3 +51,20 @@ module "mlflow" {
 
   depends_on = [module.mlflow_artifacts_bucket, module.mlflow_rds_backend]
 }
+
+module "secrets_manager" {
+  source = "../../../../cloud/aws/secrets_manager"
+  count  = var.remote_tracking ? 1 : 0
+
+  secret_name = "mlflow-secrets"
+  secret_value = {
+    db_instance_username      = module.mlflow_rds_backend.db_instance_username
+    db_instance_password      = module.mlflow_rds_backend.db_instance_password
+    db_instance_endpoint      = module.mlflow_rds_backend.db_instance_endpoint
+    db_instance_name          = module.mlflow_rds_backend.db_instance_name
+    bucket_id                 = module.mlflow_artifacts_bucket[0].bucket_id
+    mlflow_server_dns_address = module.mlflow.public_dns
+  }
+
+  depends_on = [module.mlflow]
+}

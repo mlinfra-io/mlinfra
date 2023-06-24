@@ -2,7 +2,7 @@ module "wandb_artifacts_bucket" {
   source = "../../../../cloud/aws/s3"
   count  = var.remote_tracking ? 1 : 0
 
-  bucket_name = "ultimate-wandb-artifacts-storage-bucket"
+  bucket_name = var.wandb_artifacts_bucket_name
   tags        = var.tags
 }
 
@@ -166,4 +166,21 @@ module "wandb" {
   })
 
   depends_on = [module.wandb_artifacts_bucket, module.wandb_rds_backend]
+}
+
+module "secrets_manager" {
+  source = "../../../../cloud/aws/secrets_manager"
+  count  = var.remote_tracking ? 1 : 0
+
+  secret_name = "wandb-secrets"
+  secret_value = {
+    db_instance_username      = module.wandb_rds_backend.db_instance_username
+    db_instance_password      = module.wandb_rds_backend.db_instance_password
+    db_instance_endpoint      = module.wandb_rds_backend.db_instance_endpoint
+    db_instance_name          = module.wandb_rds_backend.db_instance_name
+    bucket_id                 = module.wandb_artifacts_bucket[0].bucket_id
+    mlflow_server_dns_address = module.wandb.public_dns
+  }
+
+  depends_on = [module.wandb]
 }
