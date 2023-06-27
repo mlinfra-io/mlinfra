@@ -16,14 +16,14 @@
 
 This project will be supporting the following providers:
 
-- aws
-- gcp
-- azure
-- kubernetes # (for cloud agnostic deployment)
-- digital ocean
-- bare metal (such as hetzner)
-- openstack
-- docker-compose
+- [AWS](https://aws.amazon.com/)
+- [GCP](https://cloud.google.com/)
+- [Azure](https://azure.microsoft.com/en-us)
+- [Kubernetes](https://kubernetes.io/)
+- [DigitalOcean](https://www.digitalocean.com/)
+- Bare metal (such as [Hetzner](https://www.hetzner.com/de))
+- [Openstack](https://www.openstack.org/)
+- [docker compose](https://docs.docker.com/compose/)
 
 ## Deployment Config
 
@@ -71,6 +71,8 @@ stack:
 - To get started, install terraform and python. You can install the required python packages by running `pip3 install -r requirements.txt`
 - You can run any of the available examples from the `examples` folder using `invoke terraform --stack-config-path examples/<application>/<cloud>-<application>.yaml --action <action>` where `<action>` corresponds to terraform actions such as `plan`, `apply`, `destroy` and `output`.
 - You can also run `python3 -m platinfra.main --help` to see all the available options.
+
+For more information, please refer to the [Engineering wiki](https://docs.platinfra.com) of the project regarding what are the different components of the project and how they work together.
 
 ## Contributions
 
