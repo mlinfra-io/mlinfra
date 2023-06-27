@@ -1,6 +1,6 @@
 # platinfra
 
-- _One tool to deploy them platforms_
+> _One tool to deploy all them platforms_
 
 - My intention behind this work is to liberate IaC logic for creating MLOps stacks which is usually tied to other frameworks.
 
