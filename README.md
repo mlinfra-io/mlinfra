@@ -1,4 +1,6 @@
-# ultimate-mlops-stacks
+# platinfra
+
+- _One tools to deploy them platforms_
 
 - My intention behind this work is to liberate IaC logic for creating MLOps stacks which is usually tied to other frameworks.
 
