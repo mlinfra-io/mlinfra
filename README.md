@@ -68,7 +68,9 @@ stack:
 ## Development
 
 - This project relies on terraform for IaC code and python to glue it all together.
--
+- To get started, install terraform and python. You can install the required python packages by running `pip3 install -r requirements.txt`
+- You can run any of the available examples from the `examples` folder using `invoke terraform --stack-config-path examples/<application>/<cloud>-<application>.yaml --action <action>` where `<action>` corresponds to terraform actions such as `plan`, `apply`, `destroy` and `output`.
+- You can also run `python3 -m platinfra.main --help` to see all the available options.
 
 ## Contributions
 
