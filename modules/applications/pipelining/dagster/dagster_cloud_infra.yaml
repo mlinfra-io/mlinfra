@@ -32,14 +32,12 @@ inputs:
     user_facing: true
     description: dagster artifacts destination bucket name
     default: "ultimate-dagster-artifacts-storage-bucket"
-  - name: dagster_version
+  - name: app_versions
     user_facing: true
-    description: dagster pypa version
-    default: "1.3.12"
-  - name: dagit_version
-    user_facing: true
-    description: dagster pypa version
-    default: "1.3.12"
+    description: dagster and dagit pypa versions
+    default:
+      dagit: "1.3.12"
+      dagster: "1.3.12"
   - name: ec2_application_port
     user_facing: true
     description: Application port for dagster application

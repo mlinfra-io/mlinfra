@@ -30,20 +30,16 @@ variable "dagster_artifacts_bucket_name" {
   default = "ultimate-dagster-artifacts-storage-bucket"
 }
 
-variable "dagster_version" {
-  type    = string
-  default = "1.3.12"
+variable "app_versions" {
+  type = object({
+    dagster = string
+    dagit   = string
+  })
+  default = {
+    dagster = "1.3.12"
+    dagit   = "1.3.12"
+  }
 }
-
-variable "dagit_version" {
-  type    = string
-  default = "1.3.12"
-}
-
-# variable "dagster_ui_version" {
-#   type    = string
-#   default = "0.16.1"
-# }
 
 # variable "dagster_celery_worker_version" {
 #   type    = string
