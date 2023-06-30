@@ -41,11 +41,6 @@ variable "app_versions" {
   }
 }
 
-# variable "dagster_celery_worker_version" {
-#   type    = string
-#   default = "0.1"
-# }
-
 variable "ec2_application_port" {
   type    = number
   default = 80
