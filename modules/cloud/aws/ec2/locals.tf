@@ -48,5 +48,6 @@ locals {
     cidr_blocks = [var.vpc_cidr_block]
   }]
 
-  ingress_rules = var.enable_rds_ingress_rule ? (var.rds_type == "postgres" ? concat(local.common_ingress_rules, local.rds_postgres_ingress_rules) : concat(local.common_ingress_rules, local.rds_mysql_ingress_rules)) : local.common_ingress_rules
+  _ingress_rules = var.enable_rds_ingress_rule ? (var.rds_type == "postgres" ? concat(local.common_ingress_rules, local.rds_postgres_ingress_rules) : concat(local.common_ingress_rules, local.rds_mysql_ingress_rules)) : local.common_ingress_rules
+  ingress_rules  = var.additional_ingress_rules != null ? concat(local._ingress_rules, var.additional_ingress_rules) : local._ingress_rules
 }
