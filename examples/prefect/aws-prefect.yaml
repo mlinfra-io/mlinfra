@@ -7,5 +7,3 @@ provider:
 stacks:
   - pipelining:
       name: prefect
-      params:
-        ec2_application_port: 8500
