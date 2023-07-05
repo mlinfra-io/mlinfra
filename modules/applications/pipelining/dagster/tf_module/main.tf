@@ -27,6 +27,7 @@ module "dagster" {
   ec2_user_data = templatefile("${path.module}/simple-cloud-init.tpl", {
     dagster_version      = var.app_versions.dagster
     dagit_version        = var.app_versions.dagit
+    project_name         = "dagster-project"
     ec2_application_port = var.ec2_application_port
     dagster_config       = templatefile("${path.module}/dagster-config.tpl", {})
     # workspace_config     = templatefile("${path.module}/workspace-config.tpl", { user = "ec2-user" })
