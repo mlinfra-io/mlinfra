@@ -1,4 +1,3 @@
-
 module "dagster" {
   source                  = "../../../../cloud/aws/ec2"
   vpc_id                  = var.vpc_id
@@ -10,19 +9,6 @@ module "dagster" {
   ec2_application_port    = var.ec2_application_port
   ec2_instance_type       = var.ec2_instance_type
   enable_rds_ingress_rule = var.remote_tracking
-
-  # ec2_user_data = var.remote_tracking ? templatefile("${path.module}/remote-cloud-init.tpl", {
-  #   mlflow_version       = var.mlflow_version
-  #   ec2_application_port = var.ec2_application_port
-  #   db_instance_username = module.mlflow_rds_backend.db_instance_username
-  #   db_instance_password = module.mlflow_rds_backend.db_instance_password
-  #   db_instance_endpoint = module.mlflow_rds_backend.db_instance_endpoint
-  #   db_instance_name     = module.mlflow_rds_backend.db_instance_name
-  #   bucket_id            = module.mlflow_artifacts_bucket[0].bucket_id
-  #   }) : templatefile("${path.module}/simple-cloud-init.tpl", {
-  #   mlflow_version       = var.mlflow_version
-  #   ec2_application_port = var.ec2_application_port
-  # })
 
   additional_ingress_rules = [{
     from_port   = 9500
@@ -38,6 +24,5 @@ module "dagster" {
     project_name         = "dagster-project"
     ec2_application_port = var.ec2_application_port
     dagster_config       = templatefile("${path.module}/dagster-config.tpl", {})
-    # workspace_config     = templatefile("${path.module}/workspace-config.tpl", { user = "ec2-user" })
   })
 }
