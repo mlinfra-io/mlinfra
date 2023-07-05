@@ -24,6 +24,14 @@ module "dagster" {
   #   ec2_application_port = var.ec2_application_port
   # })
 
+  additional_ingress_rules = [{
+    from_port   = 9500
+    to_port     = 9500
+    protocol    = "tcp"
+    description = "Allowing users to access VS Code port 9500 access"
+    cidr_blocks = ["0.0.0.0/0"]
+  }]
+
   ec2_user_data = templatefile("${path.module}/simple-cloud-init.tpl", {
     dagster_version      = var.app_versions.dagster
     dagit_version        = var.app_versions.dagit
