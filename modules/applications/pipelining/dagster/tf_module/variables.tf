@@ -41,6 +41,11 @@ variable "app_versions" {
   }
 }
 
+variable "vs_code_version" {
+  type    = string
+  default = "4.14.1"
+}
+
 variable "ec2_application_port" {
   type    = number
   default = 80

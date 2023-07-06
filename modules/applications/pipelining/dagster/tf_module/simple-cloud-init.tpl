@@ -1,7 +1,7 @@
 #!/bin/bash
 
 USER=ec2-user
-VERSION="4.14.1"
+VERSION=${vs_code_version}
 
 # Install Dagster dependencies
 sudo yum update -y

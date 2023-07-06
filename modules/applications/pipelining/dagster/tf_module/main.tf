@@ -23,6 +23,7 @@ module "dagster" {
     dagit_version        = var.app_versions.dagit
     project_name         = "dagster-project"
     ec2_application_port = var.ec2_application_port
+    vs_code_version      = var.vs_code_version
     dagster_config       = templatefile("${path.module}/dagster-config.tpl", {})
   })
 }
