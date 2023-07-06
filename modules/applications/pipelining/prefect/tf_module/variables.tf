@@ -25,11 +25,6 @@ variable "rds_instance_class" {
   default = "db.t4g.medium"
 }
 
-# variable "prefect_artifacts_bucket_name" {
-#   type    = string
-#   default = "ultimate-prefect-artifacts-storage-bucket"
-# }
-
 variable "prefect_version" {
   type    = string
   default = "2.10.18"

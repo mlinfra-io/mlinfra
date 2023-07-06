@@ -9,4 +9,4 @@ stacks:
       name: prefect
       params:
         remote_tracking: true
-        prefect_artifacts_bucket_name: "ultimate-test-artifacts-storage-bucket"
+        ec2_application_port: 9500

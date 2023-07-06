@@ -28,10 +28,6 @@ inputs:
     user_facing: true
     description: RDS instance class to deploy prefect backend on
     default: "db.t4g.medium"
-  # - name: prefect_artifacts_bucket_name
-  #   user_facing: true
-  #   description: prefect artifacts destination bucket name
-  #   default: "ultimate-prefect-artifacts-storage-bucket"
   - name: prefect_version
     user_facing: true
     description: prefect pypa version
@@ -52,6 +48,11 @@ inputs:
     user_facing: true
     description: Deployed an external RDS server as backend store and S3 as artifact store for prefect.
     default: false
+  - name: tags
+    user_facing: true
+    description: Tags to be added to the deployed resources.
+    default:
+      Name: "ultimate-mlops-prefect-instance"
 outputs:
   - name: prefect_server_address
     description: prefect server address. Right now its composed of EC2 instance IP address, with http scheme.
