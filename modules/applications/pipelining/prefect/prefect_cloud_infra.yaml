@@ -31,7 +31,7 @@ inputs:
   - name: prefect_version
     user_facing: true
     description: prefect pypa version
-    default: "2.10.18"
+    default: "2.11.0"
   - name: ec2_application_port
     user_facing: true
     description: Application port for prefect application
