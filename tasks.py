@@ -31,6 +31,9 @@ def estimate_cost(
     ctx,
     stack_config_path: str,
 ):
+    """
+    Estimate cost of the contents of config file
+    """
     run_initial_terraform_tasks(stack_config_path=stack_config_path)
 
     ctx.run(f"cd {TF_PATH} && terraform init")
@@ -44,7 +47,8 @@ def estimate_cost(
     pre=[],
     help={
         "stack_config_path": "Path of the config file",
-        "action": "Allowed actions are plan, destroy, apply, force-unlock",
+        "action": "Allowed actions are plan, destroy, apply, force-unlock (not yet available). Defaults to plan",
+        "args": "Additional args to pass to terraform. Defaults to none",
     },
 )
 def terraform(
@@ -53,6 +57,9 @@ def terraform(
     action: str = "plan",
     args: str = "",
 ):
+    """
+    Run terraform for the config file with the given action and args.
+    """
     run_initial_terraform_tasks(stack_config_path=stack_config_path)
 
     ctx.run(f"cd {TF_PATH} && terraform init")
