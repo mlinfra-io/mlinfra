@@ -5,16 +5,8 @@ from ultimate_mlops_cli.stack_file_processor import StackfileProcessor
 from ultimate_mlops_cli.terraform.terraform_state_helper import TerraformStateHelper
 
 
-@task(
-    pre=[],
-    help={
-        "stack_config_path": "Path of the config file",
-    },
-)
-def estimate_cost(
-    ctx,
+def run_initial_terraform_tasks(
     stack_config_path: str,
-    args: str = "",
 ):
     # clean the tf directory before init
     clean_tf_directory()
@@ -27,6 +19,19 @@ def estimate_cost(
     state_helper.manage_aws_state_storage()
 
     file_processor.generate()
+
+
+@task(
+    pre=[],
+    help={
+        "stack_config_path": "Path of the config file",
+    },
+)
+def estimate_cost(
+    ctx,
+    stack_config_path: str,
+):
+    run_initial_terraform_tasks(stack_config_path=stack_config_path)
 
     ctx.run(f"cd {TF_PATH} && terraform init")
     ctx.run(
@@ -48,17 +53,7 @@ def terraform(
     action: str = "plan",
     args: str = "",
 ):
-    # clean the tf directory before init
-    clean_tf_directory()
-
-    file_processor = StackfileProcessor(stack_config_path=stack_config_path)
-
-    state_helper = TerraformStateHelper(
-        state=file_processor.get_state_file_name(), region=file_processor.get_region()
-    )
-    state_helper.manage_aws_state_storage()
-
-    file_processor.generate()
+    run_initial_terraform_tasks(stack_config_path=stack_config_path)
 
     ctx.run(f"cd {TF_PATH} && terraform init")
 
