@@ -8,4 +8,5 @@ class Provider(Enum):
 
     AWS = "aws"
     GCP = "gcp"
-    KUBERNETES = "kubernetes"
+    AZURE = "azure"
+    # ORACLE = "oracle"
