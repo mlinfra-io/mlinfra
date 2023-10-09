@@ -2,6 +2,10 @@ import json
 import os
 import yaml
 
+from ultimate_mlops_cli.stack_processor.provider_preprocessor.aws_provider import (
+    AWSProvider,
+)
+
 from ..enums.provider import Provider
 from ..enums.deployment_type import DeploymentType
 
@@ -11,15 +15,30 @@ from ..utils.utils import clean_tf_directory
 
 class BaseProcessor:
     def __init__(self, stack_config_path):
-        self.stack = stack_config_path
+        self.stack_config_path = stack_config_path
+        self.stack_config = self.read_stack_config()
         self.stack_name = ""
         self.account_id = ""
         self.provider = "aws"
         self.deployment_type = ""
         self.state_file_name = ""
         self.is_stack_component = True
-        self.stack_config = self.get_stack_config()
         self.output = {"output": []}
+
+        if (
+            not self.stack_config["name"]
+            or "provider" not in self.stack_config
+            or "deployment_type" not in self.stack_config
+            or "stacks" not in self.stack_config
+        ):
+            raise Exception("Stack config component is missing")
+
+        # this has to be done now as the stack config is read
+        # and the provider details are needed for the state file name
+        # and the region
+        self.read_provider_details()
+        self.stack_name = self.stack_config["name"]
+        self.state_file_name = f"tfstate-{self.stack_name}-{self.region}"
 
     def generate(self):
         self.prepare_common_configuration()
@@ -33,25 +52,32 @@ class BaseProcessor:
     def get_region(self):
         return self.region
 
-    def get_stack_config(self):
+    def read_stack_config(self) -> yaml:
+        # clean the generated files directory
         clean_tf_directory()
 
+        # create the stack folder
         os.makedirs(TF_PATH, mode=0o777)
-        with open(self.stack, "r") as stack_config:
-            config = yaml.safe_load(stack_config.read())
-            self.stack_name = config["name"]
-            if "provider" in config:
-                self.is_stack_component = False
-                self.provider = Provider(config["provider"]["name"])
-                self.account_id = config["provider"]["account_id"]
-                self.region = config["provider"]["region"]
-                self.deployment_type = DeploymentType(
-                    config["provider"]["deployment_type"]
-                )
-            self.state_file_name = f"tfstate-{self.stack_name}-{self.region}"
+
+        # read the stack config file
+        try:
+            with open(self.stack_config_path, "r") as stack_config:
+                config = yaml.safe_load(stack_config.read())
             return config
+        except FileNotFoundError:
+            raise FileNotFoundError(
+                f"Stack config file not found: {self.stack_config_path}"
+            )
+
+    def read_provider_details(self) -> None:
+        if Provider(self.stack_config["provider"]["name"]) == Provider.AWS:
+            aws_provider = AWSProvider(self.stack_config["provider"])
+            self.provider = Provider(self.stack_config["provider"]["name"])
+            self.account_id, self.region = aws_provider.get_provider_details()
 
     def prepare_common_configuration(self):
+        # TODO: setup the deployment type here correctly
+        self.deployment_type = DeploymentType(self.stack_config["deployment_type"])
         contains_kubernetes = False
         for stack in self.stack_config["stacks"]:
             if "orchestrator" in stack and (
@@ -97,7 +123,9 @@ class BaseProcessor:
                     "deployment_type"
                 ] = self.deployment_type.value
                 data["provider"]["aws"]["default_tags"]["tags"]["region"] = self.region
-                data["provider"]["aws"]["default_tags"]["tags"]["stack"] = self.stack
+                data["provider"]["aws"]["default_tags"]["tags"][
+                    "stack"
+                ] = self.stack_config_path
 
                 # add random provider
                 with open(
