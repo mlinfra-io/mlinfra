@@ -6,5 +6,5 @@ class KubernetesProcessor(BaseProcessor):
     def __init__(self, config):
         super(KubernetesProcessor, self).__init__(config)
 
-    def process(self):
+    def generate(self):
         logger.info("Processing Kubernetes Infrastructure")
