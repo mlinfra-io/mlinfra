@@ -5,6 +5,7 @@
     },
     "aws_region": {
       "provider": {}
-    }
+    },
+    "terraform_remote_state": {}
   }
 }
