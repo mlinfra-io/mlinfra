@@ -16,7 +16,7 @@ from ultimate_mlops_cli.utils.utils import clean_tf_directory
 from ultimate_mlops_cli.utils.constants import TF_PATH
 
 
-class BaseProcessor:
+class StackGenerator:
     def __init__(self, stack_config_path):
         self.stack_config_path = stack_config_path
         self.stack_config = self.read_stack_config()
@@ -32,7 +32,7 @@ class BaseProcessor:
             not self.stack_config["name"]
             or "provider" not in self.stack_config
             or "deployment_type" not in self.stack_config
-            or "stacks" not in self.stack_config
+            or "stack" not in self.stack_config
         ):
             raise Exception("Stack config component is missing")
 
@@ -112,5 +112,5 @@ class BaseProcessor:
 
 
 if __name__ == "__main__":
-    tf = BaseProcessor(stack_config_path="examples/aws-mlflow.yaml")
+    tf = StackGenerator(stack_config_path="examples/aws-mlflow.yaml")
     tf.generate()
