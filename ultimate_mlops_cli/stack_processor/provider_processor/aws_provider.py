@@ -9,16 +9,14 @@ from ultimate_mlops_cli.utils.constants import TF_PATH
 class AWSProvider(AbstractProvider):
     def __init__(self, stack_name: str, config: yaml):
         super().__init__(stack_name=stack_name, config=config)
+        # required
+        self.account_id = config.get("account_id")
+        self.region = config.get("region")
 
-    def get_provider_details(self) -> (str, str):
-        super().get_provider_details()
-        return (self.account_id, self.region)
-
-    def get_access_credentials(self) -> (str, str):
-        return (self.access_key, self.secret_key)
-
-    def get_role_arn(self) -> str:
-        return self.role_arn
+        # optional
+        self.access_key = config.get("access_key", None)
+        self.secret_key = config.get("secret_key", None)
+        self.role_arn = config.get("role_arn", None)
 
     def configure_provider(self):
         with open("modules/cloud/aws/provider.tf.json", "r") as data_json:
