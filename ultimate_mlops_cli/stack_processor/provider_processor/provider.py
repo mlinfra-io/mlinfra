@@ -1,3 +1,4 @@
+import yaml
 from abc import ABC, abstractmethod
 
 
@@ -7,8 +8,10 @@ class AbstractProvider(ABC):
     """
 
     @abstractmethod
-    def __init__(self, config):
+    def __init__(self, stack_name: str, config: yaml):
+        self.stack_name = stack_name
         self.config = config
+
         self.account_id = config.get("account_id", None)
         self.region = config.get("region", None)
         self.access_key = config.get("access_key", None)

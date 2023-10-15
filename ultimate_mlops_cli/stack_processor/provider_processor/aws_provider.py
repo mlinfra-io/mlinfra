@@ -7,8 +7,8 @@ from ultimate_mlops_cli.utils.constants import TF_PATH
 
 
 class AWSProvider(AbstractProvider):
-    def __init__(self, config: yaml):
-        super().__init__(config=config)
+    def __init__(self, stack_name: str, config: yaml):
+        super().__init__(stack_name=stack_name, config=config)
 
     def get_provider_details(self) -> (str, str):
         super().get_provider_details()
@@ -21,9 +21,7 @@ class AWSProvider(AbstractProvider):
         return self.role_arn
 
     def configure_provider(self):
-        with open(
-            f"modules/cloud/{self.provider.value}/provider.tf.json", "r"
-        ) as data_json:
+        with open("modules/cloud/aws/provider.tf.json", "r") as data_json:
             with open(
                 f"./{TF_PATH}/provider.tf.json", "w", encoding="utf-8"
             ) as tf_json:
@@ -45,3 +43,18 @@ class AWSProvider(AbstractProvider):
                 data["provider"].update(random_provider_json["provider"])
 
                 json.dump(data, tf_json, ensure_ascii=False, indent=2)
+
+        with open("modules/cloud/aws/data.tf.json", "r") as data_json:
+            with open(f"./{TF_PATH}/data.tf.json", "w", encoding="utf-8") as tf_json:
+                json_data = json.load(data_json)
+
+                json_data["data"]["terraform_remote_state"] = {
+                    "backend": "s3",
+                    "config": {
+                        "bucket": self.stack_name,
+                        "key": "ultimate-mlops-stack",
+                        "dynamodb_table": self.stack_name,
+                        "region": self.region,
+                    },
+                }
+                json.dump(json_data, tf_json, ensure_ascii=False, indent=2)
