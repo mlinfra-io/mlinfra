@@ -17,14 +17,18 @@ class AbstractDeployment(ABC):
     def configure_deployment(self):
         pass
 
+    # TODO: refactor statefile name
+    def get_statefile_name(self) -> str:
+        return f"tfstate-{self.stack_name}-{self.region}"
+
     def get_provider_backend(self, provider: Provider) -> json:
         if provider == Provider.AWS:
             return {
                 "backend": {
                     "s3": {
-                        "bucket": self.stack_name,
+                        "bucket": self.get_statefile_name(),
                         "key": "ultimate-mlops-stack",
-                        "dynamodb_table": self.stack_name,
+                        "dynamodb_table": self.get_statefile_name(),
                         "region": self.region,
                         "encrypt": True,
                     }
