@@ -1,24 +1,24 @@
 import os
 import yaml
-from ultimate_mlops_cli.stack_processor.provider_processor.aws_provider import (
+from platinfra_cli.stack_processor.provider_processor.aws_provider import (
     AWSProvider,
 )
-from ultimate_mlops_cli.stack_processor.deployment_processor.cloud_infra_deployment import (
+from platinfra_cli.stack_processor.deployment_processor.cloud_infra_deployment import (
     CloudInfraDeployment,
 )
-from ultimate_mlops_cli.stack_processor.deployment_processor.kubernetes_deployment import (
+from platinfra_cli.stack_processor.deployment_processor.kubernetes_deployment import (
     KubernetesDeployment,
 )
-from ultimate_mlops_cli.stack_processor.stack_processor.cloud_infra_stack import (
+from platinfra_cli.stack_processor.stack_processor.cloud_infra_stack import (
     CloudInfraStack,
 )
-from ultimate_mlops_cli.stack_processor.stack_processor.kubernetes_stack import (
+from platinfra_cli.stack_processor.stack_processor.kubernetes_stack import (
     KubernetesStack,
 )
-from ultimate_mlops_cli.enums.provider import Provider
-from ultimate_mlops_cli.enums.deployment_type import DeploymentType
-from ultimate_mlops_cli.utils.utils import clean_tf_directory
-from ultimate_mlops_cli.utils.constants import TF_PATH
+from platinfra_cli.enums.provider import Provider
+from platinfra_cli.enums.deployment_type import DeploymentType
+from platinfra_cli.utils.utils import clean_tf_directory
+from platinfra_cli.utils.constants import TF_PATH
 
 
 class StackGenerator:

@@ -1,6 +1,6 @@
 import json
 from abc import ABC, abstractmethod
-from ultimate_mlops_cli.enums.provider import Provider
+from platinfra_cli.enums.provider import Provider
 
 
 class AbstractDeployment(ABC):

@@ -1,9 +1,9 @@
 import json
 import yaml
-from ultimate_mlops_cli.stack_processor.provider_processor.provider import (
+from platinfra_cli.stack_processor.provider_processor.provider import (
     AbstractProvider,
 )
-from ultimate_mlops_cli.utils.constants import TF_PATH
+from platinfra_cli.utils.constants import TF_PATH
 
 
 class AWSProvider(AbstractProvider):

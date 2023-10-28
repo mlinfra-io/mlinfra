@@ -1,11 +1,11 @@
 import json
 import yaml
-from ultimate_mlops_cli.stack_processor.stack_processor.stack import (
+from platinfra_cli.stack_processor.stack_processor.stack import (
     AbstractStack,
 )
-from ultimate_mlops_cli.enums.provider import Provider
-from ultimate_mlops_cli.enums.deployment_type import DeploymentType
-from ultimate_mlops_cli.utils.constants import TF_PATH, CREATE_VPC_DB_SUBNET
+from platinfra_cli.enums.provider import Provider
+from platinfra_cli.enums.deployment_type import DeploymentType
+from platinfra_cli.utils.constants import TF_PATH, CREATE_VPC_DB_SUBNET
 
 
 class CloudInfraStack(AbstractStack):

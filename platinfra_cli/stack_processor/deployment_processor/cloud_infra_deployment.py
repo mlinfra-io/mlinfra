@@ -1,9 +1,9 @@
 import json
-from ultimate_mlops_cli.enums.provider import Provider
-from ultimate_mlops_cli.stack_processor.deployment_processor.deployment import (
+from platinfra_cli.enums.provider import Provider
+from platinfra_cli.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
 )
-from ultimate_mlops_cli.utils.constants import TF_PATH
+from platinfra_cli.utils.constants import TF_PATH
 
 
 class CloudInfraDeployment(AbstractDeployment):

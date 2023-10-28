@@ -1,10 +1,10 @@
 from invoke import task
-from ultimate_mlops_cli.utils.constants import TF_PATH
-from ultimate_mlops_cli.utils.utils import clean_tf_directory
-from ultimate_mlops_cli.stack_processor.stack_generator import (
+from platinfra_cli.utils.constants import TF_PATH
+from platinfra_cli.utils.utils import clean_tf_directory
+from platinfra_cli.stack_processor.stack_generator import (
     StackGenerator,
 )
-from ultimate_mlops_cli.terraform.terraform_state_helper import TerraformStateHelper
+from platinfra_cli.terraform.terraform_state_helper import TerraformStateHelper
 
 
 def run_initial_terraform_tasks(

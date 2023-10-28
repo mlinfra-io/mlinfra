@@ -1,8 +1,8 @@
 import json
-from ultimate_mlops_cli.stack_processor.stack_processor.stack import (
+from platinfra_cli.stack_processor.stack_processor.stack import (
     AbstractStack,
 )
-from ultimate_mlops_cli.utils.constants import TF_PATH
+from platinfra_cli.utils.constants import TF_PATH
 
 
 class KubernetesStack(AbstractStack):

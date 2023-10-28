@@ -1,8 +1,8 @@
 import json
 import yaml
 from abc import ABC, abstractmethod
-from ultimate_mlops_cli.enums.provider import Provider
-from ultimate_mlops_cli.enums.deployment_type import DeploymentType
+from platinfra_cli.enums.provider import Provider
+from platinfra_cli.enums.deployment_type import DeploymentType
 
 
 class AbstractStack(ABC):
