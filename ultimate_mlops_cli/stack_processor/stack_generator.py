@@ -1,15 +1,20 @@
-import json
 import os
 import yaml
-from ultimate_mlops_cli.stack_processor.deployment_processor.cloud_infra_processor import (
-    CloudInfraProcessor,
-    KubernetesProcessor,
-)
-
 from ultimate_mlops_cli.stack_processor.provider_processor.aws_provider import (
     AWSProvider,
 )
-
+from ultimate_mlops_cli.stack_processor.deployment_processor.cloud_infra_deployment import (
+    CloudInfraDeployment,
+)
+from ultimate_mlops_cli.stack_processor.deployment_processor.kubernetes_deployment import (
+    KubernetesDeployment,
+)
+from ultimate_mlops_cli.stack_processor.stack_processor.cloud_infra_stack import (
+    CloudInfraStack,
+)
+from ultimate_mlops_cli.stack_processor.stack_processor.kubernetes_stack import (
+    KubernetesStack,
+)
 from ultimate_mlops_cli.enums.provider import Provider
 from ultimate_mlops_cli.enums.deployment_type import DeploymentType
 from ultimate_mlops_cli.utils.utils import clean_tf_directory
@@ -39,11 +44,13 @@ class StackGenerator:
         # this has to be done now as the stack config is read
         # and the provider details are needed for the state file name
         # and the region
-        self.read_provider_details()
         self.stack_name = self.stack_config["name"]
-        self.state_file_name = f"tfstate-{self.stack_name}-{self.region}"
+        self.region = self.stack_config["provider"]["region"]
+        self.provider = self.configure_provider()
 
+    # TODO: refactor statefile name
     def get_state_file_name(self):
+        self.state_file_name = f"tfstate-{self.stack_name}-{self.region}"
         return self.state_file_name
 
     def get_region(self):
@@ -54,12 +61,28 @@ class StackGenerator:
             DeploymentType(self.stack_config["deployment_type"])
             == DeploymentType.CLOUD_INFRA
         ):
-            CloudInfraProcessor(config=self.stack_config["stacks"]).generate()
+            CloudInfraDeployment(
+                stack_name=self.stack_name,
+                provider=Provider(self.stack_config["provider"]["name"]),
+                region=self.region,
+            ).configure_deployment()
+            CloudInfraStack(
+                state_file_name=self.state_file_name,
+                region=self.region,
+                account_id=self.account_id,
+                provider=self.provider,
+                deployment_type=DeploymentType.CLOUD_INFRA,
+                stacks=self.stack_config["stack"],
+            ).generate()
+
         elif (
             DeploymentType(self.stack_config["deployment_type"])
             == DeploymentType.KUBERNETES
         ):
-            KubernetesProcessor(config=self.stack_config["deployment_type"]).generate()
+            KubernetesDeployment(
+                config=self.stack_config["deployment_type"]
+            ).configure_deployment()
+            KubernetesStack(config=self.stack_config["stack"]).generate()
 
     def read_stack_config(self) -> yaml:
         # clean the generated files directory
@@ -78,37 +101,13 @@ class StackGenerator:
                 f"Stack config file not found: {self.stack_config_path}"
             )
 
-    def read_provider_details(self) -> None:
+    def configure_provider(self) -> Provider:
         if Provider(self.stack_config["provider"]["name"]) == Provider.AWS:
-            aws_provider = AWSProvider(self.stack_config["provider"])
-            self.provider = Provider(self.stack_config["provider"]["name"])
-            self.account_id, self.region = aws_provider.get_provider_details()
-
-    def _read_config_file(
-        self, stack_type: str, application_name: str, extension: str = "yaml"
-    ) -> json:
-        """
-        Reads the config file for the application and returns the config
-        as a json object for application config and yaml for stack config.
-
-        Args:
-            stack_type (str): The type of the stack.
-            application_name (str): The name of the application.
-            extension (str, optional): The extension of the config file.
-        """
-        try:
-            with open(
-                f"modules/applications/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}",
-                "r",
-                encoding="utf-8",
-            ) as tf_config:
-                if extension == "yaml":
-                    return yaml.safe_load(tf_config.read())
-                return json.loads(tf_config.read())
-        except FileNotFoundError:
-            raise FileNotFoundError(
-                f"Config file not found: {application_name}_{self.deployment_type.value}.{extension}"
+            aws_provider = AWSProvider(
+                stack_name=self.stack_name, config=self.stack_config["provider"]
             )
+            aws_provider.configure_provider()
+            return Provider.AWS
 
 
 if __name__ == "__main__":
