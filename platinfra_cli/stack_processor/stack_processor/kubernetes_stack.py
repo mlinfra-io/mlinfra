@@ -1,56 +1,53 @@
 import json
+import yaml
 from platinfra_cli.stack_processor.stack_processor.stack import (
     AbstractStack,
 )
-from platinfra_cli.utils.constants import TF_PATH
+from platinfra_cli.enums.provider import Provider
+from platinfra_cli.enums.deployment_type import DeploymentType
+from platinfra_cli.utils.constants import TF_PATH, CREATE_VPC_DB_SUBNET
 
 
 class KubernetesStack(AbstractStack):
-    def generate(self):
-        # logger.info("Processing Cloud Infrastructure")
-        self.prepare_common_configuration()
-        self.prepare_stack_modules()
-        self.prepare_stack_outputs()
-        # self.prepare_stack_input()
+    """
+    The KubernetesStack class is responsible for generating the
+    Terraform configuration files for the Kubernetes stack.
+    """
 
-    def prepare_common_configuration(self):
-        # with open("modules/cloud/aws/terraform.tf.json", "r") as data_json:
-        #     with open(
-        #         f"./{TF_PATH}/terraform.tf.json", "w", encoding="utf-8"
-        #     ) as tf_json:
-        #         data = json.load(data_json)
+    def __init__(
+        self,
+        state_file_name: str,
+        region: str,
+        account_id: str,
+        provider: Provider,
+        deployment_type: DeploymentType,
+        stacks: yaml,
+    ):
+        """
+        Constructor for the KubernetesStack class.
 
-        #         # add random provider
-        #         with open(
-        #             "modules/terraform_providers/random/terraform.tf.json", "r"
-        #         ) as random_tf:
-        #             random_tf_json = json.load(random_tf)
-        #         data["terraform"]["required_providers"].update(
-        #             random_tf_json["terraform"]["required_providers"]
-        #         )
+        :param provider: The cloud provider
+        :type provider: Provider
+        :param stacks: The stacks configuration
+        :type stacks: yaml
+        """
+        super().__init__(
+            state_file_name=state_file_name,
+            region=region,
+            account_id=account_id,
+            provider=provider,
+            deployment_type=deployment_type,
+            stacks=stacks,
+        )
+        self.output = {"output": []}
 
-        #         # TODO: Fix this as there is no state_file_name
-        #         # variable available
-        #         data["terraform"].update(
-        #             {
-        #                 "backend": {
-        #                     "s3": {
-        #                         "bucket": self.state_file_name,
-        #                         "key": "ultimate-mlops-stack",
-        #                         "dynamodb_table": self.state_file_name,
-        #                         "region": self.region,
-        #                         "encrypt": True,
-        #                     }
-        #                 }
-        #             }
-        #         )
-        #         json.dump(data, tf_json, ensure_ascii=False, indent=2)
+    def process_stack_config(self):
         pass
 
-    def prepare_stack_modules(self):
+    def process_stack_modules(self):
         create_vpc_database_subnets: bool = False
 
-        for module in self.stack_config["stacks"]:
+        for module in self.stacks:
             # extracting stack type
             stack_type = [key for key in module.keys()][0]
 
@@ -73,6 +70,7 @@ class KubernetesStack(AbstractStack):
             application_config = self._read_config_file(
                 stack_type=stack_type, application_name=name
             )
+
             if application_config is not None:
                 if "inputs" in application_config:
                     inputs = {}
@@ -130,7 +128,7 @@ class KubernetesStack(AbstractStack):
         if self.provider == Provider.AWS:
             name = "vpc"
             json_module = {"module": {name: {}}}
-            json_module["module"][name]["name"] = f"{self.stack_name}-vpc"
+            # json_module["module"][name]["name"] = f"{self.stack_name}-vpc"
             json_module["module"][name]["source"] = f"../modules/cloud/aws/{name}"
             json_module["module"][name][
                 "create_database_subnets"
@@ -163,7 +161,7 @@ class KubernetesStack(AbstractStack):
         k8s_module_name = k8s_module[0][return_key] if len(k8s_module) != 0 else None
         return k8s_module_name
 
-    def prepare_stack_outputs(self):
+    def process_stack_outputs(self):
         self.output["output"].append({"state_storage": {"value": self.state_file_name}})
         self.output["output"].append(
             {
@@ -179,6 +177,9 @@ class KubernetesStack(AbstractStack):
         )
         with open(f"./{TF_PATH}/output.tf.json", "w", encoding="utf-8") as tf_json:
             json.dump(self.output, tf_json, ensure_ascii=False, indent=2)
+
+    def process_stack_inputs(self):
+        pass
 
     def _common_service_input(self) -> any:
         return {
@@ -230,6 +231,13 @@ class KubernetesStack(AbstractStack):
                 f"./{TF_PATH}/variable.tf.json", "w", encoding="utf-8"
             ) as tf_json:
                 json.dump(json_output, tf_json, ensure_ascii=False, indent=2)
+
+    def generate(self):
+        # logger.info("Processing Kubernetes Infrastructure")
+        self.process_stack_config()
+        self.process_stack_inputs()
+        self.process_stack_modules()
+        self.process_stack_outputs()
 
 
 if __name__ == "__main__":
