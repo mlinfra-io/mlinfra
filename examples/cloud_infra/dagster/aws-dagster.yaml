@@ -3,7 +3,8 @@ provider:
   name: aws
   account_id: "793009824629"
   region: "eu-central-1"
-deployment_type: cloud_infra
+deployment:
+  type: cloud_infra
 stack:
   - pipelining:
       name: dagster
