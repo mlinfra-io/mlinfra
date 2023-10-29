@@ -138,28 +138,10 @@ class KubernetesStack(AbstractStack):
                 json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
         elif self.provider == Provider.GCP:
             pass
-
-    def get_eks_module_refs(self, k8s_module_name: str = None) -> dict:
-        module_source = (
-            f"module.{k8s_module_name}"
-            if k8s_module_name is not None and len(k8s_module_name) != 0
-            else "data.terraform_remote_state.parent.outputs"
-        )
-        if self.provider == "aws":
-            return {
-                "host": f"${{{module_source}.k8s_endpoint}}",
-                "token": "${data.aws_eks_cluster_auth.k8s.token}",
-                "cluster_ca_certificate": f"${{base64decode({module_source}.k8s_ca_data)}}",
-            }
-
-    def _get_k8s_module_name(self, return_key: str = "cluster_name") -> str:
-        k8s_module = [
-            _module
-            for _module in self.stack_config["modules"]
-            if _module["type"] == "eks"
-        ]
-        k8s_module_name = k8s_module[0][return_key] if len(k8s_module) != 0 else None
-        return k8s_module_name
+        elif self.provider == Provider.AZURE:
+            pass
+        else:
+            raise ValueError(f"Provider {self.provider} is not supported")
 
     def process_stack_outputs(self):
         self.output["output"].append({"state_storage": {"value": self.state_file_name}})

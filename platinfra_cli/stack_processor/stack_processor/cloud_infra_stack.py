@@ -135,6 +135,10 @@ class CloudInfraStack(AbstractStack):
                 json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
         elif self.provider == Provider.GCP:
             pass
+        elif self.provider == Provider.AZURE:
+            pass
+        else:
+            raise ValueError(f"Provider {self.provider} not supported")
 
     def process_stack_inputs(self):
         pass
