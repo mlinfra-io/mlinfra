@@ -61,13 +61,12 @@ class StackGenerator:
             DeploymentType(self.stack_config["deployment"]["type"])
             == DeploymentType.CLOUD_INFRA
         ):
-            cloud_infra_deployment = CloudInfraDeployment(
+            CloudInfraDeployment(
                 stack_name=self.stack_name,
                 provider=Provider(self.stack_config["provider"]["name"]),
                 region=self.region,
-            )
-            cloud_infra_deployment.configure_deployment()
-            cloud_infra_deployment.configure_stack_modules()
+                config=self.stack_config["deployment"],
+            ).configure_deployment()
 
             CloudInfraStack(
                 state_file_name=self.state_file_name,
@@ -86,6 +85,7 @@ class StackGenerator:
                 stack_name=self.stack_name,
                 provider=Provider(self.stack_config["provider"]["name"]),
                 region=self.region,
+                config=self.stack_config["deployment"],
             ).configure_deployment()
             KubernetesStack(config=self.stack_config["stack"]).generate()
 
