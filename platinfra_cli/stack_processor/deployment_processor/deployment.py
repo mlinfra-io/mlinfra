@@ -1,4 +1,5 @@
 import json
+import yaml
 from abc import ABC, abstractmethod
 from platinfra_cli.enums.provider import Provider
 
@@ -8,10 +9,11 @@ class AbstractDeployment(ABC):
     Abstract class for deployment
     """
 
-    def __init__(self, stack_name: str, provider: Provider, region: str):
+    def __init__(self, stack_name: str, provider: Provider, region: str, config: yaml):
         self.stack_name = stack_name
         self.provider = provider
         self.region = region
+        self.config = config
 
     @abstractmethod
     def configure_deployment(self):
