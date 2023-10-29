@@ -36,7 +36,7 @@ class StackGenerator:
         if (
             not self.stack_config["name"]
             or "provider" not in self.stack_config
-            or "deployment_type" not in self.stack_config
+            or "deployment" not in self.stack_config
             or "stack" not in self.stack_config
         ):
             raise Exception("Stack config component is missing")
@@ -58,14 +58,17 @@ class StackGenerator:
 
     def generate(self):
         if (
-            DeploymentType(self.stack_config["deployment_type"])
+            DeploymentType(self.stack_config["deployment"]["type"])
             == DeploymentType.CLOUD_INFRA
         ):
-            CloudInfraDeployment(
+            cloud_infra_deployment = CloudInfraDeployment(
                 stack_name=self.stack_name,
                 provider=Provider(self.stack_config["provider"]["name"]),
                 region=self.region,
-            ).configure_deployment()
+            )
+            cloud_infra_deployment.configure_deployment()
+            cloud_infra_deployment.configure_stack_modules()
+
             CloudInfraStack(
                 state_file_name=self.state_file_name,
                 region=self.region,
@@ -76,11 +79,13 @@ class StackGenerator:
             ).generate()
 
         elif (
-            DeploymentType(self.stack_config["deployment_type"])
+            DeploymentType(self.stack_config["deployment"]["type"])
             == DeploymentType.KUBERNETES
         ):
             KubernetesDeployment(
-                config=self.stack_config["deployment_type"]
+                stack_name=self.stack_name,
+                provider=Provider(self.stack_config["provider"]["name"]),
+                region=self.region,
             ).configure_deployment()
             KubernetesStack(config=self.stack_config["stack"]).generate()
 
