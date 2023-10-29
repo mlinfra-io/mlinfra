@@ -15,22 +15,6 @@ resource "aws_kms_key" "eks" {
   tags                    = var.aws_kms_key.tags
 }
 
-resource "aws_security_group" "additional_security_group" {
-  name_prefix = var.aws_security_group.name_prefix
-  vpc_id      = var.aws_security_group.vpc_id
-
-  dynamic "ingress" {
-    for_each = var.aws_security_group.ingresses
-    content {
-      from_port   = ingress.value.from_port
-      to_port     = ingress.value.to_port
-      protocol    = ingress.value.protocol
-      cidr_blocks = ingress.value.cidr_blocks
-    }
-  }
-  tags = var.aws_security_group.tags
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
@@ -188,8 +172,8 @@ module "ebs_csi_driver_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.30"
 
-  role_name_prefix      = "EBS-CSI-IRSA"
-  attach_ebs_csi_policy = true
+  role_name_prefix      = var.ebs_csi_driver_irsa.role_name_prefix
+  attach_ebs_csi_policy = var.ebs_csi_driver_irsa.attach_ebs_csi_policy
 
   oidc_providers = {
     main = {

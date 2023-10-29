@@ -7,20 +7,6 @@ variable "aws_kms_key" {
   })
 }
 
-variable "aws_security_group" {
-  type = object({
-    name_prefix = string
-    vpc_id      = string
-    ingresses = list(object({
-      from_port   = number
-      to_port     = number
-      protocol    = string
-      cidr_blocks = list(string)
-    }))
-    tags = map(string)
-  })
-}
-
 variable "aws_eks_cluster" {
   type = object({
     cluster_name                    = string
@@ -78,6 +64,19 @@ variable "vpc_cni_irsa" {
     role_name_prefix      = "VPC-CNI-IRSA"
     attach_vpc_cni_policy = true
     vpc_cni_enable_ipv4   = true
+    tags                  = {}
+  }
+}
+
+variable "ebs_csi_driver_irsa" {
+  type = object({
+    role_name_prefix      = string
+    attach_ebs_csi_policy = bool
+    tags                  = map(string)
+  })
+  default = {
+    role_name_prefix      = "EBS-CSI-IRSA"
+    attach_ebs_csi_policy = true
     tags                  = {}
   }
 }
