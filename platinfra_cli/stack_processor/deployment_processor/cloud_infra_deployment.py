@@ -4,7 +4,6 @@ from platinfra_cli.enums.provider import Provider
 from platinfra_cli.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
 )
-from platinfra_cli.utils.constants import TF_PATH
 from platinfra_cli.utils.utils import generate_tf_json
 
 
@@ -36,19 +35,17 @@ class CloudInfraDeployment(AbstractDeployment):
     def configure_deployment_config(self):
         # inject vpc module
         if self.provider == Provider.AWS:
-            name = "vpc"
-            json_module = {"module": {name: {}}}
-            json_module["module"][name]["name"] = f"{self.stack_name}-vpc"
-            json_module["module"][name]["source"] = f"../modules/cloud/aws/{name}"
+            json_module = {"module": {"vpc": {}}}
+            json_module["module"]["vpc"]["name"] = f"{self.stack_name}-vpc"
+            json_module["module"]["vpc"]["source"] = "../modules/cloud/aws/vpc"
 
             if "config" in self.config and "vpc" in self.config["config"]:
                 for vpc_config in self.config["config"]["vpc"]:
-                    json_module["module"][name][vpc_config] = self.config["config"][
+                    json_module["module"]["vpc"][vpc_config] = self.config["config"][
                         "vpc"
                     ].get(vpc_config, None)
 
-            with open(f"./{TF_PATH}/{name}.tf.json", "w", encoding="utf-8") as tf_json:
-                json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
+            generate_tf_json(module_name="vpc", json_module=json_module)
         elif self.provider == Provider.GCP:
             pass
         elif self.provider == Provider.AZURE:
