@@ -87,7 +87,14 @@ class StackGenerator:
                 region=self.region,
                 config=self.stack_config["deployment"],
             ).configure_deployment()
-            KubernetesStack(config=self.stack_config["stack"]).generate()
+            KubernetesStack(
+                state_file_name=self.state_file_name,
+                region=self.region,
+                account_id=self.account_id,
+                provider=self.provider,
+                deployment_type=DeploymentType.KUBERNETES,
+                stacks=self.stack_config["stack"],
+            ).generate()
 
     def read_stack_config(self) -> yaml:
         # clean the generated files directory
