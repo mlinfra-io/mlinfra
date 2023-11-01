@@ -65,7 +65,7 @@ class StackGenerator:
                 stack_name=self.stack_name,
                 provider=Provider(self.stack_config["provider"]["name"]),
                 region=self.region,
-                config=self.stack_config["deployment"],
+                deployment_config=self.stack_config["deployment"],
             ).configure_deployment()
 
             CloudInfraStack(
@@ -85,7 +85,7 @@ class StackGenerator:
                 stack_name=self.stack_name,
                 provider=Provider(self.stack_config["provider"]["name"]),
                 region=self.region,
-                config=self.stack_config["deployment"],
+                deployment_config=self.stack_config["deployment"],
             ).configure_deployment()
             KubernetesStack(
                 state_file_name=self.state_file_name,
