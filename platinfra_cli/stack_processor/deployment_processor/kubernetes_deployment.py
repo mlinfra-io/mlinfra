@@ -38,6 +38,8 @@ class KubernetesDeployment(AbstractDeployment):
 
     def generate_deployment_config(self):
         if self.provider == Provider.AWS:
+            for config_module in self.config["config"]:
+                print(config_module)
             # inject vpc module
             vpc_json_module = {"module": {"vpc": {}}}
             vpc_json_module["module"]["vpc"]["source"] = "../modules/cloud/aws/vpc"
