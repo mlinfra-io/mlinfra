@@ -9,11 +9,13 @@ class AbstractDeployment(ABC):
     Abstract class for deployment
     """
 
-    def __init__(self, stack_name: str, provider: Provider, region: str, config: yaml):
+    def __init__(
+        self, stack_name: str, provider: Provider, region: str, deployment_config: yaml
+    ):
         self.stack_name = stack_name
         self.provider = provider
         self.region = region
-        self.config = config
+        self.deployment_config = deployment_config
 
     @abstractmethod
     def configure_deployment(self):

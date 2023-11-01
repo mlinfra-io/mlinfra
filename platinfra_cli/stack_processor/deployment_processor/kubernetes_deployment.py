@@ -8,9 +8,14 @@ from platinfra_cli.utils.utils import generate_tf_json
 
 
 class KubernetesDeployment(AbstractDeployment):
-    def __init__(self, stack_name: str, provider: Provider, region: str, config: yaml):
+    def __init__(
+        self, stack_name: str, provider: Provider, region: str, deployment_config: yaml
+    ):
         super(KubernetesDeployment, self).__init__(
-            stack_name=stack_name, provider=provider, region=region, config=config
+            stack_name=stack_name,
+            provider=provider,
+            region=region,
+            deployment_config=deployment_config,
         )
 
     def generate_required_provider_config(self):
@@ -38,18 +43,20 @@ class KubernetesDeployment(AbstractDeployment):
 
     def generate_deployment_config(self):
         if self.provider == Provider.AWS:
-            for config_module in self.config["config"]:
-                print(config_module)
+            # TODO: Make these blocks generic
             # inject vpc module
             vpc_json_module = {"module": {"vpc": {}}}
             vpc_json_module["module"]["vpc"]["source"] = "../modules/cloud/aws/vpc"
             vpc_json_module["module"]["vpc"]["name"] = f"{self.stack_name}-vpc"
 
-            if "config" in self.config and "vpc" in self.config["config"]:
-                for vpc_config in self.config["config"]["vpc"]:
-                    vpc_json_module["module"]["vpc"][vpc_config] = self.config[
-                        "config"
-                    ]["vpc"].get(vpc_config, None)
+            if (
+                "config" in self.deployment_config
+                and "vpc" in self.deployment_config["config"]
+            ):
+                for vpc_config in self.deployment_config["config"]["vpc"]:
+                    vpc_json_module["module"]["vpc"][
+                        vpc_config
+                    ] = self.deployment_config["config"]["vpc"].get(vpc_config, None)
 
             generate_tf_json(module_name="vpc", json_module=vpc_json_module)
 
@@ -58,11 +65,16 @@ class KubernetesDeployment(AbstractDeployment):
             k8s_json_module["module"]["eks"]["source"] = "../modules/cloud/aws/eks"
             k8s_json_module["module"]["eks"]["name"] = f"{self.stack_name}-k8s-cluster"
 
-            if "config" in self.config and "kubernetes" in self.config["config"]:
-                for k8s_config in self.config["config"]["kubernetes"]:
-                    k8s_json_module["module"]["eks"][k8s_config] = self.config[
-                        "config"
-                    ]["kubernetes"].get(k8s_config, None)
+            if (
+                "config" in self.deployment_config
+                and "kubernetes" in self.deployment_config["config"]
+            ):
+                for k8s_config in self.deployment_config["config"]["kubernetes"]:
+                    k8s_json_module["module"]["eks"][
+                        k8s_config
+                    ] = self.deployment_config["config"]["kubernetes"].get(
+                        k8s_config, None
+                    )
 
             generate_tf_json(module_name="eks", json_module=k8s_json_module)
 
