@@ -15,6 +15,8 @@ resource "aws_kms_key" "eks" {
   tags                    = var.aws_kms_key.tags
 }
 
+# TODO: Update the variables here
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
@@ -136,14 +138,14 @@ module "eks" {
   }
 
   # Extend cluster security group rules
-  cluster_security_group_additional_rules = var.aws_eks_cluster.cluster_security_group_additional_rules
+  cluster_security_group_additional_rules = var.cluster_security_group_additional_rules
 
   # Extend node-to-node security group rules
-  node_security_group_additional_rules = var.aws_eks_cluster.node_security_group_additional_rules
+  node_security_group_additional_rules = var.node_security_group_additional_rules
 
   eks_managed_node_group_defaults = {}
 
-  eks_managed_node_groups = var.aws_eks_cluster.eks_managed_node_groups
+  eks_managed_node_groups = var.eks_managed_node_groups
 
   # update tags
   tags = var.aws_eks_cluster.tags
