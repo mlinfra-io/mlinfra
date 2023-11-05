@@ -5,6 +5,12 @@ variable "aws_kms_key" {
     enable_key_rotation     = bool
     tags                    = map(string)
   })
+  default = {
+    description             = "KMS Key for EKS"
+    deletion_window_in_days = 30
+    enable_key_rotation     = true
+    tags                    = {}
+  }
 }
 
 variable "aws_eks_cluster" {
