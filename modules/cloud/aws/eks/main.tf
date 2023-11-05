@@ -42,17 +42,12 @@ module "eks" {
   cluster_addons = {
     vpc-cni = {
       # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
-      before_compute              = true
-      most_recent                 = true
-      resolve_conflicts_on_create = "OVERWRITE"
-      resolve_conflicts_on_update = "PRESERVE"
+      before_compute              = var.vpc_cni_addon.before_compute
+      most_recent                 = var.vpc_cni_addon.most_recent
+      resolve_conflicts_on_create = var.vpc_cni_addon.resolve_conflicts_on_create
+      resolve_conflicts_on_update = var.vpc_cni_addon.resolve_conflicts_on_update
       service_account_role_arn    = module.vpc_cni_irsa.iam_role_arn
-      configuration_values = {
-        env = {
-          ENABLE_PREFIX_DELEGATION = "true"
-          WARM_PREFIX_TARGET       = "1"
-        }
-      }
+      configuration_values        = var.vpc_cni_addon.configuration_values
     }
     coredns = {
       most_recent                 = true
