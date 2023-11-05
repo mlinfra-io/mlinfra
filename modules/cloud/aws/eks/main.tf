@@ -50,30 +50,10 @@ module "eks" {
       configuration_values        = var.vpc_cni_addon.configuration_values
     }
     coredns = {
-      most_recent                 = true
-      resolve_conflicts_on_create = "OVERWRITE"
-      resolve_conflicts_on_update = "PRESERVE"
-      configuration_values = jsonencode({
-        affinity = {
-          nodeAffinity = {
-            requiredDuringSchedulingIgnoredDuringExecution = {
-              nodeSelectorTerms = [{
-                matchExpressions = [{
-                  key      = "nodegroup_type"
-                  operator = "In"
-                  values   = "operations"
-                }]
-              }]
-            }
-          }
-        }
-        tolerations = [{
-          key      = "nodegroup_type"
-          operator = "Equal"
-          value    = "operations"
-          effect   = "NoSchedule"
-        }]
-      })
+      most_recent                 = var.coredns_addon.most_recent
+      resolve_conflicts_on_create = var.coredns_addon.resolve_conflicts_on_create
+      resolve_conflicts_on_update = var.coredns_addon.resolve_conflicts_on_update
+      configuration_values        = var.coredns_addon.configuration_values
     }
     kube-proxy = {
       most_recent                 = true

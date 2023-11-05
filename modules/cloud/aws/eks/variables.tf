@@ -134,6 +134,42 @@ variable "vpc_cni_addon" {
   }
 }
 
+variable "coredns_addon" {
+  type = object({
+    most_recent                 = bool
+    resolve_conflicts_on_create = string
+    resolve_conflicts_on_update = string
+    configuration_values        = any
+  })
+  default = {
+    most_recent                 = true
+    resolve_conflicts_on_create = "OVERWRITE"
+    resolve_conflicts_on_update = "PRESERVE"
+    # TODO: validate if the function jsonencode() is required here
+    configuration_values = {
+      affinity = {
+        nodeAffinity = {
+          requiredDuringSchedulingIgnoredDuringExecution = {
+            nodeSelectorTerms = [{
+              matchExpressions = [{
+                key      = "nodegroup_type"
+                operator = "In"
+                values   = "operations"
+              }]
+            }]
+          }
+        }
+      }
+      tolerations = [{
+        key      = "nodegroup_type"
+        operator = "Equal"
+        value    = "operations"
+        effect   = "NoSchedule"
+      }]
+    }
+  }
+}
+
 variable "ebs_csi_driver_irsa" {
   type = object({
     role_name_prefix      = string
