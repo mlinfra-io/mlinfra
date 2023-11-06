@@ -53,7 +53,7 @@ module "eks" {
       most_recent                 = var.coredns_addon.most_recent
       resolve_conflicts_on_create = var.coredns_addon.resolve_conflicts_on_create
       resolve_conflicts_on_update = var.coredns_addon.resolve_conflicts_on_update
-      configuration_values        = var.coredns_addon.configuration_values
+      configuration_values        = jsonencode(var.coredns_addon.configuration_values)
     }
     kube-proxy = {
       most_recent                 = true
@@ -61,54 +61,11 @@ module "eks" {
       resolve_conflicts_on_update = "PRESERVE"
     }
     aws-ebs-csi-driver = {
-      most_recent                 = true
-      resolve_conflicts_on_create = "OVERWRITE"
-      resolve_conflicts_on_update = "PRESERVE"
+      most_recent                 = var.ebs_csi_driver_addon.most_recent
+      resolve_conflicts_on_create = var.ebs_csi_driver_addon.resolve_conflicts_on_create
+      resolve_conflicts_on_update = var.ebs_csi_driver_addon.resolve_conflicts_on_update
       service_account_role_arn    = module.ebs_csi_driver_irsa.iam_role_arn
-      configuration_values = jsonencode({
-        controller = {
-          affinity = {
-            nodeAffinity = {
-              requiredDuringSchedulingIgnoredDuringExecution = {
-                nodeSelectorTerms = [{
-                  matchExpressions = [{
-                    key      = "nodegroup_type"
-                    operator = "In"
-                    values   = "operations"
-                  }]
-                }]
-              }
-            }
-          }
-          tolerations = [{
-            key      = "nodegroup_type"
-            operator = "Equal"
-            value    = "operations"
-            effect   = "NoSchedule"
-          }]
-        }
-        node = {
-          affinity = {
-            nodeAffinity = {
-              requiredDuringSchedulingIgnoredDuringExecution = {
-                nodeSelectorTerms = [{
-                  matchExpressions = [{
-                    key      = "nodegroup_type"
-                    operator = "In"
-                    values   = "operations"
-                  }]
-                }]
-              }
-            }
-          }
-          tolerations = [{
-            key      = "nodegroup_type"
-            operator = "Equal"
-            value    = "operations"
-            effect   = "NoSchedule"
-          }]
-        }
-      })
+      configuration_values        = jsonencode(var.ebs_csi_driver_addon.configuration_values)
     }
   }
 

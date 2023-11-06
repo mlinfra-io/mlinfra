@@ -170,6 +170,64 @@ variable "coredns_addon" {
   }
 }
 
+variable "ebs_csi_driver_addon" {
+  type = object({
+    most_recent                 = bool
+    resolve_conflicts_on_create = string
+    resolve_conflicts_on_update = string
+    configuration_values        = any
+  })
+  default = {
+    most_recent                 = true
+    resolve_conflicts_on_create = "OVERWRITE"
+    resolve_conflicts_on_update = "PRESERVE"
+    configuration_values = {
+      controller = {
+        affinity = {
+          nodeAffinity = {
+            requiredDuringSchedulingIgnoredDuringExecution = {
+              nodeSelectorTerms = [{
+                matchExpressions = [{
+                  key      = "nodegroup_type"
+                  operator = "In"
+                  values   = "operations"
+                }]
+              }]
+            }
+          }
+        }
+        tolerations = [{
+          key      = "nodegroup_type"
+          operator = "Equal"
+          value    = "operations"
+          effect   = "NoSchedule"
+        }]
+      }
+      node = {
+        affinity = {
+          nodeAffinity = {
+            requiredDuringSchedulingIgnoredDuringExecution = {
+              nodeSelectorTerms = [{
+                matchExpressions = [{
+                  key      = "nodegroup_type"
+                  operator = "In"
+                  values   = "operations"
+                }]
+              }]
+            }
+          }
+        }
+        tolerations = [{
+          key      = "nodegroup_type"
+          operator = "Equal"
+          value    = "operations"
+          effect   = "NoSchedule"
+        }]
+      }
+    }
+  }
+}
+
 variable "ebs_csi_driver_irsa" {
   type = object({
     role_name_prefix      = string
