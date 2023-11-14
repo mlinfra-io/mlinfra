@@ -1,30 +1,228 @@
-variable "aws_kms_key" {
+variable "vpc_id" {
+  type = string
+}
+
+variable "subnet_ids" {
+  type = list(string)
+}
+
+variable "kms_key_deletion_window" {
+  type        = number
+  description = "Duration in days after which the key is deleted after destruction of the resource"
+  default     = 14
+}
+
+variable "kms_key_rotation" {
+  type        = bool
+  description = "value to enable/disable kms key rotation"
+  default     = true
+}
+
+# create variables for cluster name,
+# vpc id, subnets ids and control plane subnets ids
+
+variable "eks_cluster_name" {
+  type        = string
+  description = "Name of the EKS cluster"
+  default     = "eks-cluster"
+}
+
+variable "eks_cluster_version" {
+  type        = string
+  description = "EKS Cluster version"
+  default     = "1.28"
+}
+
+variable "cluster_endpoint_private_access" {
+  type        = bool
+  description = "Indicates whether the Amazon EKS private API server endpoint is enabled. Default is false."
+  default     = false
+}
+
+variable "cluster_endpoint_public_access" {
+  type        = bool
+  description = "Indicates whether the Amazon EKS public API server endpoint is enabled. Default is true."
+  default     = true
+}
+
+variable "cluster_ip_family" {
+  type        = string
+  description = "Indicates whether the Amazon EKS private API server endpoint is enabled. Default is false."
+  default     = "ipv4"
+}
+
+variable "vpc_cni_irsa_role_name_prefix" {
+  type        = string
+  description = "Role name prefix for VPC CNI IRSA"
+  default     = "vpc-cni-irsa"
+}
+
+variable "vpc_cni_irsa" {
   type = object({
-    description             = string
-    deletion_window_in_days = number
-    enable_key_rotation     = bool
-    tags                    = map(string)
+    attach_vpc_cni_policy = bool
+    vpc_cni_enable_ipv4   = bool
   })
   default = {
-    description             = "KMS Key for EKS"
-    deletion_window_in_days = 14
-    enable_key_rotation     = true
-    tags                    = {}
+    attach_vpc_cni_policy = true
+    vpc_cni_enable_ipv4   = true
   }
 }
 
-variable "aws_eks_cluster" {
+variable "vpc_cni_addon" {
   type = object({
-    cluster_name                    = string
-    cluster_version                 = string
-    cluster_endpoint_private_access = bool
-    cluster_endpoint_public_access  = bool
-    vpc_id                          = string
-    subnets                         = list(string)
-    cluster_ip_family               = string
-    control_plane_subnet_ids        = list(string)
-    tags                            = map(any)
+    before_compute              = bool
+    most_recent                 = bool
+    resolve_conflicts_on_create = string
+    resolve_conflicts_on_update = string
   })
+  default = {
+    before_compute              = true
+    most_recent                 = true
+    resolve_conflicts_on_create = "OVERWRITE"
+    resolve_conflicts_on_update = "PRESERVE"
+  }
+}
+
+variable "vpc_cni_addon_configuration_values" {
+  type        = map(any)
+  description = "Configuration for VPC CNI AddOn"
+  default = {
+    env = {
+      ENABLE_PREFIX_DELEGATION = "true"
+      WARM_PREFIX_TARGET       = "1"
+    }
+  }
+
+}
+
+variable "coredns_addon" {
+  type = object({
+    most_recent                 = bool
+    resolve_conflicts_on_create = string
+    resolve_conflicts_on_update = string
+    configuration_values        = any
+  })
+  default = {
+    most_recent                 = true
+    resolve_conflicts_on_create = "OVERWRITE"
+    resolve_conflicts_on_update = "PRESERVE"
+
+    configuration_values = {
+      affinity = {
+        nodeAffinity = {
+          requiredDuringSchedulingIgnoredDuringExecution = {
+            nodeSelectorTerms = [{
+              matchExpressions = [{
+                key      = "nodegroup_type"
+                operator = "In"
+                values   = "operations"
+              }]
+            }]
+          }
+        }
+      }
+      tolerations = [{
+        key      = "nodegroup_type"
+        operator = "Equal"
+        value    = "operations"
+        effect   = "NoSchedule"
+      }]
+    }
+  }
+}
+
+variable "coredns_addon_configuration_values" {
+  type        = any
+  description = "Configuration for CoreDNS AddOn"
+  default = {
+    affinity = {
+      nodeAffinity = {
+        requiredDuringSchedulingIgnoredDuringExecution = {
+          nodeSelectorTerms = [{
+            matchExpressions = [{
+              key      = "nodegroup_type"
+              operator = "In"
+              values   = "operations"
+            }]
+          }]
+        }
+      }
+    }
+    tolerations = [{
+      key      = "nodegroup_type"
+      operator = "Equal"
+      value    = "operations"
+      effect   = "NoSchedule"
+    }]
+  }
+}
+
+variable "ebs_csi_driver_addon" {
+  type = object({
+    most_recent                 = bool
+    resolve_conflicts_on_create = string
+    resolve_conflicts_on_update = string
+  })
+  default = {
+    most_recent                 = true
+    resolve_conflicts_on_create = "OVERWRITE"
+    resolve_conflicts_on_update = "PRESERVE"
+  }
+}
+
+variable "ebs_csi_driver_addon_configuration_values" {
+  type        = map(any)
+  description = "Configuration for EBS CSI Driver AddOn"
+  default = {
+    controller = {
+      affinity = {
+        nodeAffinity = {
+          requiredDuringSchedulingIgnoredDuringExecution = {
+            nodeSelectorTerms = [{
+              matchExpressions = [{
+                key      = "nodegroup_type"
+                operator = "In"
+                values   = "operations"
+              }]
+            }]
+          }
+        }
+      }
+      tolerations = [{
+        key      = "nodegroup_type"
+        operator = "Equal"
+        value    = "operations"
+        effect   = "NoSchedule"
+      }]
+    }
+    node = {
+      affinity = {
+        nodeAffinity = {
+          requiredDuringSchedulingIgnoredDuringExecution = {
+            nodeSelectorTerms = [{
+              matchExpressions = [{
+                key      = "nodegroup_type"
+                operator = "In"
+                values   = "operations"
+              }]
+            }]
+          }
+        }
+      }
+      tolerations = [{
+        key      = "nodegroup_type"
+        operator = "Equal"
+        value    = "operations"
+        effect   = "NoSchedule"
+      }]
+    }
+  }
+}
+
+variable "ebs_csi_driver_irsa_role_name_prefix" {
+  type        = string
+  description = "Name prefix for the IAM role that provides permissions for the Amazon EKS node group to call AWS APIs on your behalf."
+  default     = "ebs-csi-irsa"
 }
 
 variable "cluster_security_group_additional_rules" {
@@ -80,163 +278,121 @@ variable "node_security_group_additional_rules" {
   }
 }
 
-variable "eks_managed_node_groups" {
+variable "eks_managed_node_group_defaults" {
+  type    = map(any)
+  default = {}
+}
+
+# variable "eks_managed_node_groups" {
+#   type = map(object({
+#     create_launch_template = bool
+#     launch_template_name   = string
+#     ami_type               = string
+#     disk_size              = number
+#     min_size               = number
+#     max_size               = number
+#     desired_size           = number
+#     capacity_type          = string
+#     force_update_version   = bool
+#     instance_types         = list(string)
+#     labels                 = optional(map(string))
+#     taints                 = list(map(string))
+#   }))
+#   default = {
+#     default_nodegroup = {
+#       create_launch_template = false
+#       launch_template_name   = ""
+#       ami_type               = "AL2_x86_64"
+#       force_update_version   = true
+#       labels = {
+#         nodegroup_type = "operations"
+#       }
+#       taints = [{
+#         key    = "nodegroup_type"
+#         value  = "operations"
+#         effect = "NO_SCHEDULE"
+#       }]
+#     }
+#   }
+# }
+
+variable "ami_type" {
+  type        = string
+  description = "The AMI type to use for the worker nodes."
+  default     = "AL2_x86_64"
+  validation {
+    condition     = var.ami_type == "AL2_x86_64" || var.ami_type == "AL2_x86_64_GPU"
+    error_message = "The ami type must be either AL2_x86_64 or AL2_x86_64_GPU"
+  }
+}
+
+variable "nodegroup_name" {
+  type        = string
+  description = "The name of the node group."
+  default     = "default_nodegroup"
+}
+
+variable "disk_size" {
+  type        = number
+  description = "The size in GiB of the EBS volume for each node in the node group."
+  default     = 20
+}
+
+variable "min_size" {
+  type        = number
+  description = "The minimum size of the node group."
+  default     = 1
+}
+
+variable "max_size" {
+  type        = number
+  description = "The maximum size of the node group."
+  default     = 5
+}
+
+variable "desired_size" {
+  type        = number
+  description = "The number of worker nodes that should be running in the cluster."
+  default     = 3
+}
+
+variable "spot_instance" {
+  type        = bool
+  description = "The capacity type of the node group."
+  default     = true
+}
+
+variable "instance_types" {
+  type        = list(string)
+  description = "The instance types associated with the node group."
+  default     = ["t3.medium"]
+}
+
+variable "labels" {
+  type        = map(string)
+  description = ""
+  default = {
+    nodegroup_type = "operations"
+  }
+}
+
+variable "taints" {
   type = map(object({
-    create_launch_template = bool
-    launch_template_name   = string
-    ami_type               = string
-    disk_size              = number
-    min_size               = number
-    max_size               = number
-    desired_size           = number
-    capacity_type          = string
-    force_update_version   = bool
-    instance_types         = list(string)
-    labels                 = optional(map(string))
-    taints                 = list(map(string))
+    key    = string
+    value  = string
+    effect = string
   }))
-}
-
-variable "vpc_cni_irsa" {
-  type = object({
-    role_name_prefix      = string
-    attach_vpc_cni_policy = bool
-    vpc_cni_enable_ipv4   = bool
-    tags                  = map(string)
-  })
   default = {
-    role_name_prefix      = "VPC-CNI-IRSA"
-    attach_vpc_cni_policy = true
-    vpc_cni_enable_ipv4   = true
-    tags                  = {}
-  }
-}
-
-variable "vpc_cni_addon" {
-  type = object({
-    before_compute              = bool
-    most_recent                 = bool
-    resolve_conflicts_on_create = string
-    resolve_conflicts_on_update = string
-    configuration_values        = map(any)
-  })
-  default = {
-    before_compute              = true
-    most_recent                 = true
-    resolve_conflicts_on_create = "OVERWRITE"
-    resolve_conflicts_on_update = "PRESERVE"
-    configuration_values = {
-      env = {
-        ENABLE_PREFIX_DELEGATION = "true"
-        WARM_PREFIX_TARGET       = "1"
-      }
+    operations = {
+      key    = "nodegroup_type"
+      value  = "operations"
+      effect = "NO_SCHEDULE"
     }
   }
 }
 
-variable "coredns_addon" {
-  type = object({
-    most_recent                 = bool
-    resolve_conflicts_on_create = string
-    resolve_conflicts_on_update = string
-    configuration_values        = any
-  })
-  default = {
-    most_recent                 = true
-    resolve_conflicts_on_create = "OVERWRITE"
-    resolve_conflicts_on_update = "PRESERVE"
-    # TODO: validate if the function jsonencode() is required here
-    configuration_values = {
-      affinity = {
-        nodeAffinity = {
-          requiredDuringSchedulingIgnoredDuringExecution = {
-            nodeSelectorTerms = [{
-              matchExpressions = [{
-                key      = "nodegroup_type"
-                operator = "In"
-                values   = "operations"
-              }]
-            }]
-          }
-        }
-      }
-      tolerations = [{
-        key      = "nodegroup_type"
-        operator = "Equal"
-        value    = "operations"
-        effect   = "NoSchedule"
-      }]
-    }
-  }
-}
-
-variable "ebs_csi_driver_addon" {
-  type = object({
-    most_recent                 = bool
-    resolve_conflicts_on_create = string
-    resolve_conflicts_on_update = string
-    configuration_values        = any
-  })
-  default = {
-    most_recent                 = true
-    resolve_conflicts_on_create = "OVERWRITE"
-    resolve_conflicts_on_update = "PRESERVE"
-    configuration_values = {
-      controller = {
-        affinity = {
-          nodeAffinity = {
-            requiredDuringSchedulingIgnoredDuringExecution = {
-              nodeSelectorTerms = [{
-                matchExpressions = [{
-                  key      = "nodegroup_type"
-                  operator = "In"
-                  values   = "operations"
-                }]
-              }]
-            }
-          }
-        }
-        tolerations = [{
-          key      = "nodegroup_type"
-          operator = "Equal"
-          value    = "operations"
-          effect   = "NoSchedule"
-        }]
-      }
-      node = {
-        affinity = {
-          nodeAffinity = {
-            requiredDuringSchedulingIgnoredDuringExecution = {
-              nodeSelectorTerms = [{
-                matchExpressions = [{
-                  key      = "nodegroup_type"
-                  operator = "In"
-                  values   = "operations"
-                }]
-              }]
-            }
-          }
-        }
-        tolerations = [{
-          key      = "nodegroup_type"
-          operator = "Equal"
-          value    = "operations"
-          effect   = "NoSchedule"
-        }]
-      }
-    }
-  }
-}
-
-variable "ebs_csi_driver_irsa" {
-  type = object({
-    role_name_prefix      = string
-    attach_ebs_csi_policy = bool
-    tags                  = map(string)
-  })
-  default = {
-    role_name_prefix      = "EBS-CSI-IRSA"
-    attach_ebs_csi_policy = true
-    tags                  = {}
-  }
+variable "tags" {
+  type        = map(string)
+  description = "The tags to apply to the EKS cluster."
+  default     = {}
 }

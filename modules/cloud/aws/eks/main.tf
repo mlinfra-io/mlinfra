@@ -1,18 +1,18 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  cluster_tags = merge({
-    Name   = var.aws_eks_cluster.cluster_name,
+  tags = merge({
+    Name   = var.eks_cluster_name
     Module = path.module
-    }, var.aws_eks_cluster.tags
+    }, var.tags
   )
 }
 
 resource "aws_kms_key" "eks" {
-  description             = var.aws_kms_key.description
-  deletion_window_in_days = var.aws_kms_key.deletion_window_in_days
-  enable_key_rotation     = var.aws_kms_key.enable_key_rotation
-  tags                    = var.aws_kms_key.tags
+  description             = "KMS Key for EKS Secrets encryption"
+  deletion_window_in_days = var.kms_key_deletion_window
+  enable_key_rotation     = var.kms_key_rotation
+  tags                    = local.tags
 }
 
 # TODO: Update the variables here
@@ -21,17 +21,17 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
 
-  cluster_name                    = var.aws_eks_cluster.cluster_name
-  cluster_version                 = var.aws_eks_cluster.cluster_version
-  cluster_endpoint_private_access = var.aws_eks_cluster.cluster_endpoint_private_access
-  cluster_endpoint_public_access  = var.aws_eks_cluster.cluster_endpoint_public_access
+  cluster_name                    = var.eks_cluster_name
+  cluster_version                 = var.eks_cluster_version
+  cluster_endpoint_private_access = var.cluster_endpoint_private_access
+  cluster_endpoint_public_access  = var.cluster_endpoint_public_access
 
-  vpc_id = var.aws_eks_cluster.vpc_id
+  vpc_id = var.vpc_id
   # set to private subnets if cluster is in private subnets
-  subnet_ids        = var.aws_eks_cluster.subnets
-  cluster_ip_family = var.aws_eks_cluster.cluster_ip_family
+  subnet_ids        = var.subnet_ids
+  cluster_ip_family = var.cluster_ip_family
   # set to private subnets if cluster is in private subnets
-  control_plane_subnet_ids = var.aws_eks_cluster.control_plane_subnet_ids
+  control_plane_subnet_ids = var.subnet_ids
 
   create_kms_key = false
   cluster_encryption_config = [{
@@ -39,6 +39,7 @@ module "eks" {
     resources        = ["secrets"]
   }]
 
+  # TODO: validate if the function jsonencode() is required with add on configuration_values
   cluster_addons = {
     vpc-cni = {
       # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
@@ -47,13 +48,13 @@ module "eks" {
       resolve_conflicts_on_create = var.vpc_cni_addon.resolve_conflicts_on_create
       resolve_conflicts_on_update = var.vpc_cni_addon.resolve_conflicts_on_update
       service_account_role_arn    = module.vpc_cni_irsa.iam_role_arn
-      configuration_values        = var.vpc_cni_addon.configuration_values
+      configuration_values        = jsonencode(var.vpc_cni_addon_configuration_values)
     }
     coredns = {
       most_recent                 = var.coredns_addon.most_recent
       resolve_conflicts_on_create = var.coredns_addon.resolve_conflicts_on_create
       resolve_conflicts_on_update = var.coredns_addon.resolve_conflicts_on_update
-      configuration_values        = jsonencode(var.coredns_addon.configuration_values)
+      configuration_values        = jsonencode(var.coredns_addon_configuration_values)
     }
     kube-proxy = {
       most_recent                 = true
@@ -65,7 +66,7 @@ module "eks" {
       resolve_conflicts_on_create = var.ebs_csi_driver_addon.resolve_conflicts_on_create
       resolve_conflicts_on_update = var.ebs_csi_driver_addon.resolve_conflicts_on_update
       service_account_role_arn    = module.ebs_csi_driver_irsa.iam_role_arn
-      configuration_values        = jsonencode(var.ebs_csi_driver_addon.configuration_values)
+      configuration_values        = jsonencode(var.ebs_csi_driver_addon_configuration_values)
     }
   }
 
@@ -75,19 +76,54 @@ module "eks" {
   # Extend node-to-node security group rules
   node_security_group_additional_rules = var.node_security_group_additional_rules
 
-  eks_managed_node_group_defaults = {}
+  eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
 
-  eks_managed_node_groups = var.eks_managed_node_groups
+  # eks_managed_node_groups = var.eks_managed_node_groups
 
   # update tags
-  tags = var.aws_eks_cluster.tags
+  tags = local.tags
+}
+
+# create nodegroups using terraform aws eks module
+module "eks_managed_node_group" {
+  source  = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
+  version = "~> 19.0"
+
+  name            = var.nodegroup_name
+  cluster_name    = var.eks_cluster_name
+  cluster_version = var.eks_cluster_version
+
+  subnet_ids = var.subnet_ids
+
+  // The following variables are necessary if you decide to use the module outside of the parent EKS module context.
+  // Without it, the security groups of the nodes are empty and thus won't join the cluster.
+  cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
+  vpc_security_group_ids            = [module.eks.node_security_group_id]
+
+
+  create_launch_template = false
+  disk_size              = var.disk_size
+
+  min_size     = var.min_size
+  max_size     = var.max_size
+  desired_size = var.desired_size
+
+  instance_types       = var.instance_types
+  ami_type             = var.ami_type
+  capacity_type        = var.spot_instance ? "SPOT" : "ON_DEMAND"
+  force_update_version = true
+
+  labels = var.labels
+  taints = var.taints
+  tags   = local.tags
 }
 
 module "vpc_cni_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.30"
 
-  role_name_prefix      = var.vpc_cni_irsa.role_name_prefix
+  # TODO: add support for ipv6
+  role_name_prefix      = var.vpc_cni_irsa_role_name_prefix
   attach_vpc_cni_policy = var.vpc_cni_irsa.attach_vpc_cni_policy
   vpc_cni_enable_ipv4   = var.vpc_cni_irsa.vpc_cni_enable_ipv4
 
@@ -98,16 +134,15 @@ module "vpc_cni_irsa" {
     }
   }
 
-  # update tags
-  tags = var.aws_eks_cluster.tags
+  tags = local.tags
 }
 
 module "ebs_csi_driver_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.30"
 
-  role_name_prefix      = var.ebs_csi_driver_irsa.role_name_prefix
-  attach_ebs_csi_policy = var.ebs_csi_driver_irsa.attach_ebs_csi_policy
+  role_name_prefix      = var.ebs_csi_driver_irsa_role_name_prefix
+  attach_ebs_csi_policy = true
 
   oidc_providers = {
     main = {
@@ -117,7 +152,7 @@ module "ebs_csi_driver_irsa" {
   }
 
   # update tags
-  tags = var.aws_eks_cluster.tags
+  tags = local.tags
 }
 
 # source:
