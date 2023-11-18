@@ -34,10 +34,10 @@ module "eks" {
   control_plane_subnet_ids = var.subnet_ids
 
   create_kms_key = false
-  cluster_encryption_config = [{
+  cluster_encryption_config = {
     provider_key_arn = aws_kms_key.eks.arn
     resources        = ["secrets"]
-  }]
+  }
 
   # TODO: validate if the function jsonencode() is required with add on configuration_values
   cluster_addons = {
@@ -100,18 +100,16 @@ module "eks_managed_node_group" {
   cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
   vpc_security_group_ids            = [module.eks.node_security_group_id]
 
+  create_launch_template     = var.create_launch_template
+  use_custom_launch_template = var.use_custom_launch_template
 
-  create_launch_template = false
-  disk_size              = var.disk_size
-
-  min_size     = var.min_size
-  max_size     = var.max_size
-  desired_size = var.desired_size
-
-  instance_types       = var.instance_types
-  ami_type             = var.ami_type
-  capacity_type        = var.spot_instance ? "SPOT" : "ON_DEMAND"
-  force_update_version = true
+  instance_types = var.instance_types
+  ami_type       = var.ami_type
+  capacity_type  = var.spot_instance ? "SPOT" : "ON_DEMAND"
+  min_size       = var.min_size
+  max_size       = var.max_size
+  desired_size   = var.desired_size
+  disk_size      = var.disk_size
 
   labels = var.labels
   taints = var.taints

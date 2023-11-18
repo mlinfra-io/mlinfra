@@ -332,6 +332,18 @@ variable "nodegroup_name" {
   default     = "default_nodegroup"
 }
 
+variable "create_launch_template" {
+  type        = bool
+  description = "Create a launch template for the node group."
+  default     = false
+}
+
+variable "use_custom_launch_template" {
+  type        = bool
+  description = "Use a custom launch template for the node group."
+  default     = false
+}
+
 variable "disk_size" {
   type        = number
   description = "The size in GiB of the EBS volume for each node in the node group."
