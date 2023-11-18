@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 locals {
   tags = merge({
-    Name   = var.eks_cluster_name
+    Name   = var.cluster_name
     Module = path.module
     }, var.tags
   )
@@ -21,8 +21,8 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
 
-  cluster_name                    = var.eks_cluster_name
-  cluster_version                 = var.eks_cluster_version
+  cluster_name                    = var.cluster_name
+  cluster_version                 = var.k8s_version
   cluster_endpoint_private_access = var.cluster_endpoint_private_access
   cluster_endpoint_public_access  = var.cluster_endpoint_public_access
 
@@ -90,8 +90,8 @@ module "eks_managed_node_group" {
   version = "~> 19.0"
 
   name            = var.nodegroup_name
-  cluster_name    = var.eks_cluster_name
-  cluster_version = var.eks_cluster_version
+  cluster_name    = var.cluster_name
+  cluster_version = var.k8s_version
 
   subnet_ids = var.subnet_ids
 

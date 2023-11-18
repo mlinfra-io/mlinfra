@@ -21,13 +21,13 @@ variable "kms_key_rotation" {
 # create variables for cluster name,
 # vpc id, subnets ids and control plane subnets ids
 
-variable "eks_cluster_name" {
+variable "cluster_name" {
   type        = string
   description = "Name of the EKS cluster"
   default     = "eks-cluster"
 }
 
-variable "eks_cluster_version" {
+variable "k8s_version" {
   type        = string
   description = "EKS Cluster version"
   default     = "1.28"
@@ -393,6 +393,6 @@ variable "taints" {
 
 variable "tags" {
   type        = map(string)
-  description = "The tags to apply to the EKS cluster."
+  description = "The tags to apply to the EKS cluster and related modules."
   default     = {}
 }
