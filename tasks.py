@@ -68,7 +68,7 @@ def terraform(
     """
     run_initial_terraform_tasks(stack_config_path=stack_config_path)
 
-    ctx.run(f"cd {TF_PATH} && terraform init")
+    ctx.run(f"terraform -chdir={TF_PATH} init")
 
     if action in ["apply", "destroy"]:
         action += " -auto-approve"
@@ -78,4 +78,4 @@ def terraform(
     elif action == "plan":
         action += " -lock=false"
 
-    ctx.run(f"cd {TF_PATH} && terraform {action} {args}")
+    ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")
