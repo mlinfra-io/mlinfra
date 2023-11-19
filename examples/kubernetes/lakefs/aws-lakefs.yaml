@@ -1,0 +1,24 @@
+name: aws-lakefs-k8s
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: kubernetes
+  config:
+    vpc:
+      create_database_subnets: false
+      enable_nat_gateway: false
+    kubernetes:
+      k8s_version: "1.28"
+  # node_groups:
+  #   - name: lakefs-node-group
+  #     instance_type: t3.medium
+  #     desired_size: 1
+  #     min_size: 1
+  #     max_size: 1
+  #     volume_size: 100
+  #     volume_type: gp2
+stack:
+  - data_versioning:
+      name: lakefs

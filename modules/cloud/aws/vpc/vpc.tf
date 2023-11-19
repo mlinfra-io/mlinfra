@@ -37,7 +37,7 @@ locals {
 
 module "vpc_module" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.0.0"
+  version = "~> 5.0"
 
   depends_on = [aws_s3_bucket.vpc_logs_bucket]
 
@@ -51,7 +51,7 @@ module "vpc_module" {
 
   create_database_subnet_group = var.create_database_subnets
 
-  enable_nat_gateway     = true
+  enable_nat_gateway     = var.enable_nat_gateway
   single_nat_gateway     = false
   one_nat_gateway_per_az = var.one_nat_gateway_per_az
 

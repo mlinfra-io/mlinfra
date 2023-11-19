@@ -1,0 +1,14 @@
+name: aws-mlops-stack-mlflow
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: cloud_infra
+  config:
+    vpc:
+      create_database_subnets: true
+      enable_nat_gateway: false
+stack:
+  - experiment_tracking:
+      name: mlflow

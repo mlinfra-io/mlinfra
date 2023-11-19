@@ -1,0 +1,13 @@
+name: aws-mlops-stack-mlflow
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: cloud_infra
+stack:
+  - experiment_tracking:
+      name: mlflow
+      params:
+        remote_tracking: true
+        mlflow_artifacts_bucket_name: "ultimate-test-artifacts-storage-bucket"

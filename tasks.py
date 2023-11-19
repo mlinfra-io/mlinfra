@@ -1,8 +1,10 @@
 from invoke import task
-from ultimate_mlops_cli.utils.constants import TF_PATH
-from ultimate_mlops_cli.utils.utils import clean_tf_directory
-from ultimate_mlops_cli.stack_file_processor import StackfileProcessor
-from ultimate_mlops_cli.terraform.terraform_state_helper import TerraformStateHelper
+from platinfra_cli.utils.constants import TF_PATH
+from platinfra_cli.utils.utils import clean_tf_directory
+from platinfra_cli.stack_processor.stack_generator import (
+    StackGenerator,
+)
+from platinfra_cli.terraform.terraform_state_helper import TerraformStateHelper
 
 
 def run_initial_terraform_tasks(
@@ -11,7 +13,8 @@ def run_initial_terraform_tasks(
     # clean the tf directory before init
     clean_tf_directory()
 
-    file_processor = StackfileProcessor(stack_config_path=stack_config_path)
+    # TODO: UPDATE LOGIC for generating state file
+    file_processor = StackGenerator(stack_config_path=stack_config_path)
 
     state_helper = TerraformStateHelper(
         state=file_processor.get_state_file_name(), region=file_processor.get_region()
@@ -36,9 +39,12 @@ def estimate_cost(
     """
     run_initial_terraform_tasks(stack_config_path=stack_config_path)
 
-    ctx.run(f"cd {TF_PATH} && terraform init")
+    ctx.run(f"terraform -chdir={TF_PATH} init")
     ctx.run(
-        f"cd {TF_PATH} && terraform plan -lock=false -out tfplan.binary && terraform show -json tfplan.binary > plan.json"
+        f"terraform -chdir={TF_PATH} plan -no-color -lock=false -input=false -compact-warnings -out tfplan.binary"
+    )
+    ctx.run(
+        f"terraform -chdir={TF_PATH} show -no-color -json tfplan.binary > {TF_PATH}/plan.json"
     )
     ctx.run(f"infracost diff --show-skipped --no-cache --path {TF_PATH}/plan.json")
 
@@ -62,7 +68,7 @@ def terraform(
     """
     run_initial_terraform_tasks(stack_config_path=stack_config_path)
 
-    ctx.run(f"cd {TF_PATH} && terraform init")
+    ctx.run(f"terraform -chdir={TF_PATH} init")
 
     if action in ["apply", "destroy"]:
         action += " -auto-approve"
@@ -72,4 +78,4 @@ def terraform(
     elif action == "plan":
         action += " -lock=false"
 
-    ctx.run(f"cd {TF_PATH} && terraform {action} {args}")
+    ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")

@@ -54,3 +54,8 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
+
+variable "enable_nat_gateway" {
+  type    = bool
+  default = true
+}
