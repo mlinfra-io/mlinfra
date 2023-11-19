@@ -1,5 +1,5 @@
 module "dagster" {
-  source                  = "../../../../cloud/aws/ec2"
+  source                  = "../../../../../cloud/aws/ec2"
   vpc_id                  = var.vpc_id
   default_vpc_sg          = var.default_vpc_sg
   vpc_cidr_block          = var.vpc_cidr_block

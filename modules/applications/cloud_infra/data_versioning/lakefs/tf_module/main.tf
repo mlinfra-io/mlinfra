@@ -7,7 +7,7 @@ resource "random_password" "auth_key" {
 }
 
 module "lakefs_data_artifacts_bucket" {
-  source = "../../../../cloud/aws/s3"
+  source = "../../../../../cloud/aws/s3"
   count  = var.remote_tracking ? 1 : 0
 
   bucket_name = var.lakefs_data_bucket_name
@@ -16,7 +16,7 @@ module "lakefs_data_artifacts_bucket" {
 
 # create rds instance
 module "lakefs_rds_backend" {
-  source     = "../../../../cloud/aws/rds"
+  source     = "../../../../../cloud/aws/rds"
   create_rds = (var.remote_tracking && var.database_type == "postgres")
 
   vpc_id               = var.vpc_id
@@ -167,7 +167,7 @@ locals {
 data "aws_region" "current" {}
 
 module "lakefs" {
-  source                  = "../../../../cloud/aws/ec2"
+  source                  = "../../../../../cloud/aws/ec2"
   vpc_id                  = var.vpc_id
   default_vpc_sg          = var.default_vpc_sg
   vpc_cidr_block          = var.vpc_cidr_block
@@ -205,7 +205,7 @@ module "lakefs" {
 }
 
 module "secrets_manager" {
-  source = "../../../../cloud/aws/secrets_manager"
+  source = "../../../../../cloud/aws/secrets_manager"
   count  = var.remote_tracking ? 1 : 0
 
   secret_name = "lakefs-secrets"

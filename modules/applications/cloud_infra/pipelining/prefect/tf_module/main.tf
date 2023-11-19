@@ -1,6 +1,6 @@
 # create rds instance
 module "prefect_rds_backend" {
-  source = "../../../../cloud/aws/rds"
+  source = "../../../../../cloud/aws/rds"
 
   create_rds = var.remote_tracking
 
@@ -16,7 +16,7 @@ module "prefect_rds_backend" {
 }
 
 module "prefect" {
-  source                  = "../../../../cloud/aws/ec2"
+  source                  = "../../../../../cloud/aws/ec2"
   vpc_id                  = var.vpc_id
   default_vpc_sg          = var.default_vpc_sg
   vpc_cidr_block          = var.vpc_cidr_block
@@ -50,7 +50,7 @@ module "prefect" {
 }
 
 module "secrets_manager" {
-  source = "../../../../cloud/aws/secrets_manager"
+  source = "../../../../../cloud/aws/secrets_manager"
   count  = var.remote_tracking ? 1 : 0
 
   secret_name = "prefect-secrets"

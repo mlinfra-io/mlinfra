@@ -1,5 +1,5 @@
 module "wandb_artifacts_bucket" {
-  source = "../../../../cloud/aws/s3"
+  source = "../../../../../cloud/aws/s3"
   count  = var.remote_tracking ? 1 : 0
 
   bucket_name = var.wandb_artifacts_bucket_name
@@ -113,7 +113,7 @@ resource "aws_iam_instance_profile" "wandb_instance_profile" {
 
 # create rds instance
 module "wandb_rds_backend" {
-  source = "../../../../cloud/aws/rds"
+  source = "../../../../../cloud/aws/rds"
 
   vpc_id               = var.vpc_id
   db_subnet_group_name = var.db_subnet_group_name
@@ -137,7 +137,7 @@ module "wandb_rds_backend" {
 data "aws_region" "current" {}
 
 module "wandb" {
-  source                  = "../../../../cloud/aws/ec2"
+  source                  = "../../../../../cloud/aws/ec2"
   vpc_id                  = var.vpc_id
   default_vpc_sg          = var.default_vpc_sg
   vpc_cidr_block          = var.vpc_cidr_block
@@ -169,7 +169,7 @@ module "wandb" {
 }
 
 module "secrets_manager" {
-  source = "../../../../cloud/aws/secrets_manager"
+  source = "../../../../../cloud/aws/secrets_manager"
   count  = var.remote_tracking ? 1 : 0
 
   secret_name = "wandb-secrets"
