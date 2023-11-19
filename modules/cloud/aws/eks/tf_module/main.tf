@@ -85,6 +85,7 @@ module "eks" {
 }
 
 # create nodegroups using terraform aws eks module
+# TODO: Configure the module completely
 module "eks_managed_node_group" {
   source  = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
   version = "~> 19.0"
