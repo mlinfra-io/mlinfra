@@ -40,7 +40,7 @@ data "aws_ami" "amazon_linux_2023" {
 
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "5.0.0"
+  version = "~> 5.0.0"
 
   subnet_id              = var.ec2_subnet_id
   vpc_security_group_ids = [var.default_vpc_sg, resource.aws_security_group.ec2_security_group.id]
