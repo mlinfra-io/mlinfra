@@ -39,9 +39,13 @@ def estimate_cost(
     """
     run_initial_terraform_tasks(stack_config_path=stack_config_path)
 
-    ctx.run(f"cd {TF_PATH} && terraform init")
-    ctx.run(f"cd {TF_PATH} && terraform plan -no-color -lock=false -out tfplan.binary")
-    ctx.run(f"cd {TF_PATH} && terraform show -no-color -json tfplan.binary > plan.json")
+    ctx.run(f"terraform -chdir={TF_PATH} init")
+    ctx.run(
+        f"terraform -chdir={TF_PATH} plan -no-color -lock=false -input=false -compact-warnings -out tfplan.binary"
+    )
+    ctx.run(
+        f"terraform -chdir={TF_PATH} show -no-color -json tfplan.binary > {TF_PATH}/plan.json"
+    )
     ctx.run(f"infracost diff --show-skipped --no-cache --path {TF_PATH}/plan.json")
 
 
