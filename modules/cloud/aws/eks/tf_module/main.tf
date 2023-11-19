@@ -16,7 +16,6 @@ resource "aws_kms_key" "eks" {
 }
 
 # TODO: Update the variables here
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
