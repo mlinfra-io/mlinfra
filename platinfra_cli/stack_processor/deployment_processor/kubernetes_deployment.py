@@ -44,6 +44,7 @@ class KubernetesDeployment(AbstractDeployment):
     def generate_deployment_config(self):
         if self.provider == Provider.AWS:
             # TODO: Make these blocks generic
+
             # inject vpc module
             vpc_json_module = {"module": {"vpc": {}}}
             vpc_json_module["module"]["vpc"]["source"] = "../modules/cloud/aws/vpc"
@@ -59,11 +60,16 @@ class KubernetesDeployment(AbstractDeployment):
                     ] = self.deployment_config["config"]["vpc"].get(vpc_config, None)
 
             generate_tf_json(module_name="vpc", json_module=vpc_json_module)
+            # inject vpc module
 
             # inject k8s module
             k8s_json_module = {"module": {"eks": {}}}
-            k8s_json_module["module"]["eks"]["source"] = "../modules/cloud/aws/eks"
-            k8s_json_module["module"]["eks"]["name"] = f"{self.stack_name}-k8s-cluster"
+            k8s_json_module["module"]["eks"][
+                "source"
+            ] = "../modules/cloud/aws/eks/tf_module"
+            k8s_json_module["module"]["eks"][
+                "cluster_name"
+            ] = f"{self.stack_name}-cluster"
 
             if (
                 "config" in self.deployment_config
@@ -75,8 +81,32 @@ class KubernetesDeployment(AbstractDeployment):
                     ] = self.deployment_config["config"]["kubernetes"].get(
                         k8s_config, None
                     )
+                k8s_json_module["module"]["eks"]["vpc_id"] = "${ module.vpc.vpc_id }"
+                k8s_json_module["module"]["eks"][
+                    "subnet_ids"
+                ] = "${ module.vpc.subnet_id }"
+
+            # TODO: read defaults from the config file if anything is missing
 
             generate_tf_json(module_name="eks", json_module=k8s_json_module)
+            # inject k8s module
+
+            # inject helm module
+            # helm_json_module = {"module": {"helm": {}}}
+            # helm_json_module["module"]["helm"]["source"] = "../modules/cloud/aws/helm"
+            # helm_json_module["module"]["helm"]["name"] = f"{self.stack_name}-helm"
+
+            # if (
+            #     "config" in self.deployment_config
+            #     and "helm" in self.deployment_config["config"]
+            # ):
+            #     for helm_config in self.deployment_config["config"]["helm"]:
+            #         helm_json_module["module"]["helm"][
+            #             helm_config
+            #         ] = self.deployment_config["config"]["helm"].get(helm_config, None)
+
+            # generate_tf_json(module_name="helm", json_module=helm_json_module)
+            # inject helm module
 
         elif self.provider == Provider.GCP:
             pass
