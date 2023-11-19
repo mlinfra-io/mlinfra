@@ -46,7 +46,7 @@ class AbstractStack(ABC):
             extension (str, optional): The extension of the config file.
         """
         with open(
-            f"modules/applications/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}",
+            f"modules/applications/{self.deployment_type.value}/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}",
             "r",
             encoding="utf-8",
         ) as tf_config:

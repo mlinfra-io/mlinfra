@@ -60,7 +60,7 @@ class KubernetesStack(AbstractStack):
 
             json_module["module"][name][
                 "source"
-            ] = f"../modules/applications/{stack_type}/{name}/tf_module"
+            ] = f"../modules/applications/{self.deployment_type.value}/{stack_type}/{name}/tf_module"
 
             # Reading inputs and outputs from the config file
             # placed in the applications/application folder and
