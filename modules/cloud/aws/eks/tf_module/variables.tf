@@ -279,42 +279,11 @@ variable "node_security_group_additional_rules" {
 }
 
 variable "eks_managed_node_group_defaults" {
-  type    = map(any)
-  default = {}
+  type = map(any)
+  default = {
+    attach_cluster_primary_security_group = true
+  }
 }
-
-# variable "eks_managed_node_groups" {
-#   type = map(object({
-#     create_launch_template = bool
-#     launch_template_name   = string
-#     ami_type               = string
-#     disk_size              = number
-#     min_size               = number
-#     max_size               = number
-#     desired_size           = number
-#     capacity_type          = string
-#     force_update_version   = bool
-#     instance_types         = list(string)
-#     labels                 = optional(map(string))
-#     taints                 = list(map(string))
-#   }))
-#   default = {
-#     default_nodegroup = {
-#       create_launch_template = false
-#       launch_template_name   = ""
-#       ami_type               = "AL2_x86_64"
-#       force_update_version   = true
-#       labels = {
-#         nodegroup_type = "operations"
-#       }
-#       taints = [{
-#         key    = "nodegroup_type"
-#         value  = "operations"
-#         effect = "NO_SCHEDULE"
-#       }]
-#     }
-#   }
-# }
 
 variable "ami_type" {
   type        = string

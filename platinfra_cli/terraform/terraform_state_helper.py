@@ -96,32 +96,6 @@ class TerraformStateHelper:
                 },
             )
 
-        # Create the service linked roles
-        try:
-            iam.create_service_linked_role(
-                AWSServiceName="autoscaling.amazonaws.com",
-            )
-        except ClientError as e:
-            if e.response["Error"]["Code"] != "InvalidInput":
-                raise Exception(
-                    "When trying to create the aws service linked role for autoscaling, we got an "
-                    f"{e.response['Error']['Code']} error with the message "
-                    f"{e.response['Error']['Message']}"
-                )
-            print("Autoscaling service linked role present")
-        try:
-            iam.create_service_linked_role(
-                AWSServiceName="elasticloadbalancing.amazonaws.com",
-            )
-        except ClientError as e:
-            if e.response["Error"]["Code"] != "InvalidInput":
-                raise Exception(
-                    "When trying to create the aws service linked role for load balancing, we got an "
-                    f"{e.response['Error']['Code']} error with the message "
-                    f"{e.response['Error']['Message']}"
-                )
-            print("Load balancing service linked role present")
-
     def _setup_bucket(
         self, s3_client, region: str, bucket_name: str, bucket_exists: bool = False
     ):

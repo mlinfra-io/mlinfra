@@ -76,6 +76,6 @@ def terraform(
     #     file_processor.force_unlock()
     #     action = f"plan {args} -lock=false"
     elif action == "plan":
-        action += " -lock=false"
+        action += " -lock=false -input=false -compact-warnings"
 
     ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")
