@@ -285,6 +285,7 @@ variable "eks_managed_node_group_defaults" {
   }
 }
 
+# TODO: Simplify this to just cpu or gpu
 variable "ami_type" {
   type        = string
   description = "The AMI type to use for the worker nodes."
