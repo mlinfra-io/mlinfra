@@ -41,6 +41,22 @@ class KubernetesDeployment(AbstractDeployment):
 
             generate_tf_json(module_name="terraform", json_module=data)
 
+    def generate_k8s_helm_provider_config(self):
+        data = {"provider": {}}
+
+        # TODO: Update token generation for all providers
+        providers = ["kubernetes", "helm"]
+
+        for provider in providers:
+            with open(
+                f"modules/terraform_providers/{provider}/provider.tf.json",
+                "r",
+            ) as provider_tf:
+                provider_tf_json = json.load(provider_tf)
+            data["provider"].update(provider_tf_json["provider"])
+
+        generate_tf_json(module_name="k8s_provider", json_module=data)
+
     def generate_deployment_config(self):
         if self.provider == Provider.AWS:
             # TODO: Make these blocks generic
@@ -89,24 +105,6 @@ class KubernetesDeployment(AbstractDeployment):
             # TODO: read defaults from the config file if anything is missing
 
             generate_tf_json(module_name="eks", json_module=k8s_json_module)
-            # inject k8s module
-
-            # inject helm module
-            # helm_json_module = {"module": {"helm": {}}}
-            # helm_json_module["module"]["helm"]["source"] = "../modules/cloud/aws/helm"
-            # helm_json_module["module"]["helm"]["name"] = f"{self.stack_name}-helm"
-
-            # if (
-            #     "config" in self.deployment_config
-            #     and "helm" in self.deployment_config["config"]
-            # ):
-            #     for helm_config in self.deployment_config["config"]["helm"]:
-            #         helm_json_module["module"]["helm"][
-            #             helm_config
-            #         ] = self.deployment_config["config"]["helm"].get(helm_config, None)
-
-            # generate_tf_json(module_name="helm", json_module=helm_json_module)
-            # inject helm module
 
         elif self.provider == Provider.GCP:
             pass
@@ -117,6 +115,7 @@ class KubernetesDeployment(AbstractDeployment):
 
     def configure_deployment(self):
         self.generate_required_provider_config()
+        self.generate_k8s_helm_provider_config()
         self.generate_deployment_config()
 
 
