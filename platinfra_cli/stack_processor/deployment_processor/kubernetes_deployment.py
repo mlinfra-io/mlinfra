@@ -98,13 +98,49 @@ class KubernetesDeployment(AbstractDeployment):
                         k8s_config, None
                     )
                 k8s_json_module["module"]["eks"]["vpc_id"] = "${ module.vpc.vpc_id }"
+                # TODO: check if all subnets are here
                 k8s_json_module["module"]["eks"][
                     "subnet_ids"
                 ] = "${ module.vpc.subnet_id }"
 
+            generate_tf_json(module_name="eks", json_module=k8s_json_module)
+
             # TODO: read defaults from the config file if anything is missing
 
-            generate_tf_json(module_name="eks", json_module=k8s_json_module)
+            if (
+                "config" in self.deployment_config
+                and "node_groups" in self.deployment_config["config"]
+            ):
+                # inject k8s module
+                nodegroups_json_module = {
+                    "module": {"eks_nodegroup": {"node_groups": []}}
+                }
+                nodegroups_json_module["module"]["eks_nodegroup"][
+                    "source"
+                ] = "../modules/cloud/aws/eks_nodegroup/tf_module"
+
+                for nodegroup_config in self.deployment_config["config"]["node_groups"]:
+                    nodegroup_object = {}
+                    nodegroup_object = nodegroup_config
+                    nodegroup_object["subnet_ids"] = "${ module.vpc.subnet_id }"
+                    nodegroup_object["cluster_name"] = "${ module.eks.cluster_name }"
+                    nodegroup_object[
+                        "cluster_version"
+                    ] = "${ module.eks.cluster_version }"
+                    nodegroup_object[
+                        "cluster_primary_security_group_id"
+                    ] = "${ module.eks.cluster_primary_security_group_id }"
+                    nodegroup_object[
+                        "node_security_group_id"
+                    ] = "${ module.eks.node_security_group_id }"
+
+                    nodegroups_json_module["module"]["eks_nodegroup"][
+                        "node_groups"
+                    ].append(nodegroup_object)
+
+            generate_tf_json(
+                module_name="nodegroups", json_module=nodegroups_json_module
+            )
 
         elif self.provider == Provider.GCP:
             pass

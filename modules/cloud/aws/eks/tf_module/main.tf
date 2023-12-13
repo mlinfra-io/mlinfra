@@ -38,7 +38,6 @@ module "eks" {
     resources        = ["secrets"]
   }
 
-  # TODO: validate if the function jsonencode() is required with add on configuration_values
   cluster_addons = {
     vpc-cni = {
       # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
@@ -76,8 +75,6 @@ module "eks" {
   node_security_group_additional_rules = var.node_security_group_additional_rules
 
   eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
-
-  # eks_managed_node_groups = var.eks_managed_node_groups
 
   # update tags
   tags = local.tags
