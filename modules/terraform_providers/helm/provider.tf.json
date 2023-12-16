@@ -3,7 +3,7 @@
     "helm": {
       "kubernetes": {
         "host": "${module.eks.eks_cluster_endpoint}",
-        "cluster_ca_certificate": "base64decode(${module.eks.eks_cluster_ca_cert})",
+        "cluster_ca_certificate": "${ base64decode(module.eks.eks_cluster_ca_cert) }",
         "exec": {
           "api_version": "client.authentication.k8s.io/v1beta1",
           "args": [
