@@ -75,7 +75,7 @@ class KubernetesDeployment(AbstractDeployment):
                         vpc_config
                     ] = self.deployment_config["config"]["vpc"].get(vpc_config, None)
 
-            generate_tf_json(module_name="vpc", json_module=vpc_json_module)
+                generate_tf_json(module_name="vpc", json_module=vpc_json_module)
             # inject vpc module
 
             # inject k8s module
@@ -101,9 +101,9 @@ class KubernetesDeployment(AbstractDeployment):
                 # TODO: check if all subnets are here
                 k8s_json_module["module"]["eks"][
                     "subnet_ids"
-                ] = "${ module.vpc.subnet_id }"
+                ] = "${ module.vpc.private_subnets_ids }"
 
-            generate_tf_json(module_name="eks", json_module=k8s_json_module)
+                generate_tf_json(module_name="eks", json_module=k8s_json_module)
 
             # TODO: read defaults from the config file if anything is missing
 
@@ -122,7 +122,9 @@ class KubernetesDeployment(AbstractDeployment):
                 for nodegroup_config in self.deployment_config["config"]["node_groups"]:
                     nodegroup_object = {}
                     nodegroup_object = nodegroup_config
-                    nodegroup_object["subnet_ids"] = "${ module.vpc.subnet_id }"
+                    nodegroup_object[
+                        "subnet_ids"
+                    ] = "${ module.vpc.private_subnets_ids }"
                     nodegroup_object["cluster_name"] = "${ module.eks.cluster_name }"
                     nodegroup_object[
                         "cluster_version"
@@ -138,9 +140,9 @@ class KubernetesDeployment(AbstractDeployment):
                         "node_groups"
                     ].append(nodegroup_object)
 
-            generate_tf_json(
-                module_name="nodegroups", json_module=nodegroups_json_module
-            )
+                generate_tf_json(
+                    module_name="nodegroups", json_module=nodegroups_json_module
+                )
 
         elif self.provider == Provider.GCP:
             pass
