@@ -15,10 +15,10 @@ module "eks_managed_node_group" {
   // The following variables are necessary if you decide to use the module outside of the parent EKS module context.
   // Without it, the security groups of the nodes are empty and thus won't join the cluster.
   cluster_primary_security_group_id = each.value.cluster_primary_security_group_id
-  vpc_security_group_ids            = [each.value.node_security_group_id]
+  vpc_security_group_ids            = [each.value.cluster_primary_security_group_id]
 
   create_launch_template     = try(each.value.create_launch_template, true)
-  use_custom_launch_template = try(each.value.use_custom_launch_template, true)
+  use_custom_launch_template = try(each.value.use_custom_launch_template, false)
 
   instance_types = try(each.value.instance_types, ["t3.medium"])
   ami_type       = try(each.value.ami_type, "AL2_x86_64")
