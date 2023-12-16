@@ -51,11 +51,10 @@ module "vpc_module" {
 
   create_database_subnet_group = var.create_database_subnets
 
+  enable_vpn_gateway     = false
   enable_nat_gateway     = var.enable_nat_gateway
-  single_nat_gateway     = false
+  single_nat_gateway     = var.one_nat_gateway_per_az ? false : true
   one_nat_gateway_per_az = var.one_nat_gateway_per_az
-
-  enable_vpn_gateway = false
 
   enable_dns_hostnames = true
   enable_dns_support   = true
