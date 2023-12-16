@@ -2,8 +2,12 @@ output "vpc_id" {
   value = module.vpc_module.vpc_id
 }
 
-output "subnet_id" {
+output "public_subnets_ids" {
   value = module.vpc_module.public_subnets
+}
+
+output "private_subnets_ids" {
+  value = module.vpc_module.private_subnets
 }
 
 output "default_vpc_sg" {
