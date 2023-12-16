@@ -20,17 +20,17 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
 
-  cluster_name                    = var.cluster_name
-  cluster_version                 = var.k8s_version
+  cluster_name    = var.cluster_name
+  cluster_version = var.k8s_version
+
+  vpc_id                   = var.vpc_id
+  subnet_ids               = var.subnet_ids
+  cluster_ip_family        = var.cluster_ip_family
+  control_plane_subnet_ids = var.subnet_ids
+
+
   cluster_endpoint_private_access = var.cluster_endpoint_private_access
   cluster_endpoint_public_access  = var.cluster_endpoint_public_access
-
-  vpc_id = var.vpc_id
-  # set to private subnets if cluster is in private subnets
-  subnet_ids        = var.subnet_ids
-  cluster_ip_family = var.cluster_ip_family
-  # set to private subnets if cluster is in private subnets
-  control_plane_subnet_ids = var.subnet_ids
 
   create_kms_key = false
   cluster_encryption_config = {
@@ -72,45 +72,37 @@ module "eks" {
   cluster_security_group_additional_rules = var.cluster_security_group_additional_rules
 
   # Extend node-to-node security group rules
-  node_security_group_additional_rules = var.node_security_group_additional_rules
+  # node_security_group_additional_rules = var.node_security_group_additional_rules
 
-  eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
+  # TODO: cannot pass it as a variable
+  # eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
+  eks_managed_node_group_defaults = {
+    attach_cluster_primary_security_group = true
+  }
+
+  # Default node group that comes with the cluster
+  eks_managed_node_groups = {
+    "${var.nodegroup_name}" = {
+      create_launch_template     = var.create_launch_template
+      use_custom_launch_template = var.use_custom_launch_template
+      ami_type                   = var.ami_type
+
+      disk_size    = var.disk_size
+      min_size     = var.min_size
+      max_size     = var.max_size
+      desired_size = var.desired_size
+
+      capacity_type  = var.spot_instance ? "SPOT" : "ON_DEMAND"
+      instance_types = var.instance_types
+
+      labels = var.labels
+      taints = var.taints
+      tags   = local.tags
+    }
+  }
 
   # update tags
   tags = local.tags
-}
-
-# create nodegroups using terraform aws eks module
-# TODO: Configure the module completely
-module "eks_managed_node_group" {
-  source  = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
-  version = "~> 19.0"
-
-  name            = var.nodegroup_name
-  cluster_name    = var.cluster_name
-  cluster_version = var.k8s_version
-
-  subnet_ids = var.subnet_ids
-
-  // The following variables are necessary if you decide to use the module outside of the parent EKS module context.
-  // Without it, the security groups of the nodes are empty and thus won't join the cluster.
-  cluster_primary_security_group_id = module.eks.cluster_primary_security_group_id
-  vpc_security_group_ids            = [module.eks.node_security_group_id]
-
-  create_launch_template     = var.create_launch_template
-  use_custom_launch_template = var.use_custom_launch_template
-
-  instance_types = var.instance_types
-  ami_type       = var.ami_type
-  capacity_type  = var.spot_instance ? "SPOT" : "ON_DEMAND"
-  min_size       = var.min_size
-  max_size       = var.max_size
-  desired_size   = var.desired_size
-  disk_size      = var.disk_size
-
-  labels = var.labels
-  taints = var.taints
-  tags   = local.tags
 }
 
 module "vpc_cni_irsa" {
