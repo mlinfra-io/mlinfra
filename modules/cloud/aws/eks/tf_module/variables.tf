@@ -35,19 +35,19 @@ variable "k8s_version" {
 
 variable "cluster_endpoint_private_access" {
   type        = bool
-  description = "Indicates whether the Amazon EKS private API server endpoint is enabled. Default is false."
-  default     = false
+  description = "Indicates whether the Amazon EKS private API server endpoint is enabled. Default is true. Read more here: https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html"
+  default     = true
 }
 
 variable "cluster_endpoint_public_access" {
   type        = bool
-  description = "Indicates whether the Amazon EKS public API server endpoint is enabled. Default is true."
-  default     = true
+  description = "Indicates whether the Amazon EKS public API server endpoint is enabled. Default is false."
+  default     = false
 }
 
 variable "cluster_ip_family" {
   type        = string
-  description = "Indicates whether the Amazon EKS private API server endpoint is enabled. Default is false."
+  description = "Configures the IP family used by the EKS cluster"
   default     = "ipv4"
 }
 
@@ -195,27 +195,6 @@ variable "ebs_csi_driver_addon_configuration_values" {
         effect   = "NoSchedule"
       }]
     }
-    node = {
-      affinity = {
-        nodeAffinity = {
-          requiredDuringSchedulingIgnoredDuringExecution = {
-            nodeSelectorTerms = [{
-              matchExpressions = [{
-                key      = "nodegroup_type"
-                operator = "In"
-                values   = "operations"
-              }]
-            }]
-          }
-        }
-      }
-      tolerations = [{
-        key      = "nodegroup_type"
-        operator = "Equal"
-        value    = "operations"
-        effect   = "NoSchedule"
-      }]
-    }
   }
 }
 
@@ -278,12 +257,13 @@ variable "node_security_group_additional_rules" {
   }
 }
 
-variable "eks_managed_node_group_defaults" {
-  type = map(any)
-  default = {
-    attach_cluster_primary_security_group = true
-  }
-}
+# TODO: cannot pass it as a variable
+# variable "eks_managed_node_group_defaults" {
+#   type = map(any)
+#   default = {
+#     attach_cluster_primary_security_group = true
+#   }
+# }
 
 # TODO: Simplify this to just cpu or gpu
 variable "ami_type" {
@@ -305,7 +285,7 @@ variable "nodegroup_name" {
 variable "create_launch_template" {
   type        = bool
   description = "Create a launch template for the node group."
-  default     = false
+  default     = true
 }
 
 variable "use_custom_launch_template" {
