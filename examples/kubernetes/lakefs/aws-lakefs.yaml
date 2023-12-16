@@ -8,9 +8,12 @@ deployment:
   config:
     vpc:
       create_database_subnets: false
-      enable_nat_gateway: false
+      enable_nat_gateway: true
+      one_nat_gateway_per_az: false
     kubernetes:
       k8s_version: "1.28"
+      cluster_endpoint_public_access: true
+      spot_instance: false
     node_groups:
       - name: lakefs-node-group
         instance_types:
@@ -19,13 +22,13 @@ deployment:
         min_size: 1
         max_size: 3
         disk_size: 20
-      - name: lakefs-node-group-2
-        instance_types:
-          - t3.4xlarge
-        desired_size: 15
-        min_size: 10
-        max_size: 30
-        disk_size: 2000
+      # - name: lakefs-node-group-2
+      #   instance_types:
+      #     - t3.xlarge
+      #   desired_size: 15
+      #   min_size: 10
+      #   max_size: 30
+      #   disk_size: 2000
 stack:
   - data_versioning:
       name: lakefs
