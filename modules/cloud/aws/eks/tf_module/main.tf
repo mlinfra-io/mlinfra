@@ -183,9 +183,8 @@ resource "aws_autoscaling_group_tag" "cluster_autoscaler_label_tags" {
   autoscaling_group_name = each.value.autoscaling_group
 
   tag {
-    key   = each.value.key
-    value = each.value.value
-
+    key                 = each.value.key
+    value               = each.value.value
     propagate_at_launch = false
   }
 }
