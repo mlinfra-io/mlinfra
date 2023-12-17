@@ -75,6 +75,7 @@ module "eks" {
   # TODO: cannot pass it as a variable
   # eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
   eks_managed_node_group_defaults = {
+    ebs_optimized                         = true
     attach_cluster_primary_security_group = true
   }
 
