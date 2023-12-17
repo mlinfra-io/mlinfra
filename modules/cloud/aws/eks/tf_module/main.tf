@@ -1,7 +1,7 @@
 locals {
   tags = merge({
-    Name   = var.cluster_name
-    Module = path.module
+    name   = var.cluster_name
+    module = path.module
     }, var.tags
   )
 }
@@ -70,7 +70,7 @@ module "eks" {
   cluster_security_group_additional_rules = var.cluster_security_group_additional_rules
 
   # Extend node-to-node security group rules
-  # node_security_group_additional_rules = var.node_security_group_additional_rules
+  node_security_group_additional_rules = var.node_security_group_additional_rules
 
   # TODO: cannot pass it as a variable
   # eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
@@ -98,7 +98,6 @@ module "eks" {
       tags   = local.tags
     }
   }
-
   # update tags
   tags = local.tags
 }
