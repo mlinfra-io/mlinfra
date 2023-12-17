@@ -1,3 +1,10 @@
+locals {
+  tags = merge({
+    module = path.module
+    }, var.tags
+  )
+}
+
 # TODO: Configure the module completely
 # https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group
 module "eks_managed_node_group" {
@@ -30,5 +37,5 @@ module "eks_managed_node_group" {
 
   labels = try(each.value.labels, null)
   taints = try(each.value.taints, {})
-  # tags   = local.tags
+  tags   = local.tags
 }
