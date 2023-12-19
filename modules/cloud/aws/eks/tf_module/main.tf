@@ -1,9 +1,7 @@
-data "aws_caller_identity" "current" {}
-
 locals {
   tags = merge({
-    Name   = var.cluster_name
-    Module = path.module
+    name   = var.cluster_name
+    module = path.module
     }, var.tags
   )
 }
@@ -72,11 +70,12 @@ module "eks" {
   cluster_security_group_additional_rules = var.cluster_security_group_additional_rules
 
   # Extend node-to-node security group rules
-  # node_security_group_additional_rules = var.node_security_group_additional_rules
+  node_security_group_additional_rules = var.node_security_group_additional_rules
 
   # TODO: cannot pass it as a variable
   # eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
   eks_managed_node_group_defaults = {
+    ebs_optimized                         = true
     attach_cluster_primary_security_group = true
   }
 
@@ -100,7 +99,6 @@ module "eks" {
       tags   = local.tags
     }
   }
-
   # update tags
   tags = local.tags
 }
@@ -186,9 +184,8 @@ resource "aws_autoscaling_group_tag" "cluster_autoscaler_label_tags" {
   autoscaling_group_name = each.value.autoscaling_group
 
   tag {
-    key   = each.value.key
-    value = each.value.value
-
+    key                 = each.value.key
+    value               = each.value.value
     propagate_at_launch = false
   }
 }

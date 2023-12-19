@@ -1,10 +1,6 @@
-variable "vpc_id" {
-  type = string
-}
-
-variable "subnet_ids" {
-  type = list(string)
-}
+##############################
+###### KMS variables #########
+##############################
 
 variable "kms_key_deletion_window" {
   type        = number
@@ -18,8 +14,9 @@ variable "kms_key_rotation" {
   default     = true
 }
 
-# create variables for cluster name,
-# vpc id, subnets ids and control plane subnets ids
+##############################
+###### EKS variables #########
+##############################
 
 variable "cluster_name" {
   type        = string
@@ -33,6 +30,22 @@ variable "k8s_version" {
   default     = "1.28"
 }
 
+variable "vpc_id" {
+  type        = string
+  description = "VPC ID for EKS Cluster"
+}
+
+variable "subnet_ids" {
+  type        = list(string)
+  description = "Subnets IDs for EKS Cluster"
+}
+
+variable "cluster_ip_family" {
+  type        = string
+  description = "Configures the IP family used by the EKS cluster"
+  default     = "ipv4"
+}
+
 variable "cluster_endpoint_private_access" {
   type        = bool
   description = "Indicates whether the Amazon EKS private API server endpoint is enabled. Default is true. Read more here: https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html"
@@ -43,12 +56,6 @@ variable "cluster_endpoint_public_access" {
   type        = bool
   description = "Indicates whether the Amazon EKS public API server endpoint is enabled. Default is false."
   default     = false
-}
-
-variable "cluster_ip_family" {
-  type        = string
-  description = "Configures the IP family used by the EKS cluster"
-  default     = "ipv4"
 }
 
 variable "vpc_cni_irsa_role_name_prefix" {
@@ -88,11 +95,14 @@ variable "vpc_cni_addon_configuration_values" {
   description = "Configuration for VPC CNI AddOn"
   default = {
     env = {
+      # if your VPC has a lot of consecutive continuous IPs
       ENABLE_PREFIX_DELEGATION = "true"
       WARM_PREFIX_TARGET       = "1"
+      # if your vpc is quite fragmented
+      # WARM_IP_TARGET = "7"
+      # MINIMUM_IP_TARGET = "15"
     }
   }
-
 }
 
 variable "coredns_addon" {
@@ -100,34 +110,11 @@ variable "coredns_addon" {
     most_recent                 = bool
     resolve_conflicts_on_create = string
     resolve_conflicts_on_update = string
-    configuration_values        = any
   })
   default = {
     most_recent                 = true
     resolve_conflicts_on_create = "OVERWRITE"
     resolve_conflicts_on_update = "PRESERVE"
-
-    configuration_values = {
-      affinity = {
-        nodeAffinity = {
-          requiredDuringSchedulingIgnoredDuringExecution = {
-            nodeSelectorTerms = [{
-              matchExpressions = [{
-                key      = "nodegroup_type"
-                operator = "In"
-                values   = "operations"
-              }]
-            }]
-          }
-        }
-      }
-      tolerations = [{
-        key      = "nodegroup_type"
-        operator = "Equal"
-        value    = "operations"
-        effect   = "NoSchedule"
-      }]
-    }
   }
 }
 
@@ -142,7 +129,7 @@ variable "coredns_addon_configuration_values" {
             matchExpressions = [{
               key      = "nodegroup_type"
               operator = "In"
-              values   = "operations"
+              values   = ["operations"]
             }]
           }]
         }
@@ -182,7 +169,7 @@ variable "ebs_csi_driver_addon_configuration_values" {
               matchExpressions = [{
                 key      = "nodegroup_type"
                 operator = "In"
-                values   = "operations"
+                values   = ["operations"]
               }]
             }]
           }
@@ -265,16 +252,13 @@ variable "node_security_group_additional_rules" {
 #   }
 # }
 
-# TODO: Simplify this to just cpu or gpu
-variable "ami_type" {
-  type        = string
-  description = "The AMI type to use for the worker nodes."
-  default     = "AL2_x86_64"
-  validation {
-    condition     = var.ami_type == "AL2_x86_64" || var.ami_type == "AL2_x86_64_GPU"
-    error_message = "The ami type must be either AL2_x86_64 or AL2_x86_64_GPU"
-  }
-}
+##############################
+###### EKS variables #########
+##############################
+
+##############################
+#### Default nodegroup ######
+##############################
 
 variable "nodegroup_name" {
   type        = string
@@ -292,6 +276,17 @@ variable "use_custom_launch_template" {
   type        = bool
   description = "Use a custom launch template for the node group."
   default     = false
+}
+
+# TODO: Simplify this to just cpu or gpu
+variable "ami_type" {
+  type        = string
+  description = "The AMI type to use for the worker nodes."
+  default     = "AL2_x86_64"
+  validation {
+    condition     = var.ami_type == "AL2_x86_64" || var.ami_type == "AL2_x86_64_GPU"
+    error_message = "The ami type must be either AL2_x86_64 or AL2_x86_64_GPU"
+  }
 }
 
 variable "disk_size" {
@@ -329,10 +324,9 @@ variable "instance_types" {
   description = "The instance types associated with the node group."
   default     = ["t3.medium"]
 }
-
 variable "labels" {
   type        = map(string)
-  description = ""
+  description = "The labels to apply to the EKS cluster and related modules."
   default = {
     nodegroup_type = "operations"
   }
@@ -344,6 +338,7 @@ variable "taints" {
     value  = string
     effect = string
   }))
+  description = "The taints to apply to the EKS cluster and related modules."
   default = {
     operations = {
       key    = "nodegroup_type"
