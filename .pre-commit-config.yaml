@@ -1,16 +1,13 @@
 repos:
-  - repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.1.8
     hooks:
-      - id: flake8
-        types: [python]
-        files: "deploy/devops"
-  - repo: https://github.com/psf/black
-    rev: 22.3.0
-    hooks:
-      - id: black
-        types: [python]
-        files: "deploy/devops"
+      # Run the linter.
+      - id: ruff
+        args: [--fix]
+      # Run the formatter.
+      - id: ruff-format
   - repo: https://github.com/PyCQA/isort
     rev: 5.12.0
     hooks:
