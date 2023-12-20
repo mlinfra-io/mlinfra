@@ -34,3 +34,8 @@ def check_terraform_version():
         print("Terraform is not installed or an error occurred.")
         print("Please install Terraform and try again.")
         exit(1)
+
+
+def terraform_tested_version():
+    # TODO: read from a file and then populate this field
+    return "1.6.3"
