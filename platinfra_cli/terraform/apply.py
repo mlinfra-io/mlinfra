@@ -16,31 +16,39 @@ Apply function undergoes the following steps:
         - order modules in order of application
         - apply terraform modules with -target
 """
-import yaml
+import os
+import json
 import subprocess
-from platinfra_cli.terraform import Terraform
+from platinfra_cli.terraform.terraform import Terraform
+from platinfra_cli.utils.constants import TF_PATH
 from platinfra_cli.utils.utils import terraform_tested_version
-from platinfra_cli.stack_processor import StackGenerator
+from platinfra_cli.stack_processor.stack_generator import StackGenerator
 from platinfra_cli.terraform.terraform_state_helper import TerraformStateHelper
 
 
 class Apply(Terraform):
-    def __init__(self, config_file_path: yaml):
-        self.config_file_path = config_file_path
+    def __init__(self, stack_config_path: str):
+        self.stack_config_path = stack_config_path
 
     def apply(self):
         """
         This function is responsible for running terraform apply command
         """
         self.check_terraform_installed()
-        self.check_mlops_cli_installed()
-        self.check_config_file_exists()
-        self.clean_mlops_infra_folder()
-        self.check_cloud_credentials()
-        self.check_region_has_three_azs()
-        self.check_terraform_state_storage()
+        # self.check_mlops_cli_installed()
+        # self.check_config_file_exists()
+        # self.clean_mlops_infra_folder()
         self.process_config_file()
-        self.terraform_apply()
+        # self.check_cloud_credentials()
+        # self.check_region_has_three_azs()
+        # self.check_terraform_state_storage()
+        modules_list = self.generate_modules_list()
+        # self.terraform_apply()
+        target_string = ""
+        for item in modules_list:
+            target_string += f" -target={item}"
+
+        return target_string
 
     def check_terraform_installed(self):
         try:
@@ -63,3 +71,14 @@ class Apply(Terraform):
         state_helper.manage_aws_state_storage()
 
         file_processor.generate()
+
+    def generate_modules_list(self):
+        modules_list = []
+        for file in os.listdir(TF_PATH):
+            if file.endswith(".tf.json"):
+                with open(os.path.join(TF_PATH, file)) as json_file:
+                    data = json.load(json_file)
+                    if "module" in data:
+                        key, _ = data["module"].popitem()
+                        modules_list.append(f"module.{key}")
+        return modules_list
