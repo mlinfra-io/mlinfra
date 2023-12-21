@@ -4,6 +4,7 @@ from platinfra_cli.utils.utils import clean_tf_directory
 from platinfra_cli.stack_processor.stack_generator import (
     StackGenerator,
 )
+from platinfra_cli.terraform.apply import Apply
 from platinfra_cli.terraform.terraform_state_helper import TerraformStateHelper
 
 
@@ -66,7 +67,9 @@ def terraform(
     """
     Run terraform for the config file with the given action and args.
     """
-    run_initial_terraform_tasks(stack_config_path=stack_config_path)
+    # run_initial_terraform_tasks(stack_config_path=stack_config_path)
+    # args = Apply(stack_config_path).apply()
+    Apply(stack_config_path).apply()
 
     ctx.run(f"terraform -chdir={TF_PATH} init")
 
@@ -78,4 +81,5 @@ def terraform(
     elif action == "plan":
         action += " -lock=false -input=false -compact-warnings"
 
+    # print(f"terraform -chdir={TF_PATH} {action} {args}")
     ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")
