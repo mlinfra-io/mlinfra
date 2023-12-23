@@ -13,6 +13,11 @@ resource "aws_kms_key" "eks" {
   tags                    = local.tags
 }
 
+resource "aws_kms_alias" "eks_key_alias" {
+  name          = "alias/eks-secrets-encryption-key"
+  target_key_id = aws_kms_key.eks.key_id
+}
+
 # TODO: Update the variables here
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
