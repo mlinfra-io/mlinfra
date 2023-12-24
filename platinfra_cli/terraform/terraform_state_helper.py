@@ -25,7 +25,6 @@ class TerraformStateHelper:
         if they do not exist.
         """
         s3 = client("s3", config=Config(region_name=self.region))
-        iam = client("iam", config=Config(region_name=self.region))
         dynamodb = client("dynamodb", config=Config(region_name=self.region))
 
         # checks if bucket exists
