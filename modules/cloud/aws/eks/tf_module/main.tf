@@ -15,11 +15,10 @@ resource "aws_kms_key" "eks" {
 }
 
 resource "aws_kms_alias" "eks_key_alias" {
-  name          = "alias/eks-secrets-encryption-key"
+  name          = "alias/${var.cluster_name}-cluster-secrets-encryption-key"
   target_key_id = aws_kms_key.eks.key_id
 }
 
-# TODO: Update the variables here
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
@@ -72,11 +71,8 @@ module "eks" {
     }
   }
 
-  # Extend cluster security group rules
   cluster_security_group_additional_rules = var.cluster_security_group_additional_rules
-
-  # Extend node-to-node security group rules
-  node_security_group_additional_rules = var.node_security_group_additional_rules
+  node_security_group_additional_rules    = var.node_security_group_additional_rules
 
   # TODO: cannot pass it as a variable
   # eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
@@ -142,7 +138,6 @@ module "ebs_csi_driver_irsa" {
     }
   }
 
-  # update tags
   tags = local.tags
 }
 
@@ -153,8 +148,6 @@ module "ebs_csi_driver_irsa" {
 ################################################################################
 
 locals {
-
-  # We need to lookup K8s taint effect from the AWS API value
   taint_effects = {
     NO_SCHEDULE        = "NoSchedule"
     NO_EXECUTE         = "NoExecute"
