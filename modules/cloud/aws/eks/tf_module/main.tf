@@ -7,6 +7,8 @@ locals {
 }
 
 # TODO: add kms policy to restrict kms key access
+# TODO: update aws provider version when this issue gets fixed
+# https://github.com/hashicorp/terraform-provider-aws/issues/34538
 resource "aws_kms_key" "eks" {
   description             = "KMS Key for EKS Secrets encryption"
   deletion_window_in_days = var.kms_key_deletion_window
@@ -30,7 +32,6 @@ module "eks" {
   subnet_ids               = var.subnet_ids
   cluster_ip_family        = var.cluster_ip_family
   control_plane_subnet_ids = var.subnet_ids
-
 
   cluster_endpoint_private_access = var.cluster_endpoint_private_access
   cluster_endpoint_public_access  = var.cluster_endpoint_public_access
