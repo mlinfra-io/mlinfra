@@ -1,14 +1,13 @@
 import time
-
 from boto3 import client
 from botocore.config import Config
 from botocore.exceptions import ClientError
 
 
-class TerraformStateHelper:
+class StateHelper:
     """
-    The TerraformStateHelper class manages the creation and configuration of AWS S3 buckets and DynamoDB
-    tables for storing Terraform state.
+    The StateHelper class manages the creation and configuration of
+    AWS S3 buckets and DynamoDB tables for storing Terraform state.
     """
 
     def __init__(self, state: str, region: str) -> None:
@@ -25,7 +24,6 @@ class TerraformStateHelper:
         if they do not exist.
         """
         s3 = client("s3", config=Config(region_name=self.region))
-        iam = client("iam", config=Config(region_name=self.region))
         dynamodb = client("dynamodb", config=Config(region_name=self.region))
 
         # checks if bucket exists

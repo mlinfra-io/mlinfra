@@ -1,27 +1,6 @@
 from invoke import task
 from platinfra_cli.utils.constants import TF_PATH
-from platinfra_cli.utils.utils import clean_tf_directory
-from platinfra_cli.stack_processor.stack_generator import (
-    StackGenerator,
-)
-from platinfra_cli.terraform.terraform_state_helper import TerraformStateHelper
-
-
-def run_initial_terraform_tasks(
-    stack_config_path: str,
-):
-    # clean the tf directory before init
-    clean_tf_directory()
-
-    # TODO: UPDATE LOGIC for generating state file
-    file_processor = StackGenerator(stack_config_path=stack_config_path)
-
-    state_helper = TerraformStateHelper(
-        state=file_processor.get_state_file_name(), region=file_processor.get_region()
-    )
-    state_helper.manage_aws_state_storage()
-
-    file_processor.generate()
+from platinfra_cli.terraform.terraform import Terraform
 
 
 @task(
@@ -37,7 +16,7 @@ def estimate_cost(
     """
     Estimate cost of the contents of config file
     """
-    run_initial_terraform_tasks(stack_config_path=stack_config_path)
+    Terraform(stack_config_path).plan()
 
     ctx.run(f"terraform -chdir={TF_PATH} init")
     ctx.run(
@@ -66,7 +45,7 @@ def terraform(
     """
     Run terraform for the config file with the given action and args.
     """
-    run_initial_terraform_tasks(stack_config_path=stack_config_path)
+    Terraform(stack_config_path).apply()
 
     ctx.run(f"terraform -chdir={TF_PATH} init")
 
@@ -78,4 +57,5 @@ def terraform(
     elif action == "plan":
         action += " -lock=false -input=false -compact-warnings"
 
+    # print(f"terraform -chdir={TF_PATH} {action} {args}")
     ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")

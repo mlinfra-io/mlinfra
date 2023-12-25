@@ -6,6 +6,9 @@ locals {
   )
 }
 
+# TODO: add kms policy to restrict kms key access
+# TODO: update aws provider version when this issue gets fixed
+# https://github.com/hashicorp/terraform-provider-aws/issues/34538
 resource "aws_kms_key" "eks" {
   description             = "KMS Key for EKS Secrets encryption"
   deletion_window_in_days = var.kms_key_deletion_window
@@ -13,7 +16,11 @@ resource "aws_kms_key" "eks" {
   tags                    = local.tags
 }
 
-# TODO: Update the variables here
+resource "aws_kms_alias" "eks_key_alias" {
+  name_prefix   = "alias/${var.cluster_name}-secrets-encryption-key"
+  target_key_id = aws_kms_key.eks.key_id
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 19.0"
@@ -25,7 +32,6 @@ module "eks" {
   subnet_ids               = var.subnet_ids
   cluster_ip_family        = var.cluster_ip_family
   control_plane_subnet_ids = var.subnet_ids
-
 
   cluster_endpoint_private_access = var.cluster_endpoint_private_access
   cluster_endpoint_public_access  = var.cluster_endpoint_public_access
@@ -66,11 +72,8 @@ module "eks" {
     }
   }
 
-  # Extend cluster security group rules
   cluster_security_group_additional_rules = var.cluster_security_group_additional_rules
-
-  # Extend node-to-node security group rules
-  node_security_group_additional_rules = var.node_security_group_additional_rules
+  node_security_group_additional_rules    = var.node_security_group_additional_rules
 
   # TODO: cannot pass it as a variable
   # eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
@@ -136,7 +139,6 @@ module "ebs_csi_driver_irsa" {
     }
   }
 
-  # update tags
   tags = local.tags
 }
 
@@ -147,8 +149,6 @@ module "ebs_csi_driver_irsa" {
 ################################################################################
 
 locals {
-
-  # We need to lookup K8s taint effect from the AWS API value
   taint_effects = {
     NO_SCHEDULE        = "NoSchedule"
     NO_EXECUTE         = "NoExecute"
