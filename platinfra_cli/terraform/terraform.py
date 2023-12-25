@@ -33,6 +33,7 @@ class Terraform:
         self.stack_config_path = stack_config_path
 
     def check_terraform_installed(self):
+        """This function is responsible for checking if terraform is installed"""
         try:
             version = subprocess.check_output(
                 ["terraform", "--version"], universal_newlines=True
@@ -44,6 +45,7 @@ class Terraform:
             return f"An error occurred while checking the Terraform version: {str(e)}"
 
     def check_config_file_exists(self):
+        """This function is responsible for checking if the config file exists"""
         if not os.path.isfile(self.stack_config_path):
             raise FileNotFoundError(
                 f"The file {self.stack_config_path} does not exist."
@@ -56,6 +58,7 @@ class Terraform:
                 print(exc)
                 raise ValueError(f"{exc}")
 
+        # check if all required keys are present in the config file
         required_keys = ["name", "provider", "deployment", "stack"]
 
         if not all(key in data for key in required_keys):
@@ -65,6 +68,10 @@ class Terraform:
             )
 
     def clean_mlops_infra_folder(self, delete_dir: bool = True):
+        """
+        This function is responsible for cleaning the .mlops_infra folder
+        if delete_dir is set to true, the folder will be deleted
+        """
         if delete_dir:
             clean_tf_directory()
         else:
@@ -73,12 +80,14 @@ class Terraform:
             )
 
     def process_config_file(self):
+        """This function is responsible for processing the config file"""
         file_processor = StackGenerator(stack_config_path=self.stack_config_path)
         file_processor.generate()
 
         return file_processor.get_state_file_name(), file_processor.get_region()
 
     def check_cloud_credentials(self):
+        """This function is responsible for checking if the cloud credentials are present"""
         try:
             if not boto3.Session().get_credentials():
                 raise ValueError("AWS credentials not found.")
@@ -88,6 +97,7 @@ class Terraform:
             )
 
     def check_region_has_three_azs(self, aws_region: str = "eu-central-1"):
+        """This function is responsible for checking if the region has three availability zones"""
         ec2 = boto3.client("ec2", config=Config(region_name=aws_region))
         response = ec2.describe_availability_zones(
             Filters=[{"Name": "zone-type", "Values": ["availability-zone"]}]
@@ -107,6 +117,7 @@ class Terraform:
             )
 
     def check_terraform_state_storage(self, state_name: str, aws_region: str):
+        """This function is responsible for checking if the terraform state storage is present"""
         state_helper = StateHelper(
             state=state_name,
             region=aws_region,
@@ -130,6 +141,7 @@ class Terraform:
         return modules_list
 
     def generate_terraform_config(self) -> (str, str):
+        """This function is responsible for generating the terraform config file"""
         self.check_terraform_installed()
         # TODO: perform this after the cli package has been released
         # self.check_mlops_cli_installed()
