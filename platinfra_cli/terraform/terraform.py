@@ -29,6 +29,10 @@ from platinfra_cli.utils.utils import terraform_tested_version, clean_tf_directo
 
 
 class Terraform:
+    """
+    This class is responsible for running terraform commands
+    """
+
     def __init__(self, stack_config_path: str):
         self.stack_config_path = stack_config_path
 
