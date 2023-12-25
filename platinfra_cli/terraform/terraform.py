@@ -1,21 +1,3 @@
-"""
-This file is responsible for configuring and running terraform commands
-Plan function undergoes the following steps:
-- checking if terraform is installed
-- checking if following versions are correct:
-    - terraform
-    - mlops_cli
-- checking if the platinfra config file exists
-- clean .mlops_infra folder
-- check cloud credentials
-- check if region has three AZs
-- Generate terraform state storage
-- loop through items in config file
-    - generate list of modules (should come from stack processor module)
-    - create a different apply function for different deployment types
-        - order modules in order of application
-        - apply terraform modules with -target
-"""
 import os
 import boto3
 import json
@@ -31,6 +13,22 @@ from platinfra_cli.utils.utils import terraform_tested_version, clean_tf_directo
 class Terraform:
     """
     This class is responsible for running terraform commands
+    This file is responsible for configuring and running terraform commands
+    Plan function undergoes the following steps:
+    - checking if terraform is installed
+    - checking if following versions are correct:
+        - terraform
+        - mlops_cli
+    - checking if the platinfra config file exists
+    - clean .mlops_infra folder
+    - check cloud credentials
+    - check if region has three AZs
+    - Generate terraform state storage
+    - loop through items in config file
+        - generate list of modules (should come from stack processor module)
+        - create a different apply function for different deployment types
+            - order modules in order of application
+            - apply terraform modules with -target
     """
 
     def __init__(self, stack_config_path: str):
