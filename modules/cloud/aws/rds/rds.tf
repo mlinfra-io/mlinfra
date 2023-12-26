@@ -1,7 +1,7 @@
 module "rds_security_group" {
   create  = var.create_rds
   source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 5.0.0"
+  version = "~> 5.0"
 
   name        = "RDS_SG"
   description = "${var.rds_identifier} security group"
@@ -24,7 +24,7 @@ module "rds_security_group" {
 module "rds" {
   create_db_instance = var.create_rds
   source             = "terraform-aws-modules/rds/aws"
-  version            = "~> 5.0.0"
+  version            = "~> 5.0"
 
   identifier                     = "${var.rds_identifier}-default"
   instance_use_identifier_prefix = true
