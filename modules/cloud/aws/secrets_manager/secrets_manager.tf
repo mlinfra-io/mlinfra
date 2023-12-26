@@ -1,5 +1,6 @@
 resource "aws_secretsmanager_secret" "secretsmanager_secret" {
-  name = var.secret_name
+  name_prefix = var.secret_name
+  tags        = var.tags
 }
 
 resource "aws_secretsmanager_secret_version" "secretsmanager_secret_version" {
