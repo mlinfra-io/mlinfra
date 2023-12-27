@@ -1,3 +1,245 @@
+resource "random_password" "lakefs_auth_key" {
+  count = var.remote_tracking ? 1 : 0
+
+  length           = 64
+  special          = false
+  override_special = "_%@"
+}
+
+module "lakefs_data_artifacts_bucket" {
+  source = "../../../../../cloud/aws/s3"
+  count  = var.remote_tracking ? 1 : 0
+
+  bucket_name = var.lakefs_data_bucket_name
+  tags        = var.tags
+}
+
+resource "aws_iam_policy" "lakefs_s3_iam_policy" {
+  count       = var.remote_tracking ? 1 : 0
+  name_prefix = "LakeFSS3AccessPolicy"
+  description = "Allows LakeFS server access to the S3 bucket"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "lakeFSBucketAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:AbortMultipartUpload",
+        "s3:ListMultipartUploadParts"
+      ],
+      "Resource": [
+        "${module.lakefs_data_artifacts_bucket[0].bucket_arn}",
+        "${module.lakefs_data_artifacts_bucket[0].bucket_arn}/*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+# create rds instance
+module "lakefs_rds_backend" {
+  source     = "../../../../../cloud/aws/rds"
+  create_rds = (var.remote_tracking && var.database_type == "postgres")
+
+  vpc_id               = var.vpc_id
+  vpc_cidr_block       = var.vpc_cidr_block
+  db_subnet_group_name = var.db_subnet_group_name
+  rds_instance_class   = var.rds_instance_class
+
+  rds_identifier = "lakefs-backend"
+  db_name        = "lakefsbackend"
+  db_username    = "lakefs_backend_user"
+  tags           = var.tags
+}
+
+resource "aws_dynamodb_table" "dynamodb_table" {
+  count        = (var.remote_tracking && var.database_type == "dynamodb") ? 1 : 0
+  name         = var.dynamodb_table_name
+  billing_mode = "PAY_PER_REQUEST"
+
+  attribute {
+    name = "PartitionKey"
+    type = "B"
+  }
+
+  attribute {
+    name = "ItemKey"
+    type = "B"
+  }
+
+  hash_key  = "PartitionKey"
+  range_key = "ItemKey"
+
+  tags = var.tags
+}
+
+resource "aws_iam_policy" "lakefs_rds_iam_policy" {
+  count       = (var.remote_tracking && var.database_type == "postgres") ? 1 : 0
+  name_prefix = "LakeFSRDSAccessPolicy"
+  description = "Allows LakeFS helm chart access to the RDS Instance"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "rds:DescribeDBInstances",
+        "rds:ListTagsForResource",
+        "rds:DownloadDBLogFilePortion",
+        "rds:DescribeDBLogFiles",
+        "rds:DescribeDBClusterSnapshots",
+        "rds:DescribeDBSnapshots"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+          "rds-db:connect"
+      ],
+      "Resource": "arn:aws:rds:region:account-id:db:your-instance-identifier"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+          "rds:ModifyDBInstance",
+          "rds:CreateDBSnapshot",
+          "rds:RestoreDBInstanceToPointInTime",
+          "rds:DeleteDBInstance",
+          "rds:RestoreDBInstanceFromDBSnapshot",
+          "rds:RestoreDBInstanceFromS3",
+          "rds:StartDBInstance",
+          "rds:StopDBInstance"
+        ],
+      "Resource": "arn:aws:rds:region:account-id:db:your-instance-identifier"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy" "lakefs_dynamodb_iam_policy" {
+  count       = (var.remote_tracking && var.database_type == "dynamodb") ? 1 : 0
+  name_prefix = "LakeFSDynamodbAccessPolicy"
+  description = "Allows LakeFS server access to the Dynamodb"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+        "Sid": "ListAndDescribe",
+        "Effect": "Allow",
+        "Action": [
+            "dynamodb:List*",
+            "dynamodb:DescribeReservedCapacity*",
+            "dynamodb:DescribeLimits",
+            "dynamodb:DescribeTimeToLive"
+        ],
+        "Resource": "*"
+    },
+    {
+        "Sid": "DynamodbTableAccess",
+        "Effect": "Allow",
+        "Action": [
+            "dynamodb:BatchGet*",
+            "dynamodb:DescribeTable",
+            "dynamodb:Get*",
+            "dynamodb:Query",
+            "dynamodb:Scan",
+            "dynamodb:BatchWrite*",
+            "dynamodb:CreateTable",
+            "dynamodb:Delete*",
+            "dynamodb:Update*",
+            "dynamodb:PutItem"
+        ],
+        "Resource": "arn:aws:dynamodb:*:*:table/${var.dynamodb_table_name}"
+    }
+  ]
+}
+EOF
+}
+
+locals {
+  managed_policy_arns = var.database_type == "postgres" ? [aws_iam_policy.lakefs_rds_iam_policy[0].arn] : [aws_iam_policy.lakefs_dynamodb_iam_policy[0].arn]
+}
+
+resource "aws_iam_role" "lakefs_iam_role" {
+  count       = var.remote_tracking ? 1 : 0
+  name_prefix = "RoleForLakeFSWithS3DBAccess"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Federated" : var.oidc_provider_arn
+        },
+        "Action" : "sts:AssumeRoleWithWebIdentity",
+        "Condition" : {
+          "StringEquals" : {
+            "${var.oidc_provider}:aud" : "sts.amazonaws.com",
+            "${var.oidc_provider}:sub" : "system:serviceaccount:${var.service_account_namespace}:${var.service_account_name}"
+          }
+        }
+      }
+    ]
+  })
+  managed_policy_arns = concat(local.managed_policy_arns, [aws_iam_policy.lakefs_s3_iam_policy[0].arn])
+}
+
+resource "kubernetes_secret_v1" "lakefs_sa" {
+  count = var.remote_tracking ? 1 : 0
+  metadata {
+    name      = var.service_account_name
+    namespace = var.service_account_namespace
+    annotations = {
+      "eks.amazonaws.com/role-arn" = aws_iam_role.lakefs_iam_role[0].arn
+    }
+  }
+}
+
+locals {
+  lakefs_config_filename = var.remote_tracking && (var.database_type != null) ? "lakefs-${var.database_type}-config.tpl" : null
+  lakefs_config = var.remote_tracking && (var.database_type != null) ? var.database_type == "postgres" ? templatefile("${path.module}/${local.lakefs_config_filename}", {
+    db_instance_username = module.lakefs_rds_backend.db_instance_username
+    db_instance_password = module.lakefs_rds_backend.db_instance_password
+    db_instance_endpoint = module.lakefs_rds_backend.db_instance_endpoint
+    db_instance_name     = module.lakefs_rds_backend.db_instance_name
+    auth_secret_key      = resource.random_password.lakefs_auth_key[0].result
+    region               = data.aws_region.current.name
+    }) : templatefile("${path.module}/${local.lakefs_config_filename}", {
+    dynamodb_table_name = var.dynamodb_table_name
+    auth_secret_key     = resource.random_password.lakefs_auth_key[0].result
+    region              = data.aws_region.current.name
+  }) : null
+  lakefs_helmchart_set = (var.remote_tracking && var.database_type != null) ? [{
+    name  = "lakefsConfig"
+    value = "|\n${local.lakefs_config}"
+    type  = "auto"
+    }, {
+    name  = "serviceAccount.create"
+    value = "true"
+    type  = "auto"
+    }, {
+    name  = "serviceAccount.name"
+    value = "${var.service_account_name}"
+    type  = "auto"
+  }] : []
+}
+
+data "aws_region" "current" {}
+
 module "lakefs_helmchart" {
   source = "../../../../../cloud/aws/helm_chart"
 
@@ -6,6 +248,26 @@ module "lakefs_helmchart" {
   create_namespace = true
   repository       = "https://charts.lakefs.io"
   chart            = "lakefs"
-  chart_version    = "1.0.3"
+  chart_version    = var.lakefs_chart_version
   values           = file("${path.module}/values.yaml")
+  set              = local.lakefs_helmchart_set
+}
+
+module "secrets_manager" {
+  source = "../../../../../cloud/aws/secrets_manager"
+  count  = var.remote_tracking ? 1 : 0
+
+  secret_name = "lakefs-secrets"
+  secret_value = var.remote_tracking ? {
+    auth_secret_key = resource.random_password.lakefs_auth_key[0].result
+    } : {
+    db_instance_username = module.lakefs_rds_backend.db_instance_username
+    db_instance_password = module.lakefs_rds_backend.db_instance_password
+    db_instance_endpoint = module.lakefs_rds_backend.db_instance_endpoint
+    db_instance_name     = module.lakefs_rds_backend.db_instance_name
+    auth_secret_key      = resource.random_password.lakefs_auth_key[0].result
+    bucket_id            = module.lakefs_data_artifacts_bucket[0].bucket_id
+  }
+
+  depends_on = [module.lakefs_helmchart]
 }
