@@ -9,6 +9,28 @@ from platinfra_cli.terraform.terraform import Terraform
         "stack_config_path": "Path of the config file",
     },
 )
+def generate_terraform_config(
+    ctx,
+    stack_config_path: str,
+):
+    f"""
+    Generates the terraform config in the {TF_PATH} folder path
+    """
+    Terraform(stack_config_path).plan()
+    ctx.run(f"terraform -chdir={TF_PATH} init")
+    print(
+        f"""
+            Terraform config has been generated in the {TF_PATH} folder.
+        """
+    )
+
+
+@task(
+    pre=[],
+    help={
+        "stack_config_path": "Path of the config file",
+    },
+)
 def estimate_cost(
     ctx,
     stack_config_path: str,
