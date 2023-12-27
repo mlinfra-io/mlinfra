@@ -7,7 +7,7 @@ deployment:
   type: kubernetes
   config:
     vpc:
-      create_database_subnets: false
+      create_database_subnets: true
       enable_nat_gateway: true
       one_nat_gateway_per_az: false
     kubernetes:
@@ -27,3 +27,10 @@ deployment:
 stack:
   - data_versioning:
       name: lakefs
+      params:
+        remote_tracking: true
+        database_type: "postgres"
+        tags:
+          database_type: "postgres"
+          data_versioning: "lakefs"
+          remote_tracking: true
