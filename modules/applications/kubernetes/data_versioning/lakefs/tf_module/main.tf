@@ -8,6 +8,7 @@ resource "random_password" "lakefs_auth_key" {
   override_special = "_%@"
 }
 
+# TODO: possibility to bring your own bucket
 module "lakefs_data_artifacts_bucket" {
   source = "../../../../../cloud/aws/s3"
   count  = var.remote_tracking ? 1 : 0
@@ -225,7 +226,6 @@ resource "kubernetes_namespace_v1" "lakefs_namespace" {
 }
 
 # TODO: Add secrets store csi driver module to sync secrets
-# to k8s
 resource "kubernetes_secret_v1" "lakefs_secret" {
   metadata {
     name      = var.lakefs_secret
