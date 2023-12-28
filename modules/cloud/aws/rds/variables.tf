@@ -66,6 +66,12 @@ variable "rds_port" {
   default = 5432
 }
 
+variable "skip_final_snapshot" {
+  type        = bool
+  description = "If set to true, no final snapshot of the RDS instance will be created"
+  default     = false
+}
+
 variable "backup_retention_period" {
   type    = number
   default = 0
