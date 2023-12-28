@@ -45,74 +45,93 @@ class KubernetesStack(AbstractStack):
         pass
 
     def process_stack_modules(self):
-        for module in self.stacks:
-            # extracting stack type
-            stack_type = [key for key in module.keys()][0]
+        if self.stacks:
+            for module in self.stacks:
+                # extracting stack type
+                stack_type = [key for key in module.keys()][0]
 
-            if "name" in module[stack_type]:
-                name = module[stack_type]["name"]
-            else:
-                raise KeyError(f"No application assigned to the stack: {stack_type}")
+                if "name" in module[stack_type]:
+                    name = module[stack_type]["name"]
+                else:
+                    raise KeyError(
+                        f"No application assigned to the stack: {stack_type}"
+                    )
 
-            json_module = {"module": {name: {}}}
+                json_module = {"module": {name: {}}}
 
-            # TODO: pickup right module source based on the deployment type
+                # TODO: pickup right module source based on the deployment type
 
-            json_module["module"][name][
-                "source"
-            ] = f"../modules/applications/{self.deployment_type.value}/{stack_type}/{name}/tf_module"
+                json_module["module"][name][
+                    "source"
+                ] = f"../modules/applications/{self.deployment_type.value}/{stack_type}/{name}/tf_module"
 
-            # Reading inputs and outputs from the config file
-            # placed in the applications/application folder and
-            # adding them to json config for the application module
-            application_config = self._read_config_file(
-                stack_type=stack_type, application_name=name
+                # Reading inputs and outputs from the config file
+                # placed in the applications/application folder and
+                # adding them to json config for the application module
+                application_config = self._read_config_file(
+                    stack_type=stack_type, application_name=name
+                )
+
+                if application_config is not None:
+                    if "inputs" in application_config and application_config["inputs"]:
+                        inputs = {}
+                        for input in application_config["inputs"]:
+                            if not input["user_facing"]:
+                                input_name = input["name"]
+                                # handle the input from the yaml config
+                                # if the input value is not a string
+                                input_value = (
+                                    input["default"]
+                                    if input["default"] != "None"
+                                    else "${ %s }" % f"{input['value']}"
+                                )
+                                inputs.update({input_name: input_value})
+                            json_module["module"][name].update(inputs)
+
+                    if (
+                        "outputs" in application_config
+                        and application_config["outputs"]
+                    ):
+                        for output in application_config["outputs"]:
+                            if output["export"]:
+                                output_val = (
+                                    "${ %s }" % f"module.{name}.{output['name']}"
+                                )
+
+                                self.output["output"].append(
+                                    {output["name"]: {"value": output_val}}
+                                )
+
+                # Checks if there are params in the config file which can be
+                # passed to the application module. Params are checked against
+                # the application module yaml file
+                if "params" in module[stack_type]:
+                    # TODO: throw error for a param not existing in the yaml config
+                    params = {}
+                    for key, value in module[stack_type]["params"].items():
+                        for input in application_config["inputs"]:
+                            if key == input["name"]:
+                                if input["user_facing"]:
+                                    params.update({key: value})
+                                else:
+                                    raise KeyError(
+                                        f"{key} is not a user facing parameter"
+                                    )
+                    json_module["module"][name].update(params)
+
+                with open(
+                    f"./{TF_PATH}/stack_{stack_type}.tf.json", "w", encoding="utf-8"
+                ) as tf_json:
+                    json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
+        else:
+            print(
+                """
+                  No stacks found in the configuration file.
+                  Please check the documentation for more information.
+                """
             )
-
-            if application_config is not None:
-                if "inputs" in application_config and application_config["inputs"]:
-                    inputs = {}
-                    for input in application_config["inputs"]:
-                        if not input["user_facing"]:
-                            input_name = input["name"]
-                            # handle the input from the yaml config
-                            # if the input value is not a string
-                            input_value = (
-                                input["default"]
-                                if input["default"] != "None"
-                                else "${ %s }" % f"{input['value']}"
-                            )
-                            inputs.update({input_name: input_value})
-                        json_module["module"][name].update(inputs)
-
-                if "outputs" in application_config and application_config["outputs"]:
-                    for output in application_config["outputs"]:
-                        if output["export"]:
-                            output_val = "${ %s }" % f"module.{name}.{output['name']}"
-
-                            self.output["output"].append(
-                                {output["name"]: {"value": output_val}}
-                            )
-
-            # Checks if there are params in the config file which can be
-            # passed to the application module. Params are checked against
-            # the application module yaml file
-            if "params" in module[stack_type]:
-                # TODO: throw error for a param not existing in the yaml config
-                params = {}
-                for key, value in module[stack_type]["params"].items():
-                    for input in application_config["inputs"]:
-                        if key == input["name"]:
-                            if input["user_facing"]:
-                                params.update({key: value})
-                            else:
-                                raise KeyError(f"{key} is not a user facing parameter")
-                json_module["module"][name].update(params)
-
-            with open(
-                f"./{TF_PATH}/stack_{stack_type}.tf.json", "w", encoding="utf-8"
-            ) as tf_json:
-                json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
+            # TODO: think about throwing an exception here
+            # raise Exception("No stacks found in the configuration file")
 
     def process_stack_outputs(self):
         self.output["output"].append({"state_storage": {"value": self.state_file_name}})
