@@ -224,6 +224,8 @@ resource "kubernetes_namespace_v1" "lakefs_namespace" {
   depends_on = [aws_iam_role.lakefs_iam_role]
 }
 
+# TODO: Add secrets store csi driver module to sync secrets
+# to k8s
 resource "kubernetes_secret_v1" "lakefs_secret" {
   metadata {
     name      = var.lakefs_secret
