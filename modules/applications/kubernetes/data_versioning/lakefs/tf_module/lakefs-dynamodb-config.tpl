@@ -1,6 +1,3 @@
-secrets:
-  authEncryptSecretKey: {auth_secret_key}
-
 database:
   type: "dynamodb"
   dynamodb:
