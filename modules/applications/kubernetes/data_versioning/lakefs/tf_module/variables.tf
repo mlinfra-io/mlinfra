@@ -75,6 +75,22 @@ variable "database_type" {
   }
 }
 
+variable "skip_final_snapshot" {
+  type        = bool
+  description = "If set to true, no final snapshot of the RDS instance will be created"
+  default     = false
+}
+
+variable "lakefs_secret" {
+  type        = string
+  description = "The name of the secret containing the lakeFS credentials"
+  default     = "lakefs-db-auth"
+}
+
+# TODO: manage lakefs resources here
+
+# TODO: manage lakefs taints and tolerations here
+
 variable "tags" {
   type = map(string)
   default = {
