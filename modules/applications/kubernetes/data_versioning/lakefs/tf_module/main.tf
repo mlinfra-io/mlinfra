@@ -174,7 +174,7 @@ EOF
 }
 
 locals {
-  managed_policy_arns = var.database_type == "postgres" ? [aws_iam_policy.lakefs_rds_iam_policy[0].arn] : [aws_iam_policy.lakefs_dynamodb_iam_policy[0].arn]
+  managed_policy_arns = var.remote_tracking ? var.database_type == "postgres" ? [aws_iam_policy.lakefs_rds_iam_policy[0].arn] : [aws_iam_policy.lakefs_dynamodb_iam_policy[0].arn] : []
 }
 
 resource "aws_iam_role" "lakefs_iam_role" {
@@ -204,7 +204,7 @@ resource "aws_iam_role" "lakefs_iam_role" {
 }
 
 locals {
-  secret_data = (var.remote_tracking && var.database_type != null) ? var.database_type == "postgres" ? {
+  secret_data = var.remote_tracking ? var.database_type == "postgres" ? {
     auth_encrypt_secret_key    = resource.random_password.lakefs_auth_key[0].result
     database_connection_string = "postgresql://${module.lakefs_rds_backend.db_instance_username}:${module.lakefs_rds_backend.db_instance_password}@${module.lakefs_rds_backend.db_instance_endpoint}/${module.lakefs_rds_backend.db_instance_name}"
     } : {
@@ -250,14 +250,14 @@ resource "kubernetes_service_account_v1" "lakefs_sa" {
 }
 
 locals {
-  lakefs_config_filename = var.remote_tracking && (var.database_type != null) ? "lakefs-${var.database_type}-config.tpl" : null
-  lakefs_config = var.remote_tracking && (var.database_type != null) ? var.database_type == "postgres" ? templatefile("${path.module}/${local.lakefs_config_filename}", {
+  lakefs_config_filename = var.remote_tracking ? "lakefs-${var.database_type}-config.tpl" : null
+  lakefs_config = var.remote_tracking ? var.database_type == "postgres" ? templatefile("${path.module}/${local.lakefs_config_filename}", {
     region = data.aws_region.current.name
     }) : templatefile("${path.module}/${local.lakefs_config_filename}", {
     dynamodb_table_name = var.dynamodb_table_name
     region              = data.aws_region.current.name
   }) : null
-  lakefs_helmchart_set = (var.remote_tracking && var.database_type != null) ? [{
+  lakefs_helmchart_set = var.remote_tracking ? [{
     name  = "lakefsConfig"
     value = "${local.lakefs_config}"
     type  = "auto"
@@ -275,7 +275,7 @@ locals {
     type  = "auto"
     }, {
     name  = "secretKeys.databaseConnectionString"
-    value = var.database_type == "postgres" ? "database_connection_string" : null
+    value = var.database_type == "postgres" ? "database_connection_string" : "null"
     type  = "auto"
   }] : []
 }
@@ -290,7 +290,11 @@ module "lakefs_helmchart" {
   chart            = "lakefs"
   chart_version    = var.lakefs_chart_version
   values           = file("${path.module}/values.yaml")
-  set              = local.lakefs_helmchart_set
+  set = concat(local.lakefs_helmchart_set, [{
+    name  = "useDevPostgres"
+    value = var.remote_tracking ? "false" : "true"
+    type  = "auto"
+  }])
 
   depends_on = [kubernetes_service_account_v1.lakefs_sa]
 }
@@ -300,12 +304,15 @@ module "secrets_manager" {
   count  = var.remote_tracking ? 1 : 0
 
   secret_name = "lakefs-secrets"
-  secret_value = var.remote_tracking ? {
+  secret_value = var.remote_tracking ? var.database_type == "postgres" ? {
     auth_secret_key            = resource.random_password.lakefs_auth_key[0].result
     bucket_id                  = module.lakefs_data_artifacts_bucket[0].bucket_id
     database_connection_string = "postgresql://${module.lakefs_rds_backend.db_instance_username}:${module.lakefs_rds_backend.db_instance_password}@${module.lakefs_rds_backend.db_instance_endpoint}/${module.lakefs_rds_backend.db_instance_name}"
     } : {
     auth_secret_key = resource.random_password.lakefs_auth_key[0].result
+    bucket_id       = module.lakefs_data_artifacts_bucket[0].bucket_id
+    } : {
+    bucket_id = module.lakefs_data_artifacts_bucket[0].bucket_id
   }
 
   depends_on = [module.lakefs_helmchart]
