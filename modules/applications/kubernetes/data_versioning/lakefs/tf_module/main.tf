@@ -277,7 +277,11 @@ locals {
     name  = "secretKeys.databaseConnectionString"
     value = var.database_type == "postgres" ? "database_connection_string" : "null"
     type  = "auto"
-  }] : []
+    }] : [{
+    name  = "blockstore.s3.region"
+    value = "${data.aws_region.current.name}"
+    type  = "auto"
+  }]
 }
 
 module "lakefs_helmchart" {
