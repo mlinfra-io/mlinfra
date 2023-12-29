@@ -95,12 +95,39 @@ class KubernetesDeployment(AbstractDeployment):
                 "config" in self.deployment_config
                 and "kubernetes" in self.deployment_config["config"]
             ):
-                for k8s_config in self.deployment_config["config"]["kubernetes"]:
-                    k8s_json_module["module"]["eks"][
-                        k8s_config
-                    ] = self.deployment_config["config"]["kubernetes"].get(
-                        k8s_config, None
-                    )
+                # read values from the yaml config file
+                with open(
+                    f"modules/cloud/{self.provider.value}/eks/eks.yaml",
+                    "r",
+                    encoding="utf-8",
+                ) as tf_config:
+                    eks_application_config = yaml.safe_load(tf_config.read())
+
+                # check if values exist in the yaml config file
+                if (
+                    eks_application_config is not None
+                    and "inputs" in eks_application_config
+                    and eks_application_config["inputs"]
+                ):
+                    # iterate through the config defined in the deployment section
+                    # of the stack file
+                    for k8s_config in self.deployment_config["config"]["kubernetes"]:
+                        # if the application config exists in the eks config and is
+                        # configured to be user_facing, only then add this config
+                        config_lookup = next(
+                            (
+                                item
+                                for item in eks_application_config["inputs"]
+                                if item["name"] == k8s_config and item["user_facing"]
+                            ),
+                            None,
+                        )
+                        if config_lookup is not None:
+                            k8s_json_module["module"]["eks"][
+                                k8s_config
+                            ] = self.deployment_config["config"]["kubernetes"].get(
+                                k8s_config, None
+                            )
 
             generate_tf_json(module_name="eks", json_module=k8s_json_module)
 
