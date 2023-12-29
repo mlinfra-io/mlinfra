@@ -41,8 +41,9 @@ variable "database_subnets" {
 }
 
 variable "one_nat_gateway_per_az" {
-  type    = bool
-  default = false
+  type        = bool
+  description = "Deploy one NAT Gateway per availability zone. The default value is the same as set by module in this is set as false by default in https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest?tab=inputs"
+  default     = false
 }
 
 variable "enable_flow_log" {
@@ -56,6 +57,7 @@ variable "tags" {
 }
 
 variable "enable_nat_gateway" {
-  type    = bool
-  default = true
+  type        = bool
+  description = "Enable NAT Gateway, this is set as false by default in https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest?tab=inputs"
+  default     = true
 }
