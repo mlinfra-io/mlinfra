@@ -324,6 +324,7 @@ variable "instance_types" {
   description = "The instance types associated with the node group."
   default     = ["t3.medium"]
 }
+
 variable "labels" {
   type        = map(string)
   description = "The labels to apply to the EKS cluster and related modules."
