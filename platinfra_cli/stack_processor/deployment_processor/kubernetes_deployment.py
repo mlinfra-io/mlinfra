@@ -75,7 +75,7 @@ class KubernetesDeployment(AbstractDeployment):
                         vpc_config
                     ] = self.deployment_config["config"]["vpc"].get(vpc_config, None)
 
-                generate_tf_json(module_name="vpc", json_module=vpc_json_module)
+            generate_tf_json(module_name="vpc", json_module=vpc_json_module)
             # inject vpc module
 
             # inject k8s module
@@ -86,6 +86,10 @@ class KubernetesDeployment(AbstractDeployment):
             k8s_json_module["module"]["eks"][
                 "cluster_name"
             ] = f"{self.stack_name}-cluster"
+            k8s_json_module["module"]["eks"]["vpc_id"] = "${ module.vpc.vpc_id }"
+            k8s_json_module["module"]["eks"][
+                "subnet_ids"
+            ] = "${ module.vpc.private_subnets_ids }"
 
             if (
                 "config" in self.deployment_config
@@ -97,13 +101,8 @@ class KubernetesDeployment(AbstractDeployment):
                     ] = self.deployment_config["config"]["kubernetes"].get(
                         k8s_config, None
                     )
-                k8s_json_module["module"]["eks"]["vpc_id"] = "${ module.vpc.vpc_id }"
-                # TODO: check if all subnets are here
-                k8s_json_module["module"]["eks"][
-                    "subnet_ids"
-                ] = "${ module.vpc.private_subnets_ids }"
 
-                generate_tf_json(module_name="eks", json_module=k8s_json_module)
+            generate_tf_json(module_name="eks", json_module=k8s_json_module)
 
             # TODO: read defaults from the config file if anything is missing
 
