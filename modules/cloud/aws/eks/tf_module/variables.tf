@@ -54,8 +54,8 @@ variable "cluster_endpoint_private_access" {
 
 variable "cluster_endpoint_public_access" {
   type        = bool
-  description = "Indicates whether the Amazon EKS public API server endpoint is enabled. Default is false."
-  default     = false
+  description = "Indicates whether the Amazon EKS public API server endpoint is enabled. Default is true; contrary to the default value set in the module: https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest?tab=inputs"
+  default     = true
 }
 
 variable "vpc_cni_irsa_role_name_prefix" {
