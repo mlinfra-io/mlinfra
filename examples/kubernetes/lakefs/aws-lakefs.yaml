@@ -5,13 +5,6 @@ provider:
   region: "eu-central-1"
 deployment:
   type: kubernetes
-  config:
-    vpc:
-      enable_nat_gateway: true
-      one_nat_gateway_per_az: false
-    kubernetes:
-      k8s_version: "1.28"
-      spot_instance: true
 stack:
   - data_versioning:
       name: lakefs
