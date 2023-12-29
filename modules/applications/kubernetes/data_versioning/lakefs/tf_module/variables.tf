@@ -87,7 +87,48 @@ variable "lakefs_secret" {
   default     = "lakefs-db-auth"
 }
 
-# TODO: manage lakefs resources here
+variable "resources" {
+  type        = map(any)
+  description = ""
+  default     = {}
+}
+
+variable "nodeSelector" {
+  type        = map(any)
+  description = "The nodeSelector to schedule lakeFS pods on specific nodes"
+  default = {
+    "nodegroup_type" = "operations"
+  }
+}
+
+variable "tolerations" {
+  type        = list(any)
+  description = "The tolerations to schedule lakeFS pods on specific nodes"
+  default = [{
+    key      = "nodegroup_type"
+    operator = "Equal"
+    value    = "operations"
+    effect   = "NoSchedule"
+  }]
+}
+
+variable "affinity" {
+  type        = map(any)
+  description = "The affinity to schedule lakeFS pods on specific nodes"
+  default = {
+    "nodeAffinity" = {
+      "requiredDuringSchedulingIgnoredDuringExecution" = {
+        "nodeSelectorTerms" = [{
+          "matchExpressions" = [{
+            key      = "nodegroup_type"
+            operator = "In"
+            values   = ["operations"]
+          }]
+        }]
+      }
+    }
+  }
+}
 
 # TODO: manage lakefs taints and tolerations here
 
