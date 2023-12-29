@@ -289,7 +289,12 @@ module "lakefs_helmchart" {
   repository       = "https://charts.lakefs.io"
   chart            = "lakefs"
   chart_version    = var.lakefs_chart_version
-  values           = file("${path.module}/values.yaml")
+  values = templatefile("${path.module}/values.yaml", {
+    nodeSelector = jsonencode(var.nodeSelector)
+    tolerations  = jsonencode(var.tolerations)
+    affinity     = jsonencode(var.affinity)
+    resources    = jsonencode(var.resources)
+  })
   set = concat(local.lakefs_helmchart_set, [{
     name  = "useDevPostgres"
     value = var.remote_tracking ? "false" : "true"
