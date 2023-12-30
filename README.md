@@ -72,7 +72,7 @@ stack:
 - You can run any of the available examples from the `examples` folder using `invoke terraform --stack-config-path examples/<application>/<cloud>-<application>.yaml --action <action>` where `<action>` corresponds to terraform actions such as `plan`, `apply`, `destroy` and `output`.
 - You can also run `python3 -m platinfra.main --help` to see all the available options.
 
-For more information, please refer to the [Engineering wiki](https://docs.platinfra.com) of the project regarding what are the different components of the project and how they work together.
+For more information, please refer to the [Engineering wiki](https://platinfra.github.io/) of the project regarding what are the different components of the project and how they work together.
 
 ## Contributions
 
