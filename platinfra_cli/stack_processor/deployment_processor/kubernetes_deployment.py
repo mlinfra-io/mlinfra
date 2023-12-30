@@ -128,6 +128,13 @@ class KubernetesDeployment(AbstractDeployment):
                             ] = self.deployment_config["config"]["kubernetes"].get(
                                 k8s_config, None
                             )
+                        else:
+                            print(
+                                """
+                                WARNING: The config value {k8s_config} is not user facing.
+                                Please check the eks.yaml config file to see if this is a valid config value.
+                                """
+                            )
 
             generate_tf_json(module_name="eks", json_module=k8s_json_module)
 
