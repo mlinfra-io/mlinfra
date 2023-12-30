@@ -75,7 +75,7 @@ class KubernetesDeployment(AbstractDeployment):
                         vpc_config
                     ] = self.deployment_config["config"]["vpc"].get(vpc_config, None)
 
-                generate_tf_json(module_name="vpc", json_module=vpc_json_module)
+            generate_tf_json(module_name="vpc", json_module=vpc_json_module)
             # inject vpc module
 
             # inject k8s module
@@ -86,24 +86,57 @@ class KubernetesDeployment(AbstractDeployment):
             k8s_json_module["module"]["eks"][
                 "cluster_name"
             ] = f"{self.stack_name}-cluster"
+            k8s_json_module["module"]["eks"]["vpc_id"] = "${ module.vpc.vpc_id }"
+            k8s_json_module["module"]["eks"][
+                "subnet_ids"
+            ] = "${ module.vpc.private_subnets_ids }"
 
             if (
                 "config" in self.deployment_config
                 and "kubernetes" in self.deployment_config["config"]
             ):
-                for k8s_config in self.deployment_config["config"]["kubernetes"]:
-                    k8s_json_module["module"]["eks"][
-                        k8s_config
-                    ] = self.deployment_config["config"]["kubernetes"].get(
-                        k8s_config, None
-                    )
-                k8s_json_module["module"]["eks"]["vpc_id"] = "${ module.vpc.vpc_id }"
-                # TODO: check if all subnets are here
-                k8s_json_module["module"]["eks"][
-                    "subnet_ids"
-                ] = "${ module.vpc.private_subnets_ids }"
+                # read values from the yaml config file
+                with open(
+                    f"modules/cloud/{self.provider.value}/eks/eks.yaml",
+                    "r",
+                    encoding="utf-8",
+                ) as tf_config:
+                    eks_application_config = yaml.safe_load(tf_config.read())
 
-                generate_tf_json(module_name="eks", json_module=k8s_json_module)
+                # check if values exist in the yaml config file
+                if (
+                    eks_application_config is not None
+                    and "inputs" in eks_application_config
+                    and eks_application_config["inputs"]
+                ):
+                    # iterate through the config defined in the deployment section
+                    # of the stack file
+                    for k8s_config in self.deployment_config["config"]["kubernetes"]:
+                        # if the application config exists in the eks config and is
+                        # configured to be user_facing, only then add this config
+                        config_lookup = next(
+                            (
+                                item
+                                for item in eks_application_config["inputs"]
+                                if item["name"] == k8s_config and item["user_facing"]
+                            ),
+                            None,
+                        )
+                        if config_lookup is not None:
+                            k8s_json_module["module"]["eks"][
+                                k8s_config
+                            ] = self.deployment_config["config"]["kubernetes"].get(
+                                k8s_config, None
+                            )
+                        else:
+                            print(
+                                """
+                                WARNING: The config value {k8s_config} is not user facing.
+                                Please check the eks.yaml config file to see if this is a valid config value.
+                                """
+                            )
+
+            generate_tf_json(module_name="eks", json_module=k8s_json_module)
 
             # TODO: read defaults from the config file if anything is missing
 

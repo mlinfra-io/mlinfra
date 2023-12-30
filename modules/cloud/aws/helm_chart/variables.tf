@@ -49,10 +49,11 @@ variable "values" {
 }
 
 variable "set" {
-  type = map(object({
+  type = list(object({
     name  = string
     value = string
+    type  = string
   }))
   description = "Setting values within the helm chart"
-  default     = {}
+  default     = []
 }

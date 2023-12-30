@@ -1,7 +1,7 @@
 module "rds_security_group" {
   create  = var.create_rds
   source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 5.0.0"
+  version = "~> 5.0"
 
   name        = "RDS_SG"
   description = "${var.rds_identifier} security group"
@@ -21,10 +21,11 @@ module "rds_security_group" {
   tags = var.tags
 }
 
+# update module.rds version to 6.0
 module "rds" {
   create_db_instance = var.create_rds
   source             = "terraform-aws-modules/rds/aws"
-  version            = "~> 5.0.0"
+  version            = "~> 5.0"
 
   identifier                     = "${var.rds_identifier}-default"
   instance_use_identifier_prefix = true
@@ -39,6 +40,7 @@ module "rds" {
   family               = var.rds_family               # DB parameter group
   major_engine_version = var.rds_major_engine_version # DB option group
   instance_class       = var.rds_instance_class
+  skip_final_snapshot  = var.skip_final_snapshot
 
   allocated_storage = var.allocated_storage
 

@@ -67,7 +67,7 @@ class CloudInfraStack(AbstractStack):
             )
 
             if application_config is not None:
-                if "inputs" in application_config:
+                if "inputs" in application_config and application_config["inputs"]:
                     inputs = {}
                     for input in application_config["inputs"]:
                         if not input["user_facing"]:
@@ -82,7 +82,7 @@ class CloudInfraStack(AbstractStack):
                             inputs.update({input_name: input_value})
                         json_module["module"][name].update(inputs)
 
-                if "outputs" in application_config:
+                if "outputs" in application_config and application_config["outputs"]:
                     for output in application_config["outputs"]:
                         if output["export"]:
                             output_val = "${ %s }" % f"module.{name}.{output['name']}"

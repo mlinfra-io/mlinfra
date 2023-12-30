@@ -31,10 +31,6 @@ variable "cluster_version" {
   default     = "1.28"
 }
 
-# variable "subnet_ids" {
-#   type = list(string)
-# }
-
 variable "nodegroup_name" {
   type        = string
   description = "The name of the node group."
@@ -92,9 +88,7 @@ variable "spot_instance" {
 variable "labels" {
   type        = map(string)
   description = ""
-  default = {
-    nodegroup_type = "operations"
-  }
+  default     = {}
 }
 
 variable "taints" {
@@ -103,13 +97,7 @@ variable "taints" {
     value  = string
     effect = string
   }))
-  default = {
-    operations = {
-      key    = "nodegroup_type"
-      value  = "operations"
-      effect = "NO_SCHEDULE"
-    }
-  }
+  default = {}
 }
 
 variable "tags" {

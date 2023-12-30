@@ -24,18 +24,18 @@ module "eks_managed_node_group" {
   cluster_primary_security_group_id = each.value.cluster_primary_security_group_id
   vpc_security_group_ids            = [each.value.cluster_primary_security_group_id]
 
-  create_launch_template     = try(each.value.create_launch_template, true)
-  use_custom_launch_template = try(each.value.use_custom_launch_template, false)
+  create_launch_template     = try(each.value.create_launch_template, var.create_launch_template)
+  use_custom_launch_template = try(each.value.use_custom_launch_template, var.use_custom_launch_template)
 
-  instance_types = try(each.value.instance_types, ["t3.medium"])
-  ami_type       = try(each.value.ami_type, "AL2_x86_64")
-  capacity_type  = try(each.value.spot_instance, true) ? "SPOT" : "ON_DEMAND"
-  min_size       = try(each.value.min_size, 0)
-  max_size       = try(each.value.max_size, 3)
-  desired_size   = try(each.value.desired_size, 1)
-  disk_size      = try(each.value.disk_size, null)
+  instance_types = try(each.value.instance_types, var.instance_types)
+  ami_type       = try(each.value.ami_type, var.ami_type)
+  capacity_type  = try(each.value.spot_instance, var.spot_instance) ? "SPOT" : "ON_DEMAND"
+  min_size       = try(each.value.min_size, var.min_size)
+  max_size       = try(each.value.max_size, var.max_size)
+  desired_size   = try(each.value.desired_size, var.desired_size)
+  disk_size      = try(each.value.disk_size, var.disk_size)
 
-  labels = try(each.value.labels, null)
-  taints = try(each.value.taints, {})
+  labels = try(each.value.labels, var.labels)
+  taints = try(each.value.taints, var.taints)
   tags   = local.tags
 }

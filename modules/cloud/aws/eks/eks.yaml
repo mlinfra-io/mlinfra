@@ -1,0 +1,89 @@
+inputs:
+  - name: vpc_id
+    user_facing: false
+    description: "VPC ID for EKS Cluster"
+    value: module.vpc.vpc_id
+    default: None
+  - name: subnet_ids
+    user_facing: false
+    description: "VPC Subnet IDs for EKS Cluster"
+    value: module.vpc.private_subnets_ids
+    default: None
+  - name: cluster_name
+    user_facing: true
+    description: "Name of the EKS cluster"
+    default: "eks-cluster"
+  - name: k8s_version
+    user_facing: true
+    description: "EKS Cluster version"
+    default: "1.28"
+  - name: cluster_endpoint_private_access
+    user_facing: true
+    description: "Indicates whether the Amazon EKS private API server endpoint is enabled. Default is true. Read more here: https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html"
+    default: true
+  - name: cluster_endpoint_public_access
+    user_facing: true
+    description: "Indicates whether the Amazon EKS public API server endpoint is enabled. Default is true; contrary to the default value set in the module: https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest?tab=inputs"
+    default: true
+  - name: nodegroup_name
+    user_facing: true
+    description: "The name of the node group."
+    default: "default_nodegroup"
+  - name: create_launch_template
+    user_facing: true
+    description: "Create a launch template for the node group."
+    default: true
+  - name: use_custom_launch_template
+    user_facing: true
+    description: "Use a custom launch template for the node group."
+    default: false
+  - name: ami_type
+    user_facing: true
+    description: "The AMI type to use for the worker nodes."
+    default: "AL2_x86_64"
+  - name: disk_size
+    user_facing: true
+    description: "The size in GiB of the EBS volume for each node in the node group."
+    default: 20
+  - name: min_size
+    user_facing: true
+    description: "The minimum size of the node group."
+    default: 1
+  - name: max_size
+    user_facing: true
+    description: "The maximum size of the node group."
+    default: 5
+  - name: desired_size
+    user_facing: true
+    description: "The number of worker nodes that should be running in the cluster."
+    default: 3
+  - name: spot_instance
+    user_facing: true
+    description: "The capacity type of the node group."
+    default: true
+  - name: instance_types
+    user_facing: true
+    description: "The instance types associated with the node group."
+    default:
+      - "t3.medium"
+  - name: labels
+    user_facing: true
+    description: "The labels to apply to the EKS cluster and related modules."
+    default:
+      nodegroup_type: "operations"
+  - name: taints
+    user_facing: true
+    description: "The taints to apply to the EKS cluster and related modules."
+    default:
+      operations:
+        key: "nodegroup_type"
+        value: "operations"
+        effect: "NO_SCHEDULE"
+  - name: tags
+    user_facing: true
+    description: "Tags for EKS Cluster"
+    default:
+      cluster_version: "1.28"
+outputs:
+clouds:
+  - aws

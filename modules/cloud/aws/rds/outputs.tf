@@ -13,3 +13,7 @@ output "db_instance_endpoint" {
 output "db_instance_name" {
   value = module.rds.db_instance_name
 }
+
+output "db_instance_arn" {
+  value = module.rds.db_instance_arn
+}
