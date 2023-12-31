@@ -56,7 +56,6 @@ repos:
       - id: pip-compile
         name: pip-compile requirements-dev.txt
         args:
-          - --extra=dev
           - --output-file=requirements-dev.txt
           - pyproject.toml
         files: ^(pyproject\.toml|requirements-dev\.txt)$
