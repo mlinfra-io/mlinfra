@@ -1,6 +1,0 @@
-black
-invoke
-boto3
-pytest
-pyyaml
-mypy
