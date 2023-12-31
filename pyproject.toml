@@ -30,6 +30,8 @@ classifiers = [
     "Topic :: Utilities",
 ]
 
+# dependencies = []
+
 dynamic = ["version"]
 
 [tool.setuptools]
