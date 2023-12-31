@@ -30,7 +30,14 @@ classifiers = [
     "Topic :: Utilities",
 ]
 
-# dependencies = []
+dependencies = [
+    "invoke",
+    "boto3",
+    "pyyaml",
+    "black",
+    "pytest",
+    "mypy"
+]
 
 dynamic = ["version"]
 
@@ -47,16 +54,7 @@ Repository = "https://github.com/platinfra/platinfra.git"
 Documentation = "https://platinfra.github.io/"
 
 [project.optional-dependencies]
-dev = [
-    "invoke",
-    "boto3",
-    "pyyaml",
-    "black",
-    "pytest",
-    "mypy"
-]
 docs = [
-    "mkdocs",
     "mkdocs-material"
 ]
 
