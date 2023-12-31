@@ -56,7 +56,6 @@ repos:
       - id: pip-compile
         name: pip-compile requirements-dev.txt
         args:
-          - --no-annotate
           - --extra=dev
           - --output-file=requirements-dev.txt
           - pyproject.toml
@@ -64,7 +63,6 @@ repos:
       - id: pip-compile
         name: pip-compile requirements-docs.txt
         args:
-          - --no-annotate
           - --extra=docs
           - --output-file=requirements-docs.txt
           - pyproject.toml
