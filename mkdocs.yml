@@ -9,5 +9,12 @@ validation:
   absolute_links: warn
   unrecognized_links: warn
 
+nav:
+  - Home: index.md
+  # - User Guide:
+  # - Tutorials:
+  # - API Reference:
+  - Contributing: CONTRIBUTING.md
+
 theme:
   name: "material"
