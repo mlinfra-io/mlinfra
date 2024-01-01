@@ -37,3 +37,4 @@ terraform.rc
 .terraform.lock.hcl
 
 .mlops_stack/
+site/
