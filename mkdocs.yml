@@ -1,3 +1,6 @@
 site_name: platinfra
+site_url: https://platinfra.github.io/
+repo_url: https://github.com/platinfra/platinfra
+
 theme:
   name: "material"
