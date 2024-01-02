@@ -10,13 +10,15 @@ validation:
 
 nav:
   - Home: index.md
-  # - User Guide:
+  # - Examples:
   # - Tutorials:
   # - API Reference:
   - Contributing: CONTRIBUTING.md
 
 theme:
   name: "material"
+  features:
+    - content.code.copy
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
@@ -37,6 +39,15 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to system preference
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
 
 extra:
   homepage: https://platinfra.github.io/
