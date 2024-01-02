@@ -2,7 +2,6 @@ site_name: platinfra
 site_url: https://platinfra.github.io/
 repo_url: https://github.com/platinfra/platinfra
 
-# To validate all internal links exist. Does not work in ipynb files
 strict: true
 validation:
   omitted_files: warn
@@ -38,3 +37,17 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to system preference
+
+extra:
+  homepage: https://platinfra.github.io/
+  generator: false
+  version:
+    provider: mike
+    default: latest
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/aliabbasjaffri
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/platinfra
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/aliabbasjaffri/
