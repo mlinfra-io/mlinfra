@@ -21,8 +21,11 @@ theme:
   name: "material"
   font:
     text: Raleway
+    code: mononoki
   features:
+    - content.tabs.link
     - content.code.copy
+    - content.code.annotate
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
