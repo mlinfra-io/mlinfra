@@ -21,8 +21,12 @@ theme:
   name: "material"
   font:
     text: Raleway
+    code: mononoki
   features:
+    - content.tabs.link
     - content.code.copy
+    - content.code.annotate
+    - content.action.edit
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
@@ -78,3 +82,5 @@ plugins:
   - git-revision-date-localized:
       enable_creation_date: false
       type: iso_date
+
+dev_addr: 0.0.0.0:8000
