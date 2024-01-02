@@ -1,5 +1,6 @@
 site_name: platinfra
 site_url: https://platinfra.github.io/
+repo_name: platinfra
 repo_url: https://github.com/platinfra/platinfra
 
 strict: true
@@ -10,13 +11,16 @@ validation:
 
 nav:
   - Home: index.md
-  # - Examples:
+  - User Guide:
+      - How does platinfra works: user_guide/how_platinfra_works.md
   # - Tutorials:
   # - API Reference:
   - Contributing: CONTRIBUTING.md
 
 theme:
   name: "material"
+  font:
+    text: Raleway
   features:
     - content.code.copy
   palette:
@@ -39,6 +43,8 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to system preference
+  icon:
+    repo: fontawesome/brands/github
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -48,6 +54,9 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - def_list
 
 extra:
   homepage: https://platinfra.github.io/
@@ -62,3 +71,10 @@ extra:
       link: https://pypi.org/project/platinfra
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/aliabbasjaffri/
+
+plugins:
+  - privacy
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: false
+      type: iso_date
