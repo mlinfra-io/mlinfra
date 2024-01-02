@@ -1,0 +1,97 @@
+[build-system]
+requires = [
+    "setuptools",
+]
+
+[project]
+name = "platinfra"
+description = "A tool to help anyone deploy mlops tooling at the click of a button."
+keywords = ["platinfra"]
+requires-python = ">3.10"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Ali Abbas Jaffri", email = "ali.abbasjaffri@live.com" }]
+maintainers = [{ name = "Ali Abbas Jaffri", email = "ali.abbasjaffri@live.com" }]
+classifiers = [
+    "Development Status :: 1 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: DevOps Engineers",
+    "Intended Audience :: Platform Engineers",
+    "Intended Audience :: MLOps Engineers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Machine Learning Operations",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Engineering",
+    "Topic :: Software Development :: Version Control",
+    "Topic :: Utilities",
+]
+
+dependencies = [
+    "invoke",
+    "boto3",
+    "pyyaml",
+    "black",
+    "pytest",
+    "mypy"
+]
+
+dynamic = ["version"]
+
+[tool.setuptools]
+package-dir = { "" = "platinfra_cli" }
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["platinfra_cli"]
+
+[project.urls]
+Homepage = "https://github.com/platinfra/platinfra"
+Repository = "https://github.com/platinfra/platinfra.git"
+Documentation = "https://platinfra.github.io/"
+
+[project.optional-dependencies]
+docs = [
+    "mkdocs-material",
+    "mkdocs-git-revision-date-localized-plugin"
+]
+
+# Automatically determine version number from Git tags
+[tool.setuptools_scm]
+
+[tool.mypy]
+allow_redefinition = true
+check_untyped_defs = true
+disallow_incomplete_defs = true
+pretty = true
+python_version = "3.11"
+strict_optional = false
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = ["yaml"]
+ignore_missing_imports = true
+
+[tool.ruff]
+# explicitly set src folder for isort to understand first-party imports correctly.
+src = ["src"]
+line-length = 100
+# Enable pycodestyle errors & warnings (`E`, `W`), Pyflakes (`F`), and isort (`I`) by default.
+select = ["E", "F", "I", "W"]
+ignore = [
+    # Line too long
+    "E501",
+    # Allow capitalized variable names
+    "F841",
+]
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 90
+skip_glob = ['**/venv/**']

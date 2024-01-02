@@ -1,0 +1,80 @@
+site_name: platinfra
+site_url: https://platinfra.github.io/
+repo_name: platinfra
+repo_url: https://github.com/platinfra/platinfra
+
+strict: true
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+
+nav:
+  - Home: index.md
+  - User Guide:
+      - How does platinfra works: user_guide/how_platinfra_works.md
+  # - Tutorials:
+  # - API Reference:
+  - Contributing: CONTRIBUTING.md
+
+theme:
+  name: "material"
+  font:
+    text: Raleway
+  features:
+    - content.code.copy
+  palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - def_list
+
+extra:
+  homepage: https://platinfra.github.io/
+  generator: false
+  version:
+    provider: mike
+    default: latest
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/aliabbasjaffri
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/platinfra
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/aliabbasjaffri/
+
+plugins:
+  - privacy
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: false
+      type: iso_date
