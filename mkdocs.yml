@@ -81,5 +81,3 @@ plugins:
   - git-revision-date-localized:
       enable_creation_date: false
       type: iso_date
-
-dev_addr: 0.0.0.0:8000
