@@ -1,9 +1,10 @@
 import json
+
 import yaml
-from platinfra_cli.stack_processor.provider_processor.provider import (
+from platinfra.stack_processor.provider_processor.provider import (
     AbstractProvider,
 )
-from platinfra_cli.utils.constants import TF_PATH
+from platinfra.utils.constants import TF_PATH
 
 
 class AWSProvider(AbstractProvider):
@@ -24,9 +25,7 @@ class AWSProvider(AbstractProvider):
 
     def configure_provider(self):
         with open("modules/cloud/aws/provider.tf.json", "r") as data_json:
-            with open(
-                f"./{TF_PATH}/provider.tf.json", "w", encoding="utf-8"
-            ) as tf_json:
+            with open(f"./{TF_PATH}/provider.tf.json", "w", encoding="utf-8") as tf_json:
                 data = json.load(data_json)
                 data["provider"]["aws"]["region"] = self.region
                 data["provider"]["aws"]["allowed_account_ids"] = [self.account_id]

@@ -1,13 +1,14 @@
-import os
-import boto3
 import json
-import yaml
+import os
 import subprocess
+
+import boto3
+import yaml
 from botocore.config import Config
-from platinfra_cli.utils.constants import TF_PATH
-from platinfra_cli.terraform.state_helper import StateHelper
-from platinfra_cli.stack_processor.stack_generator import StackGenerator
-from platinfra_cli.utils.utils import terraform_tested_version, clean_tf_directory
+from platinfra.stack_processor.stack_generator import StackGenerator
+from platinfra.terraform.state_helper import StateHelper
+from platinfra.utils.constants import TF_PATH
+from platinfra.utils.utils import clean_tf_directory, terraform_tested_version
 
 
 class Terraform:
@@ -37,9 +38,7 @@ class Terraform:
     def check_terraform_installed(self):
         """This function is responsible for checking if terraform is installed"""
         try:
-            version = subprocess.check_output(
-                ["terraform", "--version"], universal_newlines=True
-            )
+            version = subprocess.check_output(["terraform", "--version"], universal_newlines=True)
             installed_version = version.split("\n")[0]
             if installed_version in terraform_tested_version:
                 return 0
@@ -49,9 +48,7 @@ class Terraform:
     def check_config_file_exists(self):
         """This function is responsible for checking if the config file exists"""
         if not os.path.isfile(self.stack_config_path):
-            raise FileNotFoundError(
-                f"The file {self.stack_config_path} does not exist."
-            )
+            raise FileNotFoundError(f"The file {self.stack_config_path} does not exist.")
 
         with open(self.stack_config_path, "r") as stream:
             try:
@@ -65,9 +62,7 @@ class Terraform:
 
         if not all(key in data for key in required_keys):
             missing_keys = [key for key in required_keys if key not in data]
-            raise ValueError(
-                f"The following keys are missing: {', '.join(missing_keys)}"
-            )
+            raise ValueError(f"The following keys are missing: {', '.join(missing_keys)}")
 
     def clean_mlops_infra_folder(self, delete_dir: bool = True):
         """
@@ -77,9 +72,7 @@ class Terraform:
         if delete_dir:
             clean_tf_directory()
         else:
-            print(
-                "The param delete_dir is set as false, skipping the directory deletion"
-            )
+            print("The param delete_dir is set as false, skipping the directory deletion")
 
     def process_config_file(self):
         """This function is responsible for processing the config file"""
@@ -94,9 +87,7 @@ class Terraform:
             if not boto3.Session().get_credentials():
                 raise ValueError("AWS credentials not found.")
         except Exception as e:
-            raise ValueError(
-                f"An error occurred while checking AWS credentials: {str(e)}"
-            )
+            raise ValueError(f"An error occurred while checking AWS credentials: {str(e)}")
 
     def check_region_has_three_azs(self, aws_region: str = "eu-central-1"):
         """This function is responsible for checking if the region has three availability zones"""

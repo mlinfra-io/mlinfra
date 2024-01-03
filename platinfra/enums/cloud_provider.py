@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Provider(Enum):
+class CloudProvider(Enum):
     """
     All providers under one class
     """

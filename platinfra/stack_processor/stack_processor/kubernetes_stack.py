@@ -1,11 +1,12 @@
 import json
+
 import yaml
-from platinfra_cli.stack_processor.stack_processor.stack import (
+from platinfra.enums.cloud_provider import CloudProvider
+from platinfra.enums.deployment_type import DeploymentType
+from platinfra.stack_processor.stack_processor.stack import (
     AbstractStack,
 )
-from platinfra_cli.enums.provider import Provider
-from platinfra_cli.enums.deployment_type import DeploymentType
-from platinfra_cli.utils.constants import TF_PATH
+from platinfra.utils.constants import TF_PATH
 
 
 class KubernetesStack(AbstractStack):
@@ -19,7 +20,7 @@ class KubernetesStack(AbstractStack):
         state_file_name: str,
         region: str,
         account_id: str,
-        provider: Provider,
+        provider: CloudProvider,
         deployment_type: DeploymentType,
         stacks: yaml,
     ):
@@ -53,9 +54,7 @@ class KubernetesStack(AbstractStack):
                 if "name" in module[stack_type]:
                     name = module[stack_type]["name"]
                 else:
-                    raise KeyError(
-                        f"No application assigned to the stack: {stack_type}"
-                    )
+                    raise KeyError(f"No application assigned to the stack: {stack_type}")
 
                 json_module = {"module": {name: {}}}
 
@@ -88,15 +87,10 @@ class KubernetesStack(AbstractStack):
                                 inputs.update({input_name: input_value})
                             json_module["module"][name].update(inputs)
 
-                    if (
-                        "outputs" in application_config
-                        and application_config["outputs"]
-                    ):
+                    if "outputs" in application_config and application_config["outputs"]:
                         for output in application_config["outputs"]:
                             if output["export"]:
-                                output_val = (
-                                    "${ %s }" % f"module.{name}.{output['name']}"
-                                )
+                                output_val = "${ %s }" % f"module.{name}.{output['name']}"
 
                                 self.output["output"].append(
                                     {output["name"]: {"value": output_val}}
@@ -114,9 +108,7 @@ class KubernetesStack(AbstractStack):
                                 if input["user_facing"]:
                                     params.update({key: value})
                                 else:
-                                    raise KeyError(
-                                        f"{key} is not a user facing parameter"
-                                    )
+                                    raise KeyError(f"{key} is not a user facing parameter")
                     json_module["module"][name].update(params)
 
                 with open(
@@ -199,9 +191,7 @@ class KubernetesStack(AbstractStack):
             json_output["variable"].extend(self._user_input())
             json_output["variable"].extend(self._default_config_input())
 
-            with open(
-                f"./{TF_PATH}/variable.tf.json", "w", encoding="utf-8"
-            ) as tf_json:
+            with open(f"./{TF_PATH}/variable.tf.json", "w", encoding="utf-8") as tf_json:
                 json.dump(json_output, tf_json, ensure_ascii=False, indent=2)
 
     def generate(self):

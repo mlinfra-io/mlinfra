@@ -1,24 +1,25 @@
 import os
+
 import yaml
-from platinfra_cli.stack_processor.provider_processor.aws_provider import (
-    AWSProvider,
-)
-from platinfra_cli.stack_processor.deployment_processor.cloud_infra_deployment import (
+from platinfra.enums.cloud_provider import CloudProvider
+from platinfra.enums.deployment_type import DeploymentType
+from platinfra.stack_processor.deployment_processor.cloud_infra_deployment import (
     CloudInfraDeployment,
 )
-from platinfra_cli.stack_processor.deployment_processor.kubernetes_deployment import (
+from platinfra.stack_processor.deployment_processor.kubernetes_deployment import (
     KubernetesDeployment,
 )
-from platinfra_cli.stack_processor.stack_processor.cloud_infra_stack import (
+from platinfra.stack_processor.provider_processor.aws_provider import (
+    AWSProvider,
+)
+from platinfra.stack_processor.stack_processor.cloud_infra_stack import (
     CloudInfraStack,
 )
-from platinfra_cli.stack_processor.stack_processor.kubernetes_stack import (
+from platinfra.stack_processor.stack_processor.kubernetes_stack import (
     KubernetesStack,
 )
-from platinfra_cli.enums.provider import Provider
-from platinfra_cli.enums.deployment_type import DeploymentType
-from platinfra_cli.utils.utils import clean_tf_directory
-from platinfra_cli.utils.constants import TF_PATH
+from platinfra.utils.constants import TF_PATH
+from platinfra.utils.utils import clean_tf_directory
 
 
 class StackGenerator:
@@ -57,13 +58,10 @@ class StackGenerator:
         return self.region
 
     def generate(self):
-        if (
-            DeploymentType(self.stack_config["deployment"]["type"])
-            == DeploymentType.CLOUD_INFRA
-        ):
+        if DeploymentType(self.stack_config["deployment"]["type"]) == DeploymentType.CLOUD_INFRA:
             CloudInfraDeployment(
                 stack_name=self.stack_name,
-                provider=Provider(self.stack_config["provider"]["name"]),
+                provider=CloudProvider(self.stack_config["provider"]["name"]),
                 region=self.region,
                 deployment_config=self.stack_config["deployment"],
             ).configure_deployment()
@@ -77,13 +75,10 @@ class StackGenerator:
                 stacks=self.stack_config["stack"],
             ).generate()
 
-        elif (
-            DeploymentType(self.stack_config["deployment"]["type"])
-            == DeploymentType.KUBERNETES
-        ):
+        elif DeploymentType(self.stack_config["deployment"]["type"]) == DeploymentType.KUBERNETES:
             KubernetesDeployment(
                 stack_name=self.stack_name,
-                provider=Provider(self.stack_config["provider"]["name"]),
+                provider=CloudProvider(self.stack_config["provider"]["name"]),
                 region=self.region,
                 deployment_config=self.stack_config["deployment"],
             ).configure_deployment()
@@ -109,17 +104,15 @@ class StackGenerator:
                 config = yaml.safe_load(stack_config.read())
             return config
         except FileNotFoundError:
-            raise FileNotFoundError(
-                f"Stack config file not found: {self.stack_config_path}"
-            )
+            raise FileNotFoundError(f"Stack config file not found: {self.stack_config_path}")
 
-    def configure_provider(self) -> Provider:
-        if Provider(self.stack_config["provider"]["name"]) == Provider.AWS:
+    def configure_provider(self) -> CloudProvider:
+        if CloudProvider(self.stack_config["provider"]["name"]) == CloudProvider.AWS:
             aws_provider = AWSProvider(
                 stack_name=self.stack_name, config=self.stack_config["provider"]
             )
             aws_provider.configure_provider()
-            return Provider.AWS
+            return CloudProvider.AWS
 
 
 if __name__ == "__main__":

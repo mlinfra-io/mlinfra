@@ -1,15 +1,20 @@
 import json
+
 import yaml
-from platinfra_cli.enums.provider import Provider
-from platinfra_cli.stack_processor.deployment_processor.deployment import (
+from platinfra.enums.cloud_provider import CloudProvider
+from platinfra.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
 )
-from platinfra_cli.utils.utils import generate_tf_json
+from platinfra.utils.utils import generate_tf_json
 
 
 class KubernetesDeployment(AbstractDeployment):
     def __init__(
-        self, stack_name: str, provider: Provider, region: str, deployment_config: yaml
+        self,
+        stack_name: str,
+        provider: CloudProvider,
+        region: str,
+        deployment_config: yaml,
     ):
         super(KubernetesDeployment, self).__init__(
             stack_name=stack_name,
@@ -19,9 +24,7 @@ class KubernetesDeployment(AbstractDeployment):
         )
 
     def generate_required_provider_config(self):
-        with open(
-            f"modules/cloud/{self.provider.value}/terraform.tf.json", "r"
-        ) as data_json:
+        with open(f"modules/cloud/{self.provider.value}/terraform.tf.json", "r") as data_json:
             data = json.load(data_json)
 
             # TODO: Update token generation for all providers
@@ -58,7 +61,7 @@ class KubernetesDeployment(AbstractDeployment):
         generate_tf_json(module_name="k8s_provider", json_module=data)
 
     def generate_deployment_config(self):
-        if self.provider == Provider.AWS:
+        if self.provider == CloudProvider.AWS:
             # TODO: Make these blocks generic
 
             # inject vpc module
@@ -66,30 +69,21 @@ class KubernetesDeployment(AbstractDeployment):
             vpc_json_module["module"]["vpc"]["source"] = "../modules/cloud/aws/vpc"
             vpc_json_module["module"]["vpc"]["name"] = f"{self.stack_name}-vpc"
 
-            if (
-                "config" in self.deployment_config
-                and "vpc" in self.deployment_config["config"]
-            ):
+            if "config" in self.deployment_config and "vpc" in self.deployment_config["config"]:
                 for vpc_config in self.deployment_config["config"]["vpc"]:
-                    vpc_json_module["module"]["vpc"][
-                        vpc_config
-                    ] = self.deployment_config["config"]["vpc"].get(vpc_config, None)
+                    vpc_json_module["module"]["vpc"][vpc_config] = self.deployment_config["config"][
+                        "vpc"
+                    ].get(vpc_config, None)
 
             generate_tf_json(module_name="vpc", json_module=vpc_json_module)
             # inject vpc module
 
             # inject k8s module
             k8s_json_module = {"module": {"eks": {}}}
-            k8s_json_module["module"]["eks"][
-                "source"
-            ] = "../modules/cloud/aws/eks/tf_module"
-            k8s_json_module["module"]["eks"][
-                "cluster_name"
-            ] = f"{self.stack_name}-cluster"
+            k8s_json_module["module"]["eks"]["source"] = "../modules/cloud/aws/eks/tf_module"
+            k8s_json_module["module"]["eks"]["cluster_name"] = f"{self.stack_name}-cluster"
             k8s_json_module["module"]["eks"]["vpc_id"] = "${ module.vpc.vpc_id }"
-            k8s_json_module["module"]["eks"][
-                "subnet_ids"
-            ] = "${ module.vpc.private_subnets_ids }"
+            k8s_json_module["module"]["eks"]["subnet_ids"] = "${ module.vpc.private_subnets_ids }"
 
             if (
                 "config" in self.deployment_config
@@ -123,11 +117,9 @@ class KubernetesDeployment(AbstractDeployment):
                             None,
                         )
                         if config_lookup is not None:
-                            k8s_json_module["module"]["eks"][
-                                k8s_config
-                            ] = self.deployment_config["config"]["kubernetes"].get(
-                                k8s_config, None
-                            )
+                            k8s_json_module["module"]["eks"][k8s_config] = self.deployment_config[
+                                "config"
+                            ]["kubernetes"].get(k8s_config, None)
                         else:
                             print(
                                 """
@@ -145,9 +137,7 @@ class KubernetesDeployment(AbstractDeployment):
                 and "node_groups" in self.deployment_config["config"]
             ):
                 # inject k8s module
-                nodegroups_json_module = {
-                    "module": {"eks_nodegroup": {"node_groups": []}}
-                }
+                nodegroups_json_module = {"module": {"eks_nodegroup": {"node_groups": []}}}
                 nodegroups_json_module["module"]["eks_nodegroup"][
                     "source"
                 ] = "../modules/cloud/aws/eks_nodegroup/tf_module"
@@ -155,13 +145,9 @@ class KubernetesDeployment(AbstractDeployment):
                 for nodegroup_config in self.deployment_config["config"]["node_groups"]:
                     nodegroup_object = {}
                     nodegroup_object = nodegroup_config
-                    nodegroup_object[
-                        "subnet_ids"
-                    ] = "${ module.vpc.private_subnets_ids }"
+                    nodegroup_object["subnet_ids"] = "${ module.vpc.private_subnets_ids }"
                     nodegroup_object["cluster_name"] = "${ module.eks.cluster_name }"
-                    nodegroup_object[
-                        "cluster_version"
-                    ] = "${ module.eks.cluster_version }"
+                    nodegroup_object["cluster_version"] = "${ module.eks.cluster_version }"
                     nodegroup_object[
                         "cluster_primary_security_group_id"
                     ] = "${ module.eks.cluster_primary_security_group_id }"
@@ -169,17 +155,15 @@ class KubernetesDeployment(AbstractDeployment):
                         "node_security_group_id"
                     ] = "${ module.eks.node_security_group_id }"
 
-                    nodegroups_json_module["module"]["eks_nodegroup"][
-                        "node_groups"
-                    ].append(nodegroup_object)
+                    nodegroups_json_module["module"]["eks_nodegroup"]["node_groups"].append(
+                        nodegroup_object
+                    )
 
-                generate_tf_json(
-                    module_name="nodegroups", json_module=nodegroups_json_module
-                )
+                generate_tf_json(module_name="nodegroups", json_module=nodegroups_json_module)
 
-        elif self.provider == Provider.GCP:
+        elif self.provider == CloudProvider.GCP:
             pass
-        elif self.provider == Provider.AZURE:
+        elif self.provider == CloudProvider.AZURE:
             pass
         else:
             raise ValueError(f"Provider {self.provider} is not supported")

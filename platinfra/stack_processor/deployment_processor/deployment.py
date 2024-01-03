@@ -1,7 +1,8 @@
 import json
-import yaml
 from abc import ABC, abstractmethod
-from platinfra_cli.enums.provider import Provider
+
+import yaml
+from platinfra.enums.cloud_provider import CloudProvider
 
 
 class AbstractDeployment(ABC):
@@ -10,7 +11,11 @@ class AbstractDeployment(ABC):
     """
 
     def __init__(
-        self, stack_name: str, provider: Provider, region: str, deployment_config: yaml
+        self,
+        stack_name: str,
+        provider: CloudProvider,
+        region: str,
+        deployment_config: yaml,
     ):
         self.stack_name = stack_name
         self.provider = provider
@@ -25,8 +30,8 @@ class AbstractDeployment(ABC):
     def get_statefile_name(self) -> str:
         return f"tfstate-{self.stack_name}-{self.region}"
 
-    def get_provider_backend(self, provider: Provider) -> json:
-        if provider == Provider.AWS:
+    def get_provider_backend(self, provider: CloudProvider) -> json:
+        if provider == CloudProvider.AWS:
             return {
                 "backend": {
                     "s3": {

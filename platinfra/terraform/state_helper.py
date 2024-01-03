@@ -1,4 +1,5 @@
 import time
+
 from boto3 import client
 from botocore.config import Config
 from botocore.exceptions import ClientError
@@ -84,9 +85,7 @@ class StateHelper:
             dynamodb.create_table(
                 TableName=self.dynamodb_table,
                 KeySchema=[{"AttributeName": "LockID", "KeyType": "HASH"}],
-                AttributeDefinitions=[
-                    {"AttributeName": "LockID", "AttributeType": "S"}
-                ],
+                AttributeDefinitions=[{"AttributeName": "LockID", "AttributeType": "S"}],
                 BillingMode="PROVISIONED",
                 ProvisionedThroughput={
                     "ReadCapacityUnits": 20,
@@ -94,9 +93,7 @@ class StateHelper:
                 },
             )
 
-    def _setup_bucket(
-        self, s3_client, region: str, bucket_name: str, bucket_exists: bool = False
-    ):
+    def _setup_bucket(self, s3_client, region: str, bucket_name: str, bucket_exists: bool = False):
         """
         Creates state bucket if it does not exist.
         Configures bucket versioning and lifecycle rules.
@@ -146,9 +143,7 @@ class StateHelper:
         # checking for bucket lifecycle configuration
         # enable if it does not exist
         try:
-            response = s3_client.get_bucket_lifecycle_configuration(
-                Bucket=bucket_name
-            ).get("Rules")
+            response = s3_client.get_bucket_lifecycle_configuration(Bucket=bucket_name).get("Rules")
             if response is not None:
                 print("Bucket lifecycle configuration already exists on state bucket")
         except ClientError as e:
@@ -167,9 +162,7 @@ class StateHelper:
                                     "StorageClass": "GLACIER",
                                 },
                                 "NoncurrentVersionExpiration": {"NoncurrentDays": 60},
-                                "AbortIncompleteMultipartUpload": {
-                                    "DaysAfterInitiation": 10
-                                },
+                                "AbortIncompleteMultipartUpload": {"DaysAfterInitiation": 10},
                             },
                         ]
                     },

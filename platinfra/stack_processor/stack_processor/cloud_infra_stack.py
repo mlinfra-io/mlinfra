@@ -1,11 +1,12 @@
 import json
+
 import yaml
-from platinfra_cli.stack_processor.stack_processor.stack import (
+from platinfra.enums.cloud_provider import CloudProvider
+from platinfra.enums.deployment_type import DeploymentType
+from platinfra.stack_processor.stack_processor.stack import (
     AbstractStack,
 )
-from platinfra_cli.enums.provider import Provider
-from platinfra_cli.enums.deployment_type import DeploymentType
-from platinfra_cli.utils.constants import TF_PATH
+from platinfra.utils.constants import TF_PATH
 
 
 class CloudInfraStack(AbstractStack):
@@ -16,7 +17,7 @@ class CloudInfraStack(AbstractStack):
         state_file_name: str,
         region: str,
         account_id: str,
-        provider: Provider,
+        provider: CloudProvider,
         deployment_type: DeploymentType,
         stacks: yaml,
     ):
@@ -87,9 +88,7 @@ class CloudInfraStack(AbstractStack):
                         if output["export"]:
                             output_val = "${ %s }" % f"module.{name}.{output['name']}"
 
-                            self.output["output"].append(
-                                {output["name"]: {"value": output_val}}
-                            )
+                            self.output["output"].append({output["name"]: {"value": output_val}})
 
             # Checks if there are params in the config file which can be
             # passed to the application module. Params are checked against
@@ -106,9 +105,7 @@ class CloudInfraStack(AbstractStack):
                                 raise KeyError(f"{key} is not a user facing parameter")
                 json_module["module"][name].update(params)
 
-            with open(
-                f"./{TF_PATH}/stack_{stack_type}.tf.json", "w", encoding="utf-8"
-            ) as tf_json:
+            with open(f"./{TF_PATH}/stack_{stack_type}.tf.json", "w", encoding="utf-8") as tf_json:
                 json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
 
     def process_stack_inputs(self):
@@ -177,9 +174,7 @@ class CloudInfraStack(AbstractStack):
             json_output["variable"].extend(self._user_input())
             json_output["variable"].extend(self._default_config_input())
 
-            with open(
-                f"./{TF_PATH}/variable.tf.json", "w", encoding="utf-8"
-            ) as tf_json:
+            with open(f"./{TF_PATH}/variable.tf.json", "w", encoding="utf-8") as tf_json:
                 json.dump(json_output, tf_json, ensure_ascii=False, indent=2)
 
     def generate(self):

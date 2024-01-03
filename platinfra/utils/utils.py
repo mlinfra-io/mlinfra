@@ -1,7 +1,8 @@
-import os
 import json
+import os
 import shutil
 import subprocess
+
 from .constants import TF_PATH
 
 

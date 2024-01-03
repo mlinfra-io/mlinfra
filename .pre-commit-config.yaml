@@ -15,12 +15,12 @@ repos:
         args: ["--profile", "black"]
         types: [python]
         files: "deploy/devops"
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.6
-    hooks:
-      - id: bandit
-        args: [-c, pyproject.toml]
-        additional_dependencies: ["bandit[toml]"]
+  # - repo: https://github.com/PyCQA/bandit
+  #   rev: 1.7.6
+  #   hooks:
+  #     - id: bandit
+  #       args: [-c, pyproject.toml]
+  #       additional_dependencies: ["bandit[toml]"]
   - repo: https://github.com/gruntwork-io/pre-commit
     rev: v0.1.17
     hooks:

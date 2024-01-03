@@ -1,8 +1,9 @@
 import json
-import yaml
 from abc import ABC, abstractmethod
-from platinfra_cli.enums.provider import Provider
-from platinfra_cli.enums.deployment_type import DeploymentType
+
+import yaml
+from platinfra.enums.cloud_provider import CloudProvider
+from platinfra.enums.deployment_type import DeploymentType
 
 
 class AbstractStack(ABC):
@@ -15,7 +16,7 @@ class AbstractStack(ABC):
         state_file_name: str,
         region: str,
         account_id: str,
-        provider: Provider,
+        provider: CloudProvider,
         deployment_type: DeploymentType,
         stacks: yaml,
     ):
