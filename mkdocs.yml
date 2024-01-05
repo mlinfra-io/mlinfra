@@ -15,6 +15,7 @@ nav:
       - How does platinfra works: user_guide/how_platinfra_works.md
   # - Tutorials:
   # - API Reference:
+  - Release Notes: RELEASE_NOTES.md
   - Contributing: CONTRIBUTING.md
   - Reporting Security Vulnerabilities: SECURITY.md
 
