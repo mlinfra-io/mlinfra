@@ -16,6 +16,7 @@ nav:
   # - Tutorials:
   # - API Reference:
   - Contributing: CONTRIBUTING.md
+  - Reporting Security Vulnerabilities: CONTRIBUTING.md
 
 theme:
   name: "material"
