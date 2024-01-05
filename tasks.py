@@ -44,9 +44,7 @@ def estimate_cost(
     ctx.run(
         f"terraform -chdir={TF_PATH} plan -no-color -lock=false -input=false -compact-warnings -out tfplan.binary"
     )
-    ctx.run(
-        f"terraform -chdir={TF_PATH} show -no-color -json tfplan.binary > {TF_PATH}/plan.json"
-    )
+    ctx.run(f"terraform -chdir={TF_PATH} show -no-color -json tfplan.binary > {TF_PATH}/plan.json")
     ctx.run(f"infracost diff --show-skipped --no-cache --path {TF_PATH}/plan.json")
 
 

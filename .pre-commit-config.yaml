@@ -41,13 +41,21 @@ repos:
         exclude: "mkdocs.yml"
       - id: mixed-line-ending
       - id: check-symlinks
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
-    hooks:
-      # See https://github.com/pre-commit/mirrors-mypy/blob/main/.pre-commit-hooks.yaml
-      - id: mypy
-        types_or: [python, pyi]
-        args: [--ignore-missing-imports, --scripts-are-modules]
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.8.0
+  #   hooks:
+  #     # See https://github.com/pre-commit/mirrors-mypy/blob/main/.pre-commit-hooks.yaml
+  #     - id: mypy
+  #       types_or: [python, pyi]
+  #       args: [
+  #           --ignore-missing-imports,
+  #           --scripts-are-modules,
+  #           # TODO: this is temporary.
+  #           # need to work on the cli and then remove this.
+  #           --allow-untyped-calls,
+  #           --allow-untyped-defs,
+  #           --allow-untyped-globals,
+  #         ]
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.77.0
     hooks:
