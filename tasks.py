@@ -1,6 +1,6 @@
 from invoke import task
-from platinfra_cli.utils.constants import TF_PATH
-from platinfra_cli.terraform.terraform import Terraform
+from platinfra.terraform.terraform import Terraform
+from platinfra.utils.constants import TF_PATH
 
 
 @task(
@@ -12,7 +12,7 @@ from platinfra_cli.terraform.terraform import Terraform
 def generate_terraform_config(
     ctx,
     stack_config_path: str,
-):
+) -> None:
     f"""
     Generates the terraform config in the {TF_PATH} folder path
     """
@@ -34,7 +34,7 @@ def generate_terraform_config(
 def estimate_cost(
     ctx,
     stack_config_path: str,
-):
+) -> None:
     """
     Estimate cost of the contents of config file
     """
@@ -63,11 +63,12 @@ def terraform(
     stack_config_path: str,
     action: str = "plan",
     args: str = "",
-):
+) -> None:
     """
     Run terraform for the config file with the given action and args.
     """
-    Terraform(stack_config_path).apply()
+    targets_list = Terraform(stack_config_path=stack_config_path).apply()
+    print(targets_list)
 
     ctx.run(f"terraform -chdir={TF_PATH} init")
 
