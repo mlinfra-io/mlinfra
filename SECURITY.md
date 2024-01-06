@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you find some security vulnerability, please immediately inform at [`ali.abbasjaffri [at] live dot com`](mailto:ali.abbasjaffri@live.com?subject=Security-Vulnerability-Report-platinfra) and we will get back to you as soon as possible.
+If you find some security vulnerability, please immediately inform at [`ali dot abbasjaffri [at] live dot com`](mailto:ali.abbasjaffri@live.com?subject=Security-Vulnerability-Report-platinfra) and we will get back to you as soon as possible.
 
 Please refrain from reporting the vulnerability publically. In order for us to best respond to your report, please include any of the following:
 
