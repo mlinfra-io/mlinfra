@@ -41,6 +41,10 @@ dependencies = [
 
 [tool.setuptools]
 package-dir = { "" = "src" }
+# package-dir = { "" = "src", "platinfra" = "src/platinfra", "modules" = "src/modules" }
+
+[tool.setuptools.package-data]
+modules = ["modules"]
 
 [project.urls]
 Homepage = "https://github.com/platinfra/platinfra"
