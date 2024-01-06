@@ -1,3 +1,2 @@
-include cli.py
 include tasks.py
 recursive-include modules/ *
