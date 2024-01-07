@@ -1,0 +1,19 @@
+{
+  "provider": {
+    "aws": {
+      "default_tags": {
+        "tags": {
+          "env": "staging"
+        }
+      },
+      "ignore_tags": {
+        "keys": [
+          "env",
+          "region",
+          "stack"
+        ]
+      },
+      "region": "eu-central-1"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+inputs:
+  - name: vpc_id
+    user_facing: false
+    description: VPC id
+    value: module.vpc.vpc_id
+    default: None
+  - name: subnet_id
+    user_facing: false
+    description: VPC Subnet ID for EC2
+    value: module.vpc.subnet_id[0]
+    default: None
+  - name: default_vpc_sg
+    user_facing: false
+    description: Default VPC security group
+    value: module.vpc.default_vpc_sg
+    default: None
+  - name: vpc_cidr_block
+    user_facing: false
+    description: VPC CIDR block required for SG of RDS
+    value: module.vpc.vpc_cidr_block
+    default: None
+  - name: db_subnet_group_name
+    user_facing: false
+    description: DB Subnet group name
+    value: module.vpc.database_subnet_group
+    default: None
+  - name: rds_instance_class
+    user_facing: true
+    description: RDS instance class to deploy WandB backend on
+    default: "db.t4g.medium"
+  - name: wandb_version
+    user_facing: true
+    description: WandB pypa version
+    default: "0.15.4"
+  - name: wandb_artifacts_bucket_name
+    user_facing: true
+    description: WandB artifacts destination bucket name
+    default: "ultimate-wandb-artifacts-storage-bucket"
+  - name: ec2_application_port
+    user_facing: true
+    description: Application port for WandB application
+    default: 80
+  - name: ec2_instance_type
+    user_facing: true
+    description: AWS Instance type to deploy WandB application on
+    default: "t2.micro"
+  - name: ec2_spot_instance
+    user_facing: true
+    description: Configures the deployment of either an on demand or spot instance.
+    default: true
+  - name: remote_tracking
+    user_facing: true
+    description: Deployed an external RDS server as backend store and S3 as artifact store for WandB.
+    default: false
+outputs:
+  - name: wandb_server_address
+    description: WandB server address. Right now its composed of EC2 instance IP address, with http scheme.
+    export: true
+  - name: wandb_server_dns_address
+    description: WandB server DNS address.
+    export: true
+clouds:
+  - aws

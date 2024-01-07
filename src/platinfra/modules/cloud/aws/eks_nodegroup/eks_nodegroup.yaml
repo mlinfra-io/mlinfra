@@ -1,0 +1,25 @@
+inputs:
+  - name: subnet_ids
+    user_facing: false
+    description: "VPC Subnet IDs for EKS Cluster"
+    value: module.vpc.private_subnets_ids
+    default: None
+  - name: cluster_name
+    user_facing: false
+    description: "Name of the EKS cluster"
+    default: module.eks.cluster_name
+  - name: cluster_primary_security_group_id
+    user_facing: false
+    description: "The security group that is associated with the EKS cluster control plane."
+    default: module.eks.cluster_primary_security_group_id
+  - name: node_security_group_id
+    user_facing: false
+    description: "The security group that is associated with the node group."
+    default: module.eks.node_security_group_id
+  - name: cluster_version
+    user_facing: false
+    description: "EKS Cluster version"
+    default: module.eks.cluster_version
+outputs:
+clouds:
+  - aws

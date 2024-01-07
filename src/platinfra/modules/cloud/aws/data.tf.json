@@ -1,0 +1,11 @@
+{
+  "data": {
+    "aws_caller_identity": {
+      "provider": {}
+    },
+    "aws_region": {
+      "provider": {}
+    },
+    "terraform_remote_state": {}
+  }
+}
