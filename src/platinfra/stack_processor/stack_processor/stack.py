@@ -2,6 +2,7 @@ import json
 from abc import ABC, abstractmethod
 
 import yaml
+from platinfra import absolute_project_root
 from platinfra.enums.cloud_provider import CloudProvider
 from platinfra.enums.deployment_type import DeploymentType
 
@@ -47,7 +48,8 @@ class AbstractStack(ABC):
             extension (str, optional): The extension of the config file.
         """
         with open(
-            f"modules/applications/{self.deployment_type.value}/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}",
+            absolute_project_root()
+            / f"modules/applications/{self.deployment_type.value}/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}",
             "r",
             encoding="utf-8",
         ) as tf_config:

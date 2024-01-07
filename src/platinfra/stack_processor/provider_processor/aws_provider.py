@@ -1,6 +1,7 @@
 import json
 
 import yaml
+from platinfra import absolute_project_root
 from platinfra.stack_processor.provider_processor.provider import (
     AbstractProvider,
 )
@@ -24,7 +25,7 @@ class AWSProvider(AbstractProvider):
         return f"tfstate-{self.stack_name}-{self.region}"
 
     def configure_provider(self):
-        with open("modules/cloud/aws/provider.tf.json", "r") as data_json:
+        with open(absolute_project_root() / "modules/cloud/aws/provider.tf.json", "r") as data_json:
             with open(f"./{TF_PATH}/provider.tf.json", "w", encoding="utf-8") as tf_json:
                 data = json.load(data_json)
                 data["provider"]["aws"]["region"] = self.region
@@ -38,7 +39,8 @@ class AWSProvider(AbstractProvider):
 
                 # add random provider
                 with open(
-                    "modules/terraform_providers/random/provider.tf.json", "r"
+                    absolute_project_root() / "modules/terraform_providers/random/provider.tf.json",
+                    "r",
                 ) as random_provider:
                     random_provider_json = json.load(random_provider)
                 data["provider"].update(random_provider_json["provider"])
@@ -47,7 +49,7 @@ class AWSProvider(AbstractProvider):
 
         # TODO: check when to add this...
 
-        # with open("modules/cloud/aws/data.tf.json", "r") as data_json:
+        # with open(absolute_project_root() / "modules/cloud/aws/data.tf.json", "r") as data_json:
         #     with open(f"./{TF_PATH}/data.tf.json", "w", encoding="utf-8") as tf_json:
         #         json_data = json.load(data_json)
 

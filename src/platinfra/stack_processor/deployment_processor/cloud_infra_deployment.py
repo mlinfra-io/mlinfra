@@ -1,6 +1,7 @@
 import json
 
 import yaml
+from platinfra import relative_project_root
 from platinfra.enums.cloud_provider import CloudProvider
 from platinfra.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
@@ -24,11 +25,17 @@ class CloudInfraDeployment(AbstractDeployment):
         )
 
     def configure_required_provider_config(self):
-        with open(f"modules/cloud/{self.provider.value}/terraform.tf.json", "r") as data_json:
+        with open(
+            relative_project_root() / f"modules/cloud/{self.provider.value}/terraform.tf.json",
+            "r",
+        ) as data_json:
             data = json.load(data_json)
 
             # add random provider
-            with open("modules/terraform_providers/random/terraform.tf.json", "r") as random_tf:
+            with open(
+                relative_project_root() / "modules/terraform_providers/random/terraform.tf.json",
+                "r",
+            ) as random_tf:
                 random_tf_json = json.load(random_tf)
             data["terraform"]["required_providers"].update(
                 random_tf_json["terraform"]["required_providers"]
@@ -43,7 +50,9 @@ class CloudInfraDeployment(AbstractDeployment):
         if self.provider == CloudProvider.AWS:
             json_module = {"module": {"vpc": {}}}
             json_module["module"]["vpc"]["name"] = f"{self.stack_name}-vpc"
-            json_module["module"]["vpc"]["source"] = "../modules/cloud/aws/vpc"
+            json_module["module"]["vpc"]["source"] = (
+                relative_project_root() / "modules/cloud/aws/vpc"
+            )
 
             if "config" in self.deployment_config and "vpc" in self.deployment_config["config"]:
                 for vpc_config in self.deployment_config["config"]["vpc"]:

@@ -1,6 +1,7 @@
 import json
 
 import yaml
+from platinfra import relative_project_root
 from platinfra.enums.cloud_provider import CloudProvider
 from platinfra.enums.deployment_type import DeploymentType
 from platinfra.stack_processor.stack_processor.stack import (
@@ -60,9 +61,10 @@ class KubernetesStack(AbstractStack):
 
                 # TODO: pickup right module source based on the deployment type
 
-                json_module["module"][name][
-                    "source"
-                ] = f"../modules/applications/{self.deployment_type.value}/{stack_type}/{name}/tf_module"
+                json_module["module"][name]["source"] = "../" + str(
+                    relative_project_root()
+                    / f"modules/applications/{self.deployment_type.value}/{stack_type}/{name}/tf_module"
+                )
 
                 # Reading inputs and outputs from the config file
                 # placed in the applications/application folder and
