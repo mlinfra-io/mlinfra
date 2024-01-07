@@ -1,2 +1,0 @@
-include tasks.py
-recursive-include modules/ *
