@@ -1,7 +1,7 @@
 import json
 
 import yaml
-from platinfra import absolute_project_root, relative_project_root
+from platinfra import absolute_project_root
 from platinfra.enums.cloud_provider import CloudProvider
 from platinfra.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
@@ -71,9 +71,7 @@ class KubernetesDeployment(AbstractDeployment):
             # TODO: Make these blocks generic
             # inject vpc module
             vpc_json_module = {"module": {"vpc": {}}}
-            vpc_json_module["module"]["vpc"]["source"] = "../" + str(
-                relative_project_root() / "modules/cloud/aws/vpc"
-            )
+            vpc_json_module["module"]["vpc"]["source"] = "./modules/cloud/aws/vpc"
 
             vpc_json_module["module"]["vpc"]["name"] = f"{self.stack_name}-vpc"
 
@@ -88,9 +86,7 @@ class KubernetesDeployment(AbstractDeployment):
 
             # inject k8s module
             k8s_json_module = {"module": {"eks": {}}}
-            k8s_json_module["module"]["eks"]["source"] = "../" + str(
-                relative_project_root() / "modules/cloud/aws/eks/tf_module"
-            )
+            k8s_json_module["module"]["eks"]["source"] = "./modules/cloud/aws/eks/tf_module"
             k8s_json_module["module"]["eks"]["cluster_name"] = f"{self.stack_name}-cluster"
             k8s_json_module["module"]["eks"]["vpc_id"] = "${ module.vpc.vpc_id }"
             k8s_json_module["module"]["eks"]["subnet_ids"] = "${ module.vpc.private_subnets_ids }"
@@ -101,7 +97,7 @@ class KubernetesDeployment(AbstractDeployment):
             ):
                 # read values from the yaml config file
                 with open(
-                    absolute_project_root() / f"modules/cloud/{self.provider.value}/eks/eks.yaml",
+                    absolute_project_root() / f"./modules/cloud/{self.provider.value}/eks/eks.yaml",
                     "r",
                     encoding="utf-8",
                 ) as tf_config:
@@ -148,9 +144,9 @@ class KubernetesDeployment(AbstractDeployment):
             ):
                 # inject k8s module
                 nodegroups_json_module = {"module": {"eks_nodegroup": {"node_groups": []}}}
-                nodegroups_json_module["module"]["eks_nodegroup"]["source"] = "../" + str(
-                    relative_project_root() / "modules/cloud/aws/eks_nodegroup/tf_module"
-                )
+                nodegroups_json_module["module"]["eks_nodegroup"][
+                    "source"
+                ] = "./modules/cloud/aws/eks_nodegroup/tf_module"
 
                 for nodegroup_config in self.deployment_config["config"]["node_groups"]:
                     nodegroup_object = {}
