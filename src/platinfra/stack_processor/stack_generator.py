@@ -1,6 +1,8 @@
 import os
+import shutil
 
 import yaml
+from platinfra import absolute_project_root
 from platinfra.enums.cloud_provider import CloudProvider
 from platinfra.enums.deployment_type import DeploymentType
 from platinfra.stack_processor.deployment_processor.cloud_infra_deployment import (
@@ -97,6 +99,7 @@ class StackGenerator:
 
         # create the stack folder
         os.makedirs(TF_PATH, mode=0o777)
+        shutil.copytree(absolute_project_root() / "modules", TF_PATH + "/modules")
 
         # read the stack config file
         try:
