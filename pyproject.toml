@@ -43,7 +43,7 @@ dependencies = [
 package-dir = { "" = "src" }
 
 [tool.setuptools.package-data]
-platinfra = ["**/*.tf", "**/*.json", "**/*.yaml"]
+platinfra = ["**/*.tf", "**/*.tpl"]
 
 [project.urls]
 Homepage = "https://github.com/platinfra/platinfra"
