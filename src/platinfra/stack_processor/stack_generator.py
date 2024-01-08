@@ -1,5 +1,4 @@
 import os
-import shutil
 
 import yaml
 from platinfra import absolute_project_root
@@ -21,7 +20,7 @@ from platinfra.stack_processor.stack_processor.kubernetes_stack import (
     KubernetesStack,
 )
 from platinfra.utils.constants import TF_PATH
-from platinfra.utils.utils import clean_tf_directory
+from platinfra.utils.utils import clean_tf_directory, create_symlinks
 
 
 class StackGenerator:
@@ -99,7 +98,7 @@ class StackGenerator:
 
         # create the stack folder
         os.makedirs(TF_PATH, mode=0o777)
-        shutil.copytree(absolute_project_root() / "modules", TF_PATH + "/modules")
+        create_symlinks(absolute_project_root() / "modules", TF_PATH + "/modules")
 
         # read the stack config file
         try:
