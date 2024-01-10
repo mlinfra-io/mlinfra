@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import shutil
 import subprocess
 
@@ -35,6 +36,36 @@ def check_terraform_version():
         print("Terraform is not installed or an error occurred.")
         print("Please install Terraform and try again.")
         exit(1)
+
+
+# TODO: create symlink of only respective provider for the deployment type, not everything.
+def create_symlinks(source: str, destination: str) -> None:
+    """
+    Create symlinks for all.tf and .tpl files in the source directory to the destination directory
+    This also skips files starting with a dot (.)
+    :param source: source directory
+    :param destination: destination directory
+
+    :return: None
+    """
+    if not os.path.exists(destination):
+        os.makedirs(destination)
+
+    for item in os.listdir(source):
+        if item.startswith("."):
+            continue
+        source_item = os.path.join(source, item)
+        destination_item = os.path.join(destination, item)
+
+        if os.path.isdir(source_item):
+            create_symlinks(source_item, destination_item)
+        elif os.path.isfile(source_item) and (
+            source_item.endswith(".tf")
+            or source_item.endswith(".tpl")
+            or re.search(r".*values\.yaml", source_item)
+        ):
+            if not os.path.exists(destination_item):
+                os.symlink(source_item, destination_item)
 
 
 def terraform_tested_version():
