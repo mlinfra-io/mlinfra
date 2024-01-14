@@ -81,3 +81,4 @@ repos:
           - --license-filepath
           - LICENSE_HEADER.txt
           - --use-current-year
+          - --no-extra-eol
