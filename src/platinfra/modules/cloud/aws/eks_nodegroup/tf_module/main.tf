@@ -9,7 +9,7 @@ locals {
 # https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group
 module "eks_managed_node_group" {
   source  = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
-  version = "~> 19.0"
+  version = "~> 19.20.0"
 
   for_each = { for k, v in var.node_groups : k => v }
 

@@ -36,8 +36,14 @@ locals {
 
 
 module "vpc_module" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  source = "terraform-aws-modules/vpc/aws"
+  # TODO: update aws provider version when this issue gets fixed
+  # version = "~> 5.0"
+  # vpc module update requires min aws provider version 5.20
+  # this breaks the aws provider as it has troubles with kms key creation
+  # see: https://github.com/terraform-aws-modules/terraform-aws-vpc/pull/1023
+  # and https://github.com/hashicorp/terraform-provider-aws/issues/34538
+  version = "~> 5.4.0"
 
   depends_on = [aws_s3_bucket.vpc_logs_bucket]
 
