@@ -14,6 +14,7 @@ import json
 import os
 import subprocess
 
+# import hashlib
 import boto3
 import yaml
 from botocore.config import Config
@@ -99,20 +100,35 @@ class Terraform:
         os.makedirs(TF_PATH, mode=0o777)
         create_symlinks(absolute_project_root() / "modules", TF_PATH + "/modules")
 
+        # TODO: generate hash of the stack config to not generate config all the time
+        # sha256_hash = hashlib.sha256()
+
         # read the stack config file
         try:
             with open(self.stack_config_path, "r") as stack_config:
                 config = yaml.safe_load(stack_config.read())
+
+            # with open(stack_config, "rb") as stack_config_file:
+            #     # Read and update hash in chunks of 4K
+            #     for byte_block in iter(lambda: stack_config_file.read(4096), b""):
+            #         sha256_hash.update(byte_block)
+            #         stack_file_digest = sha256_hash.hexdigest()
+            #
+            # Check if a folder with the value of stack_file_digest already exists
+            # if not, create a folder inside the TF_PATH with stack_file_digest as the name
+            # os.makedirs(f"{TF_PATH}/{stack_file_digest}", mode=0o777)
+
             return config
+
         except FileNotFoundError:
             raise FileNotFoundError(f"Stack config file not found: {self.stack_config_path}")
 
     def process_config_file(self):
         """This function is responsible for processing the config file"""
-        file_processor = StackGenerator(stack_config=self.read_stack_config())
-        file_processor.generate()
+        stack_processor = StackGenerator(stack_config=self.read_stack_config())
+        stack_processor.generate()
 
-        return file_processor.get_state_file_name(), file_processor.get_region()
+        return stack_processor.get_state_file_name(), stack_processor.get_region()
 
     def check_cloud_credentials(self):
         """This function is responsible for checking if the cloud credentials are present"""
