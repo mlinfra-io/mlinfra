@@ -1,4 +1,4 @@
-# platinfra
+![Banner Logo](docs/_images/platinfra-logo.png)
 
 > _One tool to deploy all them platforms_
 
