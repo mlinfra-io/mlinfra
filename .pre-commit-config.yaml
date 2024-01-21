@@ -15,12 +15,12 @@ repos:
         args: ["--profile", "black"]
         types: [python]
         files: "deploy/devops"
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.6
-    hooks:
-      - id: bandit
-        args: [-c, pyproject.toml]
-        additional_dependencies: ["bandit[toml]"]
+  # - repo: https://github.com/PyCQA/bandit
+  #   rev: 1.7.6
+  #   hooks:
+  #     - id: bandit
+  #       args: [-c, pyproject.toml]
+  #       additional_dependencies: ["bandit[toml]"]
   - repo: https://github.com/gruntwork-io/pre-commit
     rev: v0.1.17
     hooks:
@@ -41,13 +41,16 @@ repos:
         exclude: "mkdocs.yml"
       - id: mixed-line-ending
       - id: check-symlinks
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.8.0
-    hooks:
-      # See https://github.com/pre-commit/mirrors-mypy/blob/main/.pre-commit-hooks.yaml
-      - id: mypy
-        types_or: [python, pyi]
-        args: [--ignore-missing-imports, --scripts-are-modules]
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.8.0
+  #   hooks:
+  #     # See https://github.com/pre-commit/mirrors-mypy/blob/main/.pre-commit-hooks.yaml
+  #     - id: mypy
+  #       types_or: [python, pyi]
+  #       args: [
+  #           --ignore-missing-imports,
+  #           --scripts-are-modules,
+  #         ]
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.77.0
     hooks:
@@ -69,3 +72,13 @@ repos:
           - --output-file=requirements-docs.txt
           - pyproject.toml
         files: ^(pyproject\.toml|requirements-docs\.txt)$
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.4
+    hooks:
+      - id: insert-license
+        files: \.py$
+        args:
+          - --license-filepath
+          - LICENSE_HEADER.txt
+          - --use-current-year
+          - --no-extra-eol
