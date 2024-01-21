@@ -17,10 +17,15 @@ import subprocess
 import boto3
 import yaml
 from botocore.config import Config
+from platinfra import absolute_project_root
 from platinfra.stack_processor.stack_generator import StackGenerator
 from platinfra.terraform.state_helper import StateHelper
 from platinfra.utils.constants import TF_PATH
-from platinfra.utils.utils import clean_tf_directory, terraform_tested_version
+from platinfra.utils.utils import (
+    clean_tf_directory,
+    create_symlinks,
+    terraform_tested_version,
+)
 
 
 class Terraform:
@@ -86,9 +91,25 @@ class Terraform:
         else:
             print("The param delete_dir is set as false, skipping the directory deletion")
 
+    def read_stack_config(self) -> yaml:
+        # clean the generated files directory
+        clean_tf_directory()
+
+        # create the stack folder
+        os.makedirs(TF_PATH, mode=0o777)
+        create_symlinks(absolute_project_root() / "modules", TF_PATH + "/modules")
+
+        # read the stack config file
+        try:
+            with open(self.stack_config_path, "r") as stack_config:
+                config = yaml.safe_load(stack_config.read())
+            return config
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Stack config file not found: {self.stack_config_path}")
+
     def process_config_file(self):
         """This function is responsible for processing the config file"""
-        file_processor = StackGenerator(stack_config_path=self.stack_config_path)
+        file_processor = StackGenerator(stack_config=self.read_stack_config())
         file_processor.generate()
 
         return file_processor.get_state_file_name(), file_processor.get_region()

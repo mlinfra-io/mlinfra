@@ -10,10 +10,6 @@
 #     or implied. See the License for the specific language governing
 #     permissions and limitations under the License.
 
-import os
-
-import yaml
-from platinfra import absolute_project_root
 from platinfra.enums.cloud_provider import CloudProvider
 from platinfra.enums.deployment_type import DeploymentType
 from platinfra.stack_processor.deployment_processor.cloud_infra_deployment import (
@@ -31,14 +27,11 @@ from platinfra.stack_processor.stack_processor.cloud_infra_stack import (
 from platinfra.stack_processor.stack_processor.kubernetes_stack import (
     KubernetesStack,
 )
-from platinfra.utils.constants import TF_PATH
-from platinfra.utils.utils import clean_tf_directory, create_symlinks
 
 
 class StackGenerator:
-    def __init__(self, stack_config_path):
-        self.stack_config_path = stack_config_path
-        self.stack_config = self.read_stack_config()
+    def __init__(self, stack_config):
+        self.stack_config = stack_config
         self.stack_name = ""
         self.account_id = ""
         self.provider = "aws"
@@ -104,22 +97,6 @@ class StackGenerator:
                 stacks=self.stack_config["stack"],
             ).generate()
 
-    def read_stack_config(self) -> yaml:
-        # clean the generated files directory
-        clean_tf_directory()
-
-        # create the stack folder
-        os.makedirs(TF_PATH, mode=0o777)
-        create_symlinks(absolute_project_root() / "modules", TF_PATH + "/modules")
-
-        # read the stack config file
-        try:
-            with open(self.stack_config_path, "r") as stack_config:
-                config = yaml.safe_load(stack_config.read())
-            return config
-        except FileNotFoundError:
-            raise FileNotFoundError(f"Stack config file not found: {self.stack_config_path}")
-
     def configure_provider(self) -> CloudProvider:
         if CloudProvider(self.stack_config["provider"]["name"]) == CloudProvider.AWS:
             aws_provider = AWSProvider(
@@ -127,8 +104,3 @@ class StackGenerator:
             )
             aws_provider.configure_provider()
             return CloudProvider.AWS
-
-
-if __name__ == "__main__":
-    tf = StackGenerator(stack_config_path="examples/aws-mlflow.yaml")
-    tf.generate()
