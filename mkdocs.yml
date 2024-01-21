@@ -1,4 +1,4 @@
-site_name: platinfra
+site_name: ""
 site_url: https://platinfra.github.io/
 repo_name: platinfra
 repo_url: https://github.com/platinfra/platinfra
@@ -24,6 +24,8 @@ theme:
   font:
     text: Raleway
     code: mononoki
+  logo: _images/platinfra-white.png
+  favicon: _images/platinfra-minimal-white.png
   features:
     - content.tabs.link
     - content.code.copy
