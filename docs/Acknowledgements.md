@@ -1,4 +1,3 @@
-### Acknowledgements
 - This project is heavily inspired by [opta](https://github.com/run-x/opta), a tool quite ahead of its time, and got discontinued way before its time. I would like to thank the team behind it for their work and providing me inspiration to condense the idea of deployment of MLOps tools into a single tool.
 - The project leans heavily on [terraform aws modules](https://github.com/terraform-aws-modules/) by [Anton Babenko](https://www.linkedin.com/in/antonbabenko/) for the AWS infrastructure.
 - I would also like to thank the following individuals:

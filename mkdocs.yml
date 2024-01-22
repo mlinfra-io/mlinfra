@@ -18,6 +18,7 @@ nav:
   - Release Notes: RELEASE_NOTES.md
   - Contributing: CONTRIBUTING.md
   - Reporting Security Vulnerabilities: SECURITY.md
+  - Acknowledgements: Acknowledgements.md
 
 theme:
   name: "material"
