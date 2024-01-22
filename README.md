@@ -47,6 +47,8 @@ This project will be supporting the following providers:
 - [ ] Bare metal (such as [Hetzner](https://www.hetzner.com/de))
 - [ ] [Openstack](https://www.openstack.org/)
 - [ ] [docker compose](https://docs.docker.com/compose/)
+- [ ] [k3s](https://k3s.io/)
+- [ ] [kind](https://kind.sigs.k8s.io/)
 
 ## Supported MLOps Tools
 
@@ -107,6 +109,8 @@ stack:
 - I realised MLOps infrastructure deployment is not as easy and common over the years of creating and deploying ML platforms for multiple teams. A lot of the times, teams start on wrong foot, leading to months of planning and implementation of MLOps infrastructure. This project is an attempt to create a common MLOps infrastructure deployment framework that can be used by any ML team to deploy their MLOps stack in a single command.
 
 - The idea is that for anyone willing to deploy MLOps infrastructure, they should be able to do so by providing basic minimum configuration and just running a single command.
+
+- The project also aims to provide feasibility of deployment ranging from local environment, using [k3s](https://k3s.io/) or [kind](https://kind.sigs.k8s.io/) for local testing and validation, to all the way on major public cloud providers for more production ready usecases.
 
 ## Development
 
