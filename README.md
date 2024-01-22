@@ -3,6 +3,7 @@
 [![](https://img.shields.io/pypi/v/platinfra)](https://pypi.org/project/platinfra)
 ![GitHub License](https://img.shields.io/github/license/platinfra/platinfra?color=orange)
 [![docs](https://img.shields.io/badge/docs-latest-orange)](https://platinfra.github.io/)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/platinfra?color=orange)
 ![Discord](https://img.shields.io/discord/1199078513463009321?color=orange)
 
 > _One tool to deploy all them platforms_
@@ -47,6 +48,17 @@ This project will be supporting the following providers:
 - [ ] [Openstack](https://www.openstack.org/)
 - [ ] [docker compose](https://docs.docker.com/compose/)
 
+## Supported MLOps Tools
+
+`platinfra` intends to support as many [MLOps tools](https://github.com/EthicalML/awesome-production-machine-learning/) deployable in a platform in their standalone as well as high availability across different layers of an MLOps stack:
+- data_versioning
+- experiment_tracker
+- pipelining / orchestrator
+- artifact_tracker / model_registry
+- model_serving / model_inference
+- monitoring
+- alerting
+
 ## Deployment Config
 
 - `platinfra` deploys infrastructure using a declarative approach
@@ -58,10 +70,12 @@ name: aws-mlops-stack
 provider:
   name: aws
   account-id: xxxxxxxxx
-  deployment_component: cloud-infra # (this would create ec2 instances and then deploy applications on it)
+  region: eu-central-1
+deployment:
+  type: cloud_infra # (this would create ec2 instances and then deploy applications on it)
 stack:
   data_versioning:
-    - dvc # can also be pachyderm or lakefs or neptune and so on
+    - lakefs # can also be pachyderm or lakefs or neptune and so on
   secrets_manager:
     - secrets_manager # can also be vault or any other
   experiment_tracker:
@@ -85,7 +99,8 @@ stack:
     - mlflow # can be mlflow or neptune or determined or weaveworks or prometheus or grafana and so on...
 ```
 
-- Other stacks such as feature_store, event streamers, loggers or [cost dashboards](https://www.nebuly.com/) can be added via community requests.
+- Other stacks such as feature_store, event streamers, loggers or [cost dashboards](https://www.kubecost.com/) can be added via community requests.
+- For more information, please [check out the docs](https://platinfra.github.io/) for detailed documentation.
 
 ## Vision
 
@@ -98,10 +113,9 @@ stack:
 - This project relies on terraform for IaC code and python to glue it all together.
 - To get started, install terraform and python.
 - You can install the required python packages by running `pip install -r requirements-dev.txt`
-- You can run any of the available examples from the `examples` folder using `platinfra terraform --stack-config-path examples/<application>/<cloud>-<application>.yaml --action <action>` where `<action>` corresponds to terraform actions such as `plan`, `apply`, `destroy` and `output`.
-- You can also run `platinfra --help` to see all the available options.
+- You can run any of the available examples from the `examples` folder by running `cd src` and `invoke terraform --stack-config-path examples/<application>/<cloud>-<application>.yaml --action <action>` where `<action>` corresponds to terraform actions such as `plan`, `apply`, `destroy` and `output`.
 
-For more information, please refer to the [Engineering wiki](https://platinfra.github.io/) of the project regarding what are the different components of the project and how they work together.
+For more information, please refer to the Engineering Wiki of the project (Will be released soon!) regarding what are the different components of the project and how they work together.
 
 ## Contributions
 
