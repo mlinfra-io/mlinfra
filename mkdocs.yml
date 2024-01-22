@@ -1,4 +1,4 @@
-site_name: platinfra
+site_name: ""
 site_url: https://platinfra.github.io/
 repo_name: platinfra
 repo_url: https://github.com/platinfra/platinfra
@@ -24,6 +24,8 @@ theme:
   font:
     text: Raleway
     code: mononoki
+  logo: _images/platinfra-white.png
+  favicon: _images/platinfra-minimal-white.png
   features:
     - content.tabs.link
     - content.code.copy
@@ -31,12 +33,14 @@ theme:
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
+      primary: deep orange
       toggle:
         icon: material/brightness-auto
         name: Switch to light mode
 
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
+      primary: deep orange
       scheme: default
       toggle:
         icon: material/brightness-7
@@ -44,6 +48,7 @@ theme:
 
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
+      primary: deep orange
       scheme: slate
       toggle:
         icon: material/brightness-4
@@ -74,6 +79,8 @@ extra:
       link: https://github.com/aliabbasjaffri
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/platinfra
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/P49NPVNj
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/aliabbasjaffri/
 
