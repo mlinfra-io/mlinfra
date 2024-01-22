@@ -1,7 +1,7 @@
 ![Banner Logo](docs/_images/platinfra-logo.png)
 
 [![](https://img.shields.io/pypi/v/platinfra)](https://pypi.org/project/platinfra)
-![GitHub License](https://img.shields.io/github/license/platinfra/platinfra)
+![GitHub License](https://img.shields.io/github/license/platinfra/platinfra?color=orange)
 [![docs](https://img.shields.io/badge/docs-latest-orange)](https://platinfra.github.io/)
 ![GitHub Repo stars](https://img.shields.io/github/stars/platinfra/platinfra)
 
