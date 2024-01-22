@@ -79,6 +79,8 @@ extra:
       link: https://github.com/aliabbasjaffri
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/platinfra
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/P49NPVNj
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/aliabbasjaffri/
 
