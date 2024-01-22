@@ -1,10 +1,18 @@
 ![Banner Logo](docs/_images/platinfra-logo.png)
 
+[![](https://img.shields.io/pypi/v/platinfra)](https://pypi.org/project/platinfra)
+![GitHub License](https://img.shields.io/github/license/platinfra/platinfra)
+[![docs](https://img.shields.io/badge/docs-latest-orange)](https://platinfra.github.io/)
+![GitHub Repo stars](https://img.shields.io/github/stars/platinfra/platinfra)
+
 > _One tool to deploy all them platforms_
 
 - My intention behind this work is to liberate IaC logic for creating MLOps stacks which is usually tied to other frameworks.
 
 - All you need is terraform to run this project and `let it rip!`
+
+- Contribute to the project by opening a PR or joining project roadmap and design related discussion on [discord](https://discord.gg/P49NPVNj)
+
 
 ## Vision
 
@@ -78,3 +86,9 @@ For more information, please refer to the [Engineering wiki](https://platinfra.g
 
 - Contributions are welcome! Help us onboard all of the available mlops tools on currently available cloud providers.
 - For major changes, please open an issue first to discuss what you would like to change. A team member will get to you soon.
+- For information on the general development workflow, see the [contribution guide](CONTRIBUTING.md).
+
+
+## License
+
+The platinfra library is distributed under the [Apache-2 license](https://github.com/platinfra/platinfra/blob/main/LICENSE).
