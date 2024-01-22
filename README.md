@@ -10,7 +10,7 @@
 
 platinfra is a combination of python and terraform tooling put together for deploying scalable MLOps infrastructure. This project aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
 
-- Contribute to the project by opening a PR or joining project roadmap and design related discussion on [discord](https://discord.gg/P49NPVNj)
+Contribute to the project by opening a issue or joining project roadmap and design related discussion on [discord](https://discord.gg/P49NPVNj). Complete roadmap will be released soon!
 
 ## Usage
 
