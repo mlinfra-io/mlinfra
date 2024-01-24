@@ -2,6 +2,7 @@ site_name: ""
 site_url: https://platinfra.github.io/
 repo_name: platinfra
 repo_url: https://github.com/platinfra/platinfra
+edit_uri: edit/main/docs/
 
 strict: true
 validation:
@@ -32,6 +33,14 @@ theme:
     - content.tabs.link
     - content.code.copy
     - content.code.annotate
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.path
+    - content.action.edit
+    # - navigation.tabs
+    # - navigation.tabs.sticky
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
