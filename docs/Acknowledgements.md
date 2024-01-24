@@ -7,6 +7,7 @@
 
 - [Road Rage font](https://www.fontspace.com/road-rage-font-f43310)
 - [Dall-E](https://openai.com/dall-e-2) for the wonderful background
+- [AWS EKS Best Practices Guide](https://aws.github.io/aws-eks-best-practices/)
 
 ### People
 
