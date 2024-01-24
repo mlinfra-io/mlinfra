@@ -12,7 +12,12 @@ platinfra is a combination of python and terraform tooling put together for depl
 
 Contribute to the project by opening a issue or joining project roadmap and design related discussion on [discord](https://discord.gg/P49NPVNj). Complete roadmap will be released soon!
 
-## Usage
+## 🚀 Installation
+
+### Requirements
+`platinfra` has the following requirements to run perfectly:
+
+- `terraform` >= `1.4.0` should be installed on the system.
 
 `platinfra` can be installed simply by creating a python virtual environment and installing `platinfra` pip package
 ```bash
