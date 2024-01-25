@@ -123,6 +123,7 @@ class Terraform:
         except FileNotFoundError:
             raise FileNotFoundError(f"Stack config file not found: {self.stack_config_path}")
 
+    # TODO: write getters for state file name and region
     def process_config_file(self):
         """This function is responsible for processing the config file"""
         stack_processor = StackGenerator(stack_config=self.read_stack_config())
@@ -158,6 +159,7 @@ class Terraform:
                 """
             )
 
+    # TODO: move this out of this class
     def check_terraform_state_storage(self, state_name: str, aws_region: str):
         """This function is responsible for checking if the terraform state storage is present"""
         state_helper = StateHelper(
