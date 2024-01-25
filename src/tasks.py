@@ -11,6 +11,7 @@
 #     permissions and limitations under the License.
 
 from invoke import task
+from platinfra.amplitude import amplitude_client
 from platinfra.terraform.terraform import Terraform
 from platinfra.utils.constants import TF_PATH
 
@@ -28,12 +29,22 @@ def generate_terraform_config(
     f"""
     Generates the terraform config in the {TF_PATH} folder path
     """
-    Terraform(stack_config_path).plan()
+    modules = Terraform(stack_config_path).plan()
+    current_properties = {"modules": modules}
+
+    amplitude_client.send_event(
+        amplitude_client.START_GEN_TERRAFORM_EVENT,
+        event_properties=current_properties,
+    )
     ctx.run(f"terraform -chdir={TF_PATH} init")
     print(
         f"""
             Terraform config has been generated in the {TF_PATH} folder.
         """
+    )
+    amplitude_client.send_event(
+        amplitude_client.END_GEN_TERRAFORM_EVENT,
+        event_properties=current_properties,
     )
 
 
