@@ -28,6 +28,8 @@ colorama==0.4.6
     # via mkdocs-material
 docutils==0.20.1
     # via botocore
+getmac==0.9.4
+    # via platinfra (pyproject.toml)
 ghp-import==2.1.0
     # via mkdocs
 gitdb==4.0.11
@@ -133,6 +135,8 @@ six==1.16.0
     # via python-dateutil
 smmap==5.0.1
     # via gitdb
+toml==0.10.2
+    # via platinfra (pyproject.toml)
 typing-extensions==4.9.0
     # via mypy
 urllib3==2.1.0

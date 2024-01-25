@@ -33,7 +33,9 @@ dependencies = [
     "pyyaml",
     "black",
     "pytest",
-    "mypy"
+    "mypy",
+    "getmac",
+    "toml"
 ]
 
 [tool.setuptools]
