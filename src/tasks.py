@@ -69,6 +69,10 @@ def estimate_cost(
     )
     ctx.run(f"terraform -chdir={TF_PATH} show -no-color -json tfplan.binary > {TF_PATH}/plan.json")
     ctx.run(f"infracost diff --show-skipped --no-cache --path {TF_PATH}/plan.json")
+    amplitude_client.send_event(
+        amplitude_client.COST_ESTIMATOR_EVENT,
+        event_properties={},
+    )
 
 
 @task(
@@ -94,13 +98,27 @@ def terraform(
 
     ctx.run(f"terraform -chdir={TF_PATH} init")
 
-    if action in ["apply", "destroy"]:
+    if action == "apply":
         action += " -auto-approve"
+        amplitude_client.send_event(
+            amplitude_client.APPLY_EVENT,
+            event_properties={},
+        )
+    elif action == "destroy":
+        action += " -auto-approve"
+        amplitude_client.send_event(
+            amplitude_client.DESTROY_EVENT,
+            event_properties={},
+        )
     # elif action == "force-unlock":
     #     file_processor.force_unlock()
     #     action = f"plan {args} -lock=false"
     elif action == "plan":
         action += " -lock=false -input=false -compact-warnings"
+        amplitude_client.send_event(
+            amplitude_client.PLAN_EVENT,
+            event_properties={},
+        )
 
     # print(f"terraform -chdir={TF_PATH} {action} {args}")
     ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")
