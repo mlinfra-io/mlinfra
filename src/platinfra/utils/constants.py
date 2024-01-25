@@ -10,7 +10,20 @@
 #     or implied. See the License for the specific language governing
 #     permissions and limitations under the License.
 
+from typing import Final
+from uuid import uuid4
+
+import toml
+
 # TODO: update this to path.cwd
 TF_PATH = "./.mlops_stack"
 
 CREATE_VPC_DB_SUBNET = ["remote_tracking"]
+
+DEV_VERSION: Final = "dev"
+PLATINFRA_DISABLE_REPORTING: Final = "PLATINFRA_DISABLE_REPORTING"
+SESSION_ID: Final = uuid4()
+
+with open("pyproject.toml", "r") as pyproject_toml_file:
+    pyproj_toml_data = toml.load(pyproject_toml_file)
+VERSION: Final = pyproj_toml_data["version"]
