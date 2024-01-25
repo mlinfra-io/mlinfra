@@ -11,6 +11,7 @@
 #     permissions and limitations under the License.
 
 from invoke import task
+from platinfra.amplitude import amplitude_client
 from platinfra.terraform.terraform import Terraform
 from platinfra.utils.constants import TF_PATH
 
@@ -28,12 +29,22 @@ def generate_terraform_config(
     f"""
     Generates the terraform config in the {TF_PATH} folder path
     """
-    Terraform(stack_config_path).plan()
+    modules = Terraform(stack_config_path).plan()
+    current_properties = {"modules": modules}
+
+    amplitude_client.send_event(
+        amplitude_client.START_GEN_TERRAFORM_EVENT,
+        event_properties=current_properties,
+    )
     ctx.run(f"terraform -chdir={TF_PATH} init")
     print(
         f"""
             Terraform config has been generated in the {TF_PATH} folder.
         """
+    )
+    amplitude_client.send_event(
+        amplitude_client.END_GEN_TERRAFORM_EVENT,
+        event_properties=current_properties,
     )
 
 
@@ -58,6 +69,10 @@ def estimate_cost(
     )
     ctx.run(f"terraform -chdir={TF_PATH} show -no-color -json tfplan.binary > {TF_PATH}/plan.json")
     ctx.run(f"infracost diff --show-skipped --no-cache --path {TF_PATH}/plan.json")
+    amplitude_client.send_event(
+        amplitude_client.COST_ESTIMATOR_EVENT,
+        event_properties={},
+    )
 
 
 @task(
@@ -83,13 +98,27 @@ def terraform(
 
     ctx.run(f"terraform -chdir={TF_PATH} init")
 
-    if action in ["apply", "destroy"]:
+    if action == "apply":
         action += " -auto-approve"
+        amplitude_client.send_event(
+            amplitude_client.APPLY_EVENT,
+            event_properties={},
+        )
+    elif action == "destroy":
+        action += " -auto-approve"
+        amplitude_client.send_event(
+            amplitude_client.DESTROY_EVENT,
+            event_properties={},
+        )
     # elif action == "force-unlock":
     #     file_processor.force_unlock()
     #     action = f"plan {args} -lock=false"
     elif action == "plan":
         action += " -lock=false -input=false -compact-warnings"
+        amplitude_client.send_event(
+            amplitude_client.PLAN_EVENT,
+            event_properties={},
+        )
 
     # print(f"terraform -chdir={TF_PATH} {action} {args}")
     ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")

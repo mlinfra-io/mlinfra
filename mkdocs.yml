@@ -2,6 +2,7 @@ site_name: ""
 site_url: https://platinfra.github.io/
 repo_name: platinfra
 repo_url: https://github.com/platinfra/platinfra
+edit_uri: edit/main/docs/
 
 strict: true
 validation:
@@ -22,6 +23,7 @@ nav:
 
 theme:
   name: "material"
+  custom_dir: docs/overrides
   font:
     text: Raleway
     code: mononoki
@@ -31,10 +33,19 @@ theme:
     - content.tabs.link
     - content.code.copy
     - content.code.annotate
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.path
+    - content.action.edit
+    # - navigation.tabs
+    # - navigation.tabs.sticky
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
       primary: deep orange
+      accent: yellow
       toggle:
         icon: material/brightness-auto
         name: Switch to light mode
@@ -42,6 +53,7 @@ theme:
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       primary: deep orange
+      accent: yellow
       scheme: default
       toggle:
         icon: material/brightness-7
@@ -50,6 +62,7 @@ theme:
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       primary: deep orange
+      accent: yellow
       scheme: slate
       toggle:
         icon: material/brightness-4
@@ -75,6 +88,9 @@ extra:
   version:
     provider: mike
     default: latest
+  analytics:
+    provider: custom
+    api_key: 167aefed6bd10a9200b052a52504ff5
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/aliabbasjaffri
@@ -84,6 +100,17 @@ extra:
       link: https://discord.gg/P49NPVNj
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/aliabbasjaffri/
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+    cookies:
+      analytics: analytics by amplitude
+    actions:
+      - accept
 
 plugins:
   - privacy
@@ -91,3 +118,7 @@ plugins:
   - git-revision-date-localized:
       enable_creation_date: false
       type: iso_date
+
+copyright: >
+  Copyright &copy; 2023 - 2024 platinfra –
+  <a href="#__consent">Change cookie settings</a>

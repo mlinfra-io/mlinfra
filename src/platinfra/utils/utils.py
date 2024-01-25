@@ -15,6 +15,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 
 from .constants import TF_PATH
 
@@ -111,3 +112,17 @@ def terraform_tested_version():
 #             "Visit `https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html` "
 #             "for more information."
 #         )
+
+
+def safe_run(func):  # type: ignore
+    def func_wrapper(*args, **kwargs):  # type: ignore
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            if hasattr(sys, "_called_from_test"):
+                raise e
+            else:
+                print(e)
+                return None
+
+    return func_wrapper
