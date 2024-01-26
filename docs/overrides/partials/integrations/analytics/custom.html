@@ -1,6 +1,5 @@
 <script>
   var consent = __md_get("__consent");
-  var unique_id = uuid();
   var amplitude_analytics = false;
 
   if ("analytics" in consent && consent.analytics !== undefined) {
@@ -146,10 +145,15 @@
       amplitude.init("{{ config.extra.analytics.api_key }}", {
         defaultTracking: true,
       });
-
-      amplitude.setDeviceId(unique_id);
-      amplitude.setUserId(unique_id);
-      amplitude.setOptOut(amplitude_analytics_opt);
+      const event_properties = {
+        page_viewed: "url.pathname",
+      };
+      const event = {
+        event_type: "Page Viewed",
+        event_properties,
+      };
+      amplitude.track(event);
+      amplitude.setOptOut(amplitude_analytics);
     });
   });
 </script>
