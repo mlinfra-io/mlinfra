@@ -11,8 +11,8 @@ body:
     id: system-information
     attributes:
       label: System Information
-      description: "Please provide details about the system where the bug occurred (e.g., OS, browser, version)."
-      placeholder: "e.g., Windows 10, Chrome 90.0"
+      description: "Please provide details about your Python and Terraform environment. Include Python version, Terraform version, and any relevant dependencies or modules."
+      placeholder: "e.g., Python 3.10.0, Terraform v1.6.0"
     validations:
       required: true
 
@@ -41,14 +41,16 @@ body:
     attributes:
       value: "## Code of Conduct\nBy submitting this issue, I agree to abide by the [Code of Conduct](https://github.com/platinfra/platinfra/blob/main/CODE_OF_CONDUCT.md)."
 
-  - type: checkboxes
+  - type: dropdown
     id: willingness
     attributes:
       label: Willingness to Contribute
       description: "Are you willing to contribute to the resolution of this issue by submitting a pull request?"
       options:
-        - label: "Yes, I would like to work on this issue."
-        - label: "No, I am reporting this issue but do not wish to work on it."
+        - "Yes, I would like to work on this issue."
+        - "No, I am reporting this issue but do not wish to work on it."
+    validations:
+      required: true
 
   - type: markdown
     attributes:
