@@ -20,7 +20,7 @@ nav:
   - Contributing: CONTRIBUTING.md
   - Reporting Security Vulnerabilities: SECURITY.md
   - Acknowledgements: acknowledgements.md
-  - About Us: about_us.md
+  - About Me: about_me.md
 
 theme:
   name: "material"
