@@ -145,14 +145,6 @@
       amplitude.init("{{ config.extra.analytics.api_key }}", {
         defaultTracking: true,
       });
-      const event_properties = {
-        page_viewed: "url.pathname",
-      };
-      const event = {
-        event_type: "Page Viewed",
-        event_properties,
-      };
-      amplitude.track(event);
       amplitude.setOptOut(amplitude_analytics);
     });
   });
