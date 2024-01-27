@@ -8,13 +8,30 @@ body:
       value: "Thanks for taking the time to fill out this bug report!"
 
   - type: input
-    id: system-information
+    id: python-version
     attributes:
-      label: System Information
-      description: "Please provide details about your Python and Terraform environment. Include Python version, Terraform version, and any relevant dependencies or modules."
-      placeholder: "e.g., Python 3.10.0, Terraform v1.6.0"
+      label: Python Version
+      description: "Please specify your Python version."
+      placeholder: "e.g., Python 3.10"
     validations:
       required: true
+
+  - type: input
+    id: terraform-version
+    attributes:
+      label: Terraform Version
+      description: "Please specify your Terraform version."
+      placeholder: "e.g., Terraform v1.5.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Other Dependencies
+      description: "List any other modules, libraries, or dependencies in your environment."
+    validations:
+      required: false
 
   - type: textarea
     id: issue-details
