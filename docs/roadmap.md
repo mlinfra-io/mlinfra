@@ -22,27 +22,27 @@ We use the following statuses to denote the availability of deployments across C
 | :material-check-outline:  | PaaS deployment is available                  |
 | :material-check-all:      | Both, IaaS and PaaS deployments are available |
 
+#### Cloud Platforms
 
-=== "Cloud"
+| Cloud                                                 | Deployment Type Available |
+| :-----------:                                         | :-----------------:       |
+| [AWS](https://aws.amazon.com/)                        | :material-check-all:      |
+| [GCP](https://cloud.google.com/)                      | :material-close:          |
+| [Azure](https://azure.microsoft.com/en-us)            | :material-close:          |
+| [Digital Ocean Cloud](https://www.digitalocean.com/)  | :material-close:          |
+| [IBM Cloud](https://www.ibm.com/cloud)                | :material-close:          |
+| [Alibaba Cloud](https://eu.alibabacloud.com/en)       | :material-close:          |
+| [Oracle Cloud](https://www.oracle.com/cloud/)         | :material-close:          |
+| [Hetzner Cloud](https://www.hetzner.com/cloud/)       | :material-close:          |
 
-    | Cloud                                                 | Deployment Type Available |
-    | :-----------:                                         | :-----------------:       |
-    | [AWS](https://aws.amazon.com/)                        | :material-check-all:      |
-    | [GCP](https://cloud.google.com/)                      | :material-close:          |
-    | [Azure](https://azure.microsoft.com/en-us)            | :material-close:          |
-    | [Digital Ocean Cloud](https://www.digitalocean.com/)  | :material-close:          |
-    | [IBM Cloud](https://www.ibm.com/cloud)                | :material-close:          |
-    | [Alibaba Cloud](https://eu.alibabacloud.com/en)       | :material-close:          |
-    | [Oracle Cloud](https://www.oracle.com/cloud/)         | :material-close:          |
-    | [Hetzner Cloud](https://www.hetzner.com/cloud/)       | :material-close:          |
 
-=== "Local"
-    !!! note "Local deployment is only possible on local k8s platforms"
+#### Local
+!!! note "Local deployment is only possible on local k8s platforms"
 
-    | Local                             | Deployment Type Available |
-    | :-----------:                     | :-----------------:       |
-    | [K3S](https://k3s.io/)            | :material-close:          |
-    | [kind](https://kind.sigs.k8s.io/) | :material-close:          |
+| Local                             | Deployment Type Available |
+| :-----------:                     | :-----------------:       |
+| [K3S](https://k3s.io/)            | :material-close:          |
+| [kind](https://kind.sigs.k8s.io/) | :material-close:          |
 
 ## MLOps Stacks
 
@@ -62,12 +62,7 @@ We use the following statuses to denote the availability of deployments across C
     | [lakefs](https://lakefs.io/)  | :material-close:    | :material-close:    |
 
 
-### Stack Name
+#### Experiment Tracking
 
-#### Orchestrators
 
-- [ ] Kubeflow
-
-### Stack Name
-
-- [ ] Add support for Seldon
+#### Orchestrator
