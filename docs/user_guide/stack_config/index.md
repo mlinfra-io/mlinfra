@@ -11,6 +11,29 @@ The config file is made with simplicity in mind. It is comprised of 4 distinct s
 
 ### [provider](provider.md)
 
+- The `provider` block determines where the deployment of the stack config is going to take place.
+- This block also configures cloud provider's information, such as in case of AWS, account id and region of deployment.
+- A sample provider configuration can look like this:
+```yaml title="Sample Provider Configuration for AWS"
+--8<-- "docs/examples/kubernetes/lakefs/aws-lakefs.yaml:2:5"
+```
+- For more details, see the provider page.
+
 ### [deployment](deployment.md)
+
+- The `deployment` block configures the type of deployment (whether IaaS or PaaS) on the cloud provider and provides a space for adding any further configurations to the underlying cloud components.
+- The `deployment.type` can be set to `cloud_infra` for IaaS or `kubernetes` for PaaS deployments.
+- The `deployment.config` can be used to further configure the cloud components; such as the `vpc` or `kubernetes` cluster for more user defined customisations.
+- A `deployment` block can look as follows:
+=== "Simple Deployment Configuration"
+    ```yaml title="Minimal kubernetes type deployment"
+    --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs.yaml:6:7"
+    ```
+=== "Advanced Deployment Configuration"
+    ```yaml title="Advanced kubernetes type deployment with user configured vpc and k8s cluster"
+    --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs-advanced.yaml:6:26"
+    ```
+
+- For more details, see the deployment page.
 
 ### [stack](stack.md)
