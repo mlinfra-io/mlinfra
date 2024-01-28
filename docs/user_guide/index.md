@@ -1,4 +1,29 @@
-###
+### Using platinfra
+
+- `platinfra` is used as a cli which always takes `--stack-config-path` as an argument which is the path of the stack file that represents your MLOps stacks and deployment type. Following functions can be performed ona stack file
+    - `estimate-cost`: This command generates a cost breakdown of the cloud components defined in the stack config file. To use this feature, `infracost` needs to be [installed](https://www.infracost.io/docs/#1-install-infracost) on your system. An example is as follows:
+    ```bash
+    platinfra estimate-cost --stack-config-path=aws-lakefs-k8s.yaml
+    ```
+    - `generate-terraform-config`: This command generates the `*.tf.json` configuration for the stack file and allows the user to inspect the params prior to getting deployed. An example is as follows:
+    ```bash
+    platinfra generate-terraform-config --stack-config-path=aws-lakefs-k8s.yaml
+    ```
+    - `terraform`: This command is used in conjunction with another sub-command `--apply` which has the following values:
+        - `plan`: used to plan the stack config
+        - `apply`: used to apply the stack config
+        - `destroy`: used to destroy / delete the stack config
+    - Examples of these commands are as follows:
+    ```bash
+    # To plan the changes in a stack config
+    platinfra terraform --action=plan --stack-config-path=aws-lakefs-k8s.yaml
+
+    # To apply the stack config components
+    platinfra terraform --action=apply --stack-config-path=aws-lakefs-k8s.yaml
+
+    # To delete the stack config components
+    platinfra terraform --action=destroy --stack-config-path=aws-lakefs-k8s.yaml
+    ```
 
 ### Deploying a Stack
 
