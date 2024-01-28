@@ -13,15 +13,15 @@ validation:
 nav:
   - Introduction: index.md
   - User Guide:
-      - How does platinfra works: user_guide/how_platinfra_works.md
+      - user_guide/index.md
       - Stack config:
           - user_guide/stack_config/index.md
           - Provider: user_guide/stack_config/provider.md
           - Deployment: user_guide/stack_config/deployment.md
           - Stack: user_guide/stack_config/stack.md
-      # - Cloud Config:
-      #     -
-      # - Applications Config:
+        # - Cloud Config:
+        #     -
+        # - Applications Config:
   # - Tutorials:
   # - API Reference:
   - Release Notes: RELEASE_NOTES.md

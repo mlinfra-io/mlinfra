@@ -1,6 +1,6 @@
 ###
 
-### How platinfra works
+### Deploying a Stack
 
 - A sample mlops stack looks like this the following scripts.
 
