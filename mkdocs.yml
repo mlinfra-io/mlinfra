@@ -19,6 +19,7 @@ nav:
   - Release Notes: RELEASE_NOTES.md
   - Contributing: CONTRIBUTING.md
   - Reporting Security Vulnerabilities: SECURITY.md
+  - Roadmap: roadmap.md
   - Acknowledgements: acknowledgements.md
   - About Me: about_me.md
 
@@ -88,6 +89,8 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
 
 extra:
   homepage: https://platinfra.github.io/
