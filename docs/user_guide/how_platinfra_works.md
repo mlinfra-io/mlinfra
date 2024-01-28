@@ -7,48 +7,11 @@
 
 === "Simple Deployment Configuration"
     ```yaml
-    name: simple-mlops-stack
-    provider:
-      name: aws
-      account_id: "aws-12-digit-account-id"
-      region: "aws-region"
-    deployment:
-      type: cloud_infra
-    stack:
-      - data_versioning:
-          name: lakefs
-      - experiment_tracking:
-          name: mlflow
-      - pipelining:
-          name: prefect
+    --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs.yaml"
     ```
 === "Advanced Deployment Configuration"
     ```yaml
-    name: simple-mlops-stack-advanced
-    provider:
-      name: aws
-      account_id: "aws-12-digit-account-id"
-      region: "aws-region"
-    deployment:
-      type: cloud_infra
-    stack:
-      - data_versioning:
-          name: lakefs
-          params:
-            remote_tracking: true
-            database_type: "dynamodb"
-            lakefs_data_bucket_name: "lakefs-repository-data-bucket"
-            dynamodb_table_name: "lakefs_kvstore"
-      - experiment_tracking:
-          name: mlflow
-          params:
-            remote_tracking: true
-            mlflow_artifacts_bucket_name: "artifacts-storage-bucket"
-      - pipelining:
-          name: prefect
-          params:
-            remote_tracking: true
-            ec2_application_port: 9500
+    --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs-advanced.yaml"
     ```
 
 ## Stack file Composition
