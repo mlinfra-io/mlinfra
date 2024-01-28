@@ -6,5 +6,5 @@ provider:
 deployment:
   type: cloud_infra
 stack:
-  - pipelining:
+  - orchestrator:
       name: dagster

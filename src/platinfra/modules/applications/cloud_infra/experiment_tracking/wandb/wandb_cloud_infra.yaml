@@ -7,7 +7,7 @@ inputs:
   - name: subnet_id
     user_facing: false
     description: VPC Subnet ID for EC2
-    value: module.vpc.subnet_id[0]
+    value: module.vpc.public_subnets_ids[0]
     default: None
   - name: default_vpc_sg
     user_facing: false

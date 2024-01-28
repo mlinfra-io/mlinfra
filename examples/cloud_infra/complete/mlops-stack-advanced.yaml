@@ -18,7 +18,7 @@ stack:
       params:
         remote_tracking: true
         mlflow_artifacts_bucket_name: "ultimate-test-artifacts-storage-bucket"
-  - pipelining:
+  - orchestrator:
       name: prefect
       params:
         remote_tracking: true

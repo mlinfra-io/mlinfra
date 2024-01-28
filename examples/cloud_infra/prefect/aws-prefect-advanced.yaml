@@ -6,7 +6,7 @@ provider:
 deployment:
   type: cloud_infra
 stack:
-  - pipelining:
+  - orchestrator:
       name: prefect
       params:
         remote_tracking: true
