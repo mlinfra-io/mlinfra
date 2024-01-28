@@ -11,7 +11,7 @@ validation:
   unrecognized_links: warn
 
 nav:
-  - Home: index.md
+  - Introduction: index.md
   - User Guide:
       - How does platinfra works: user_guide/how_platinfra_works.md
   # - Tutorials:
