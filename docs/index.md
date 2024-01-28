@@ -15,6 +15,13 @@ The fundamental concept behind `platInfra` is to establish a universal Infrastru
 ## How does it work?
 platinfra deploys infrastructure using a declarative approach. The minimal spec for aws cloud as infra with custom applications deployed is as follows:
 
+
+!!! note "The following is just a sample configuration."
+
+    The following sample yaml serves as a reference for the configuration of a MLOps stack
+    which can be deployed using `platinfra`. Some of the stacks and their toolings are currently
+    under active development and may not be available to use right away.
+
 ```yaml
 name: aws-mlops-stack
 provider:
@@ -27,15 +34,10 @@ stack:
     - dvc # can also be pachyderm or lakefs or neptune and so on
   experiment_tracker:
     - mlflow # can be weights and biases or determined, or neptune or clearml and so on...
-  pipelining:
-    - zenml # can also be argo, or luigi, or airflow, or dagster, or prefect or flyte or kubeflow and so on...
   orchestrator:
-    - aws-batch # can also be aws step functions or aws-fargate or aws-eks or azure-aks and so on...
-  runtime_engine:
-    - ray # can also be horovod or apache spark
+    - zenml # can also be argo, or luigi, or aws-batch or airflow, or dagster, or prefect  or kubeflow or flyte
   artifact_tracker:
     - mlflow # can also be neptune or clearml or lakefs or pachyderm or determined or wandb and so on...
-  # model registry and serving are quite close, need to think about them...
   model_registry:
     - bentoml # can also be  mlflow or neptune or determined and so on...
   model_serving:
@@ -46,8 +48,10 @@ stack:
     - mlflow # can be mlflow or neptune or determined or weaveworks or prometheus or grafana and so on...
 ```
 
-The above configuration can be deployed using the following command:
+The above configuration can be simply deployed using the following command:
 
 ```bash
 platinfra terraform --action=apply --stack-config-path=aws-mlops-stack.yaml
 ```
+
+For more details, refer to the [User Guide](./user_guide/how_platinfra_works.md) section.
