@@ -1,6 +1,6 @@
 ### Using platinfra
 
-- `platinfra` is used as a cli which always takes `--stack-config-path` as an argument which is the path of the stack file that represents your MLOps stacks and deployment type. Following functions can be performed ona stack file
+- `platinfra` is used as a cli which always takes `--stack-config-path` as an argument which is the path ofg the stack file that represents your MLOps stacks and deployment type. Following functions can be performed ona stack file
     - `estimate-cost`: This command generates a cost breakdown of the cloud components defined in the stack config file. To use this feature, `infracost` needs to be [installed](https://www.infracost.io/docs/#1-install-infracost) on your system. An example is as follows:
     ```bash
     platinfra estimate-cost --stack-config-path=aws-lakefs-k8s.yaml
