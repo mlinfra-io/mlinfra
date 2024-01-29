@@ -1,7 +1,7 @@
 The deployment section is designed to enable configuration of the deployment type, either IaaS or PaaS, within your chosen cloud provider. This section is highly adaptable, requiring only one mandatory field: `type`. The `type` field accepts one of two values:
 
-- IaaS: Specified as `cloud_infra`.
-- PaaS: Specified as `kubernetes`.
+- [IaaS](https://aws.amazon.com/what-is/iaas/): Specified as `cloud_infra`.
+- [PaaS](https://aws.amazon.com/types-of-cloud-computing/): Specified as `kubernetes`.
 
 Additionally, the `config` subsection under `deployment` offers detailed, fine-grained configuration options for the respective cloud resources. These options vary based on the deployment type:
 
