@@ -57,4 +57,4 @@ We use the following statuses to denote the availability of deployments across C
     | [lakefs](https://lakefs.io/)  | :material-close:    | :material-close:    |
 
 
-The details on the rest of the roadmap would be shared soon!
+The details on the rest of the roadmap would be shared soon!g
