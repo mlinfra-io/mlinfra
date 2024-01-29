@@ -1,4 +1,4 @@
-name: aws-mlops-stack-mlflow
+name: aws-mlops-stack-wandb
 provider:
   name: aws
   account_id: "793009824629"
@@ -10,7 +10,7 @@ deployment:
       create_database_subnets: true
 stack:
   - experiment_tracking:
-      name: mlflow
+      name: wandb
       params:
         remote_tracking: true
         wandb_artifacts_bucket_name: "wandb-artifacts-bucket"
