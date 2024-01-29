@@ -1,4 +1,4 @@
-site_name: ""
+site_name: "platinfra"
 site_url: https://platinfra.github.io/
 repo_name: platinfra
 repo_url: https://github.com/platinfra/platinfra
@@ -9,6 +9,9 @@ validation:
   omitted_files: warn
   absolute_links: warn
   unrecognized_links: warn
+
+watch:
+  - examples/
 
 nav:
   - Introduction: index.md
@@ -28,7 +31,6 @@ nav:
           - cloud_infra: code/aws/cloud_infra.md
           - kubernetes: code/aws/kubernetes.md
   - Contributing: CONTRIBUTING.md
-  # - Roadmap: roadmap.md
   - Reporting Security Vulnerabilities: SECURITY.md
   - Release Notes: RELEASE_NOTES.md
   - Acknowledgements: acknowledgements.md
