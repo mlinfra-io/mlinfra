@@ -12,13 +12,14 @@
 
 import tasks
 from invoke import Collection, Program
+from platinfra.utils.constants import VERSION
 
 namespace = Collection()
 namespace.add_task(tasks.terraform)
 namespace.add_task(tasks.estimate_cost)
 namespace.add_task(tasks.generate_terraform_config)
 
-program = Program(version="0.0.1", namespace=namespace, name="platinfra")
+program = Program(version=VERSION, namespace=namespace, name="platinfra")
 
 
 def cli() -> None:

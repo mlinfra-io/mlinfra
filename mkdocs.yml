@@ -11,15 +11,28 @@ validation:
   unrecognized_links: warn
 
 nav:
-  - Home: index.md
+  - Introduction: index.md
   - User Guide:
-      - How does platinfra works: user_guide/how_platinfra_works.md
-  # - Tutorials:
-  # - API Reference:
-  - Release Notes: RELEASE_NOTES.md
+      - user_guide/index.md
+      - Stack config:
+          - user_guide/stack_config/index.md
+          - Provider: user_guide/stack_config/provider.md
+          - Deployment: user_guide/stack_config/deployment.md
+          - Stack: user_guide/stack_config/stack.md
+      - Cloud Config:
+          - user_guide/cloud_config/index.md
+      - Application Config:
+          - user_guide/application_config/index.md
+  - Examples:
+      - AWS:
+          - cloud_infra: code/aws/cloud_infra.md
+          - kubernetes: code/aws/kubernetes.md
   - Contributing: CONTRIBUTING.md
+  # - Roadmap: roadmap.md
   - Reporting Security Vulnerabilities: SECURITY.md
-  - Acknowledgements: Acknowledgements.md
+  - Release Notes: RELEASE_NOTES.md
+  - Acknowledgements: acknowledgements.md
+  - About Me: about_me.md
 
 theme:
   name: "material"
@@ -30,7 +43,7 @@ theme:
   logo: _images/platinfra-white.png
   favicon: _images/platinfra-minimal-white.png
   features:
-    - content.tabs.link
+    # - content.tabs.link
     - content.code.copy
     - content.code.annotate
     - navigation.instant
@@ -39,8 +52,8 @@ theme:
     - navigation.tracking
     - navigation.path
     - content.action.edit
-    # - navigation.tabs
-    # - navigation.tabs.sticky
+    - navigation.tabs
+    - navigation.tabs.sticky
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
@@ -69,18 +82,33 @@ theme:
         name: Switch to system preference
   icon:
     repo: fontawesome/brands/github
+    admonition:
+      note: material/lightbulb-alert
 
 markdown_extensions:
+  - abbr
+  - tables
+  - def_list
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.snippets
+  - pymdownx.superfences
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
-  - def_list
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra:
   homepage: https://platinfra.github.io/
@@ -97,9 +125,11 @@ extra:
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/platinfra
     - icon: fontawesome/brands/discord
-      link: https://discord.gg/P49NPVNj
+      link: https://discord.gg/BwuMen4XEE
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/aliabbasjaffri/
+    - icon: fontawesome/brands/medium
+      link: https://medium.com/@aliabbasjaffri_/
   consent:
     title: Cookie consent
     description: >-
@@ -115,6 +145,7 @@ extra:
 plugins:
   - privacy
   - search
+  - section-index
   - git-revision-date-localized:
       enable_creation_date: false
       type: iso_date

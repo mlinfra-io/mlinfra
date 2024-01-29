@@ -1,0 +1,33 @@
+name: Bump version
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch
+          release_branches: main
+          tag_prefix: ""
+
+      - name: Update version in Python pyproject.toml
+        if: steps.tag_version.outputs.new_tag != ''
+        run: |
+          NEW_VERSION=${{ steps.tag_version.outputs.new_tag }}
+          echo "New version: $NEW_VERSION"
+
+          # Update the version in pyproject.toml
+          sed -i "s/^version = .*/version = '\"${NEW_VERSION}\"'/" pyproject.toml
+
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add pyproject.toml
+          git commit -m "Update version to $NEW_VERSION"
+          git push

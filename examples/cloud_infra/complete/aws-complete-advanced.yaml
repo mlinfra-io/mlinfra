@@ -5,6 +5,9 @@ provider:
   region: "eu-central-1"
 deployment:
   type: cloud_infra
+  config:
+    vpc:
+      create_database_subnets: true
 stack:
   - data_versioning:
       name: lakefs
@@ -17,8 +20,8 @@ stack:
       name: mlflow
       params:
         remote_tracking: true
-        mlflow_artifacts_bucket_name: "ultimate-test-artifacts-storage-bucket"
-  - pipelining:
+        mlflow_artifacts_bucket_name: "artifacts-storage-bucket"
+  - orchestrator:
       name: prefect
       params:
         remote_tracking: true

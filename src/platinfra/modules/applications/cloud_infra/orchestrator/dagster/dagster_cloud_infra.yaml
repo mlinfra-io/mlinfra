@@ -7,7 +7,7 @@ inputs:
   - name: subnet_id
     user_facing: false
     description: VPC Subnet ID for EC2
-    value: module.vpc.subnet_id[0]
+    value: module.vpc.public_subnets_ids[0]
     default: None
   - name: default_vpc_sg
     user_facing: false
@@ -26,19 +26,25 @@ inputs:
     default: None
   - name: rds_instance_class
     user_facing: true
-    description: RDS instance class to deploy prefect backend on
+    description: RDS instance class to deploy dagster backend on
     default: "db.t4g.medium"
-  - name: prefect_version
+  - name: dagster_artifacts_bucket_name
     user_facing: true
-    description: prefect pypa version
-    default: "2.11.0"
+    description: dagster artifacts destination bucket name
+    default: "ultimate-dagster-artifacts-storage-bucket"
+  - name: app_versions
+    user_facing: true
+    description: dagster and dagit pypa versions
+    default:
+      dagit: "1.3.12"
+      dagster: "1.3.12"
   - name: ec2_application_port
     user_facing: true
-    description: Application port for prefect application
+    description: Application port for dagster application
     default: 80
   - name: ec2_instance_type
     user_facing: true
-    description: AWS Instance type to deploy prefect application on
+    description: AWS Instance type to deploy dagster application on
     default: "t2.micro"
   - name: ec2_spot_instance
     user_facing: true
@@ -46,19 +52,14 @@ inputs:
     default: true
   - name: remote_tracking
     user_facing: true
-    description: Deployed an external RDS server as backend store and S3 as artifact store for prefect.
+    description: Deployed an external RDS server as backend store and S3 as artifact store for dagster. More info on [dagster official site](https://dagster.org/docs/latest/tracking.html#scenario-4-dagster-with-remote-tracking-server-backend-and-artifact-stores)
     default: false
-  - name: tags
-    user_facing: true
-    description: Tags to be added to the deployed resources.
-    default:
-      Name: "ultimate-mlops-prefect-instance"
 outputs:
-  - name: prefect_server_address
-    description: prefect server address. Right now its composed of EC2 instance IP address, with http scheme.
+  - name: dagster_server_address
+    description: dagster server address. Right now its composed of EC2 instance IP address, with http scheme.
     export: true
-  - name: prefect_server_dns_address
-    description: prefect server DNS address.
+  - name: dagster_server_dns_address
+    description: dagster server DNS address.
     export: true
 clouds:
   - aws

@@ -62,9 +62,7 @@ class CloudInfraDeployment(AbstractDeployment):
         if self.provider == CloudProvider.AWS:
             json_module = {"module": {"vpc": {}}}
             json_module["module"]["vpc"]["name"] = f"{self.stack_name}-vpc"
-            json_module["module"]["vpc"]["source"] = (
-                relative_project_root() / "modules/cloud/aws/vpc"
-            )
+            json_module["module"]["vpc"]["source"] = "./modules/cloud/aws/vpc"
 
             if "config" in self.deployment_config and "vpc" in self.deployment_config["config"]:
                 for vpc_config in self.deployment_config["config"]["vpc"]:

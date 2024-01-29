@@ -60,7 +60,7 @@ This project will be supporting the following providers:
 `platinfra` intends to support as many [MLOps tools](https://github.com/EthicalML/awesome-production-machine-learning/) deployable in a platform in their standalone as well as high availability across different layers of an MLOps stack:
 - data_versioning
 - experiment_tracker
-- pipelining / orchestrator
+- orchestrator
 - artifact_tracker / model_registry
 - model_serving / model_inference
 - monitoring
@@ -87,7 +87,7 @@ stack:
     - secrets_manager # can also be vault or any other
   experiment_tracker:
     - mlflow # can be weights and biases or determined, or neptune or clearml and so on...
-  pipelining:
+  orchestrator:
     - zenml # can also be argo, or luigi, or airflow, or dagster, or prefect or flyte or kubeflow and so on...
   orchestrator:
     - aws-batch # can also be aws step functions or aws-fargate or aws-eks or azure-aks and so on...

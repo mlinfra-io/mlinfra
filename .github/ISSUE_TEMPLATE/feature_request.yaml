@@ -1,0 +1,45 @@
+name: Feature Request
+description: Suggest an idea for this project
+title: "[Feature]: "
+labels: ["type/feature \U0001F4A1"]
+body:
+  - type: markdown
+    attributes:
+      value: "## Feature Request\nPlease fill in this form to describe the feature request in detail."
+
+  - type: textarea
+    attributes:
+      label: Describe the Feature
+      description: "Provide a detailed description of the feature you're proposing."
+      placeholder: "Explain the feature here..."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Importance of the Feature
+      description: "Explain why this feature is important. How will it benefit the project or its users?"
+      placeholder: "Describe the importance here..."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other additional context about the feature here.
+    validations:
+      required: false
+
+  - type: dropdown
+    attributes:
+      label: Feature Category
+      description: "Select the category that best describes the feature."
+      options:
+        - New Cloud Provider
+        - MLOps Stack Application
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "### Additional Information\nFeel free to add any other context or screenshots about the feature request here."

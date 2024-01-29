@@ -51,6 +51,7 @@ class StackGenerator:
         # this has to be done now as the stack config is read
         # and the provider details are needed for the state file name
         # and the region
+        # TODO: Throw an error if the stack name exceeds 37 characters
         self.stack_name = self.stack_config["name"]
         self.region = self.stack_config["provider"]["region"]
         self.provider = self.configure_provider()

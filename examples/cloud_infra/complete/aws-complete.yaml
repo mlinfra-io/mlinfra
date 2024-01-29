@@ -10,5 +10,5 @@ stack:
       name: lakefs
   - experiment_tracking:
       name: mlflow
-  - pipelining:
+  - orchestrator:
       name: prefect

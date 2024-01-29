@@ -53,7 +53,8 @@ Documentation = "https://platinfra.github.io/"
 docs = [
     "mkdocs-material",
     "mkdocs-git-revision-date-localized-plugin",
-    "mike"
+    "mike",
+    "mkdocs-section-index"
 ]
 
 # Automatically determine version number from Git tags

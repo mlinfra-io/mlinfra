@@ -5,8 +5,11 @@ provider:
   region: "eu-central-1"
 deployment:
   type: cloud_infra
+  config:
+    vpc:
+      create_database_subnets: true
 stack:
-  - pipelining:
+  - orchestrator:
       name: prefect
       params:
         remote_tracking: true

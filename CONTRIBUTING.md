@@ -10,12 +10,22 @@ as well as any project-related communication through discussions.
 - To get started, first pat yourself!
 
 - platinfra is organised as follows:
-    - `platinfra` cli and all terraform modules are in the `platinfra` repo
+    - `platinfra` cli, all terraform modules and docs are in the `platinfra` repo
     - Generated docs are in `platinfra.github.io` repo but the source code is in `platinfra` repo.
 
 - Fork the platinfra repo and clone it to your local machine.
+- Create a python virtual environment and install the dependencies:
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements-dev.txt
+```
 - To get started with the website, fork both platinfra and platinfra.github.io repos and clone them to your local machine.
-- To get started with the documentation, go to `platinfra/docs` and run `mkdocs serve` to view the docs locally.
+- To get started with the documentation, you'd need to first install the docs dependencies:
+```bash
+pip install -r requirements-docs.txt
+```
+- go to `platinfra/docs` and run `mkdocs serve` to view the docs locally.
 
 ## Types of Contributions
 
@@ -28,7 +38,6 @@ as well as any project-related communication through discussions.
     - Detailed steps to reproduce the bug.
     - Any details about your local setup that might be helpful in troubleshooting.
     - When posting Python stack traces, please quote them using [Markdown blocks](https://help.github.com/articles/creating-and-highlighting-code-blocks/).
-    - Label the issue with `bug`
 
 
 ### Submitting Ideas or Feature Requests
@@ -37,7 +46,6 @@ The best way is to file an issue on GitHub:
 
 - Explain in detail how it would work.
 - Keep the scope as narrow as possible, to make it easier to implement.
-- Label the issue with `feature-request`
 
 ### Improve Documentation
 
@@ -45,7 +53,7 @@ platinfra could always use better documentation, so feel free to create an issue
 
 ## Bugfix resolution time expectations
 
-- We will respond to all new issues within 2-3 days
+- We will respond to all new issues as soon as possible
 - For any serious (production breaking) bug we will try to resolve ASAP and do a hotfix release
 - For other bugs we will try to resolve them within the next 2 releases (There is a release every 2 weeks).
 
