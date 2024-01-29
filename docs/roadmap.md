@@ -3,11 +3,6 @@
 - Infrastructure-as-a-Service ( [IaaS](https://aws.amazon.com/what-is/iaas/) )
 - Platform-as-a-Service ( [PaaS](https://aws.amazon.com/types-of-cloud-computing/) )
 
-Software-as-a-Service ( [SaaS](https://aws.amazon.com/saas/) ) deployments were not considered in initial planning, but if anyone has more experience in SaaS IaC, and is interested in supporting this, get in touch!
-
-!!! note "Did i miss your favourite deployment environment?"
-
-    If yes, then please open a Feature Request, write down your ideas and i'll get in touch with you!
 
 ## Deployment Environments
 
@@ -62,7 +57,4 @@ We use the following statuses to denote the availability of deployments across C
     | [lakefs](https://lakefs.io/)  | :material-close:    | :material-close:    |
 
 
-#### Experiment Tracking
-
-
-#### Orchestrator
+The details on the rest of the roadmap would be shared soon!
