@@ -35,6 +35,8 @@ nav:
   - Release Notes: RELEASE_NOTES.md
   - Acknowledgements: acknowledgements.md
   - About Me: about_me.md
+not_in_nav: |
+  /roadmap.md
 
 theme:
   name: "material"
@@ -103,6 +105,7 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.tabbed:
       alternate_style: true
+      combine_header_slug: true
       slugify: !!python/object/apply:pymdownx.slugs.slugify
         kwds:
           case: lower
@@ -111,6 +114,9 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.snippets:
+      base_path: !relative $config_dir # this is necessary otherwise code snippets don't show up.
+      url_download: true
 
 extra:
   homepage: https://platinfra.github.io/
