@@ -15,4 +15,4 @@ I would also like to thank the following individuals:
 
 - [Ghania Riaz](https://www.linkedin.com/in/ghaniariaz) for her patience in bearing me with a laptop on weekdays, holidays and our vacations!
 - [Nicholas Junge](https://www.linkedin.com/in/nicholas-junge/) for his valuable feedback and support in the early stages of this project.
-- [Hamza Tahir](https://www.linkedin.com/in/hamzatahirofficial); an old friend and an endless source of inspiration on my journey in the MLOps space.
+- [Hamza Tahir](https://www.linkedin.com/in/hamzatahirofficial): an old friend and an endless source of inspiration on my journey in the MLOps space.
