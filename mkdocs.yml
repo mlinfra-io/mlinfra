@@ -21,7 +21,7 @@ nav:
           - Stack: user_guide/stack_config/stack.md
       - Cloud Config:
           - user_guide/cloud_config/index.md
-      - Applications Config:
+      - Application Config:
           - user_guide/application_config/index.md
   # - Tutorials:
   # - API Reference:
