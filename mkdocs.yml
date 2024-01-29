@@ -23,10 +23,10 @@ nav:
           - user_guide/cloud_config/index.md
       - Application Config:
           - user_guide/application_config/index.md
-  # - Examples:
-  #     - AWS:
-  #         - vms:
-  #         - kubernetes:
+  - Examples:
+      - AWS:
+          - cloud_infra: code/aws/cloud_infra.md
+          - kubernetes: code/aws/kubernetes.md
   - Contributing: CONTRIBUTING.md
   # - Roadmap: roadmap.md
   - Reporting Security Vulnerabilities: SECURITY.md
