@@ -19,9 +19,10 @@ nav:
           - Provider: user_guide/stack_config/provider.md
           - Deployment: user_guide/stack_config/deployment.md
           - Stack: user_guide/stack_config/stack.md
-        # - Cloud Config:
-        #     -
-        # - Applications Config:
+      - Cloud Config:
+          - user_guide/cloud_config/index.md
+      - Applications Config:
+          - user_guide/application_config/index.md
   # - Tutorials:
   # - API Reference:
   - Release Notes: RELEASE_NOTES.md
