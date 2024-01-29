@@ -1,4 +1,5 @@
-`provider` block configures the cloud provider to deploy the stack config. The `provider` logic has been isolated away from the `deployment` logic keeping user's feasibility of cross-cloud-deployment in mind. A user should be able to use the same config and deploy the entire stack at another cloud provider by just changing the `provider` section and keeping the rest of the stack config same.
+The `provider` block is designed to configure the cloud provider for deploying the stack configuration. To facilitate user convenience in cross-cloud deployment, the `provider` logic has been distinctly separated from the `deployment` logic. This approach ensures that a user can deploy the same stack on a different cloud provider by simply modifying the provider section.
+
 
 #### AWS
 
