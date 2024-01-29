@@ -31,7 +31,7 @@ deployment:
   type: kubernetes
 stack:
   data_versioning:
-    - dvc # can also be pachyderm or lakefs or neptune and so on
+    - lakefs # can also be pachyderm or neptune and so on
   experiment_tracker:
     - mlflow # can be weights and biases or determined, or neptune or clearml and so on...
   orchestrator:
