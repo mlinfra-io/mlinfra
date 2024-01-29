@@ -40,7 +40,7 @@ theme:
   logo: _images/platinfra-white.png
   favicon: _images/platinfra-minimal-white.png
   features:
-    - content.tabs.link
+    # - content.tabs.link
     - content.code.copy
     - content.code.annotate
     - navigation.instant
@@ -92,13 +92,15 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.snippets
   - pymdownx.superfences
-  - pymdownx.inlinehilite
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.tabbed:
       alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.emoji:

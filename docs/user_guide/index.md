@@ -37,18 +37,27 @@ platinfra terraform --action=destroy --stack-config-path=aws-lakefs-k8s.yaml
 
 ### Deploying a Stack
 
-- A sample mlops stack looks like this the following scripts.
+- A sample mlops stack for deployment on Cloud IaaS looks as follows:
 
-=== "Simple Deployment Configuration"
-    !!! info "This stack config deploys an EKS cluster with LakeFS"
-    ```yaml
-    --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs.yaml"
-    ```
-=== "Advanced Deployment Configuration"
-    !!! info "The same stack config can be configured to quite an extent"
-    ```yaml
-    --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs-advanced.yaml"
-    ```
+    ===+ "Simple Deployment Configuration"
+        ```yaml title="This stack config deploys an EKS cluster with LakeFS"
+        --8<-- "docs/examples/cloud_infra/complete/mlops-stack.yaml"
+        ```
+    === "Advanced Deployment Configuration"
+        ```yaml title="The same stack config can be configured to quite an extent"
+        --8<-- "docs/examples/cloud_infra/complete/mlops-stack-advanced.yaml"
+        ```
+
+- Whereas sample mlops stack for deployment on Cloud PaaS looks as follows:
+
+    ===+ "Simple Deployment Configuration"
+        ```yaml title="This stack config deploys an EKS cluster with LakeFS"
+        --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs.yaml"
+        ```
+    === "Advanced Deployment Configuration"
+        ```yaml title="The same stack config can be configured to quite an extent"
+        --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs-advanced.yaml"
+        ```
 
 - Terraform plan from this configuration can be inspected using the `platinfra` cli command:
 ```
