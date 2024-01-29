@@ -29,9 +29,9 @@ nav:
   #         - kubernetes:
   - Contributing: CONTRIBUTING.md
   # - Roadmap: roadmap.md
-  - Acknowledgements: acknowledgements.md
   - Reporting Security Vulnerabilities: SECURITY.md
   - Release Notes: RELEASE_NOTES.md
+  - Acknowledgements: acknowledgements.md
   - About Me: about_me.md
 
 theme:
