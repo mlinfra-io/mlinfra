@@ -23,13 +23,15 @@ nav:
           - user_guide/cloud_config/index.md
       - Application Config:
           - user_guide/application_config/index.md
-  # - Tutorials:
-  # - API Reference:
-  - Release Notes: RELEASE_NOTES.md
+  # - Examples:
+  #     - AWS:
+  #         - vms:
+  #         - kubernetes:
   - Contributing: CONTRIBUTING.md
-  - Reporting Security Vulnerabilities: SECURITY.md
-  - Roadmap: roadmap.md
+  # - Roadmap: roadmap.md
   - Acknowledgements: acknowledgements.md
+  - Reporting Security Vulnerabilities: SECURITY.md
+  - Release Notes: RELEASE_NOTES.md
   - About Me: about_me.md
 
 theme:
@@ -50,8 +52,8 @@ theme:
     - navigation.tracking
     - navigation.path
     - content.action.edit
-    # - navigation.tabs
-    # - navigation.tabs.sticky
+    - navigation.tabs
+    - navigation.tabs.sticky
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
