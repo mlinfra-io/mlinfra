@@ -8,7 +8,7 @@ Additionally, the `config` subsection under `deployment` offers detailed, fine-g
 For `cloud_infra`, the configuration is limited to `vpc`.
 For `kubernetes`, configurations extend to `vpc`, `kubernetes`, and `node_groups`.
 
-A `deployment` block can look as follows:
+A sample `deployment` block can look as follows:
 === "Simple Deployment Configuration"
     ```yaml title="Minimal kubernetes type deployment"
     --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs.yaml:6:7"
