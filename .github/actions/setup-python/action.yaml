@@ -4,6 +4,10 @@ inputs:
   pythonVersion:
     description: Python version to set up (see actions/setup-python@v4)
     required: true
+  dependencyType:
+    description: The type of dependencies to install (dev or docs)
+    required: true
+    default: "dev"
 runs:
   using: "composite"
   steps:
@@ -19,6 +23,10 @@ runs:
     - name: Install dependencies
       run: |
         pip install --upgrade pip
-        pip install -r requirements-dev.txt -r requirements-docs.txt
+        if [[ "${{ inputs.dependencyType }}" == "dev" ]]; then
+          pip install -r requirements-dev.txt
+        elif [[ "${{ inputs.dependencyType }}" == "docs" ]]; then
+          pip install -r requirements-docs.txt
+        fi
         pip install -e . --no-deps
       shell: bash

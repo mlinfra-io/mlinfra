@@ -28,6 +28,7 @@ jobs:
         uses: ./.github/actions/setup-python
         with:
           pythonVersion: "3.10"
+          dependencyType: "dev"
       - name: Install build tools
         run: |
           pip install build
@@ -37,6 +38,20 @@ jobs:
         with:
           name: dist
           path: dist
+  publish_docs:
+    name: Publish documentation
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # for documentation builds
+      - name: Set up Python and dependencies
+        uses: ./.github/actions/setup-python
+        with:
+          pythonVersion: "3.10"
+          dependencyType: "docs"
       - name: Publish documentation
         uses: ./.github/actions/mike-docs
         with:
