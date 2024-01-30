@@ -35,7 +35,6 @@ dependencies = [
     "pytest",
     "mypy",
     "getmac",
-    "toml",
     "requests",
     "pre-commit>=3.3.3"
 ]

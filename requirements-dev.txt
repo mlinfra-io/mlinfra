@@ -68,8 +68,6 @@ six==1.16.0
     # via python-dateutil
 smmap==5.0.1
     # via gitdb
-toml==0.10.2
-    # via mlinfra (pyproject.toml)
 typing-extensions==4.9.0
     # via mypy
 urllib3==2.0.7
