@@ -11,9 +11,9 @@
 #     permissions and limitations under the License.
 
 from invoke import task
-from platinfra.amplitude import amplitude_client
-from platinfra.terraform.terraform import Terraform
-from platinfra.utils.constants import TF_PATH
+from mlinfra.amplitude import amplitude_client
+from mlinfra.terraform.terraform import Terraform
+from mlinfra.utils.constants import TF_PATH
 
 
 @task(

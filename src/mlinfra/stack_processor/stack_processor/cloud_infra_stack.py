@@ -13,12 +13,12 @@
 import json
 
 import yaml
-from platinfra.enums.cloud_provider import CloudProvider
-from platinfra.enums.deployment_type import DeploymentType
-from platinfra.stack_processor.stack_processor.stack import (
+from mlinfra.enums.cloud_provider import CloudProvider
+from mlinfra.enums.deployment_type import DeploymentType
+from mlinfra.stack_processor.stack_processor.stack import (
     AbstractStack,
 )
-from platinfra.utils.constants import TF_PATH
+from mlinfra.utils.constants import TF_PATH
 
 
 class CloudInfraStack(AbstractStack):

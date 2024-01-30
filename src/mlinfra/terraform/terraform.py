@@ -18,11 +18,11 @@ import subprocess
 import boto3
 import yaml
 from botocore.config import Config
-from platinfra import absolute_project_root
-from platinfra.stack_processor.stack_generator import StackGenerator
-from platinfra.terraform.state_helper import StateHelper
-from platinfra.utils.constants import TF_PATH
-from platinfra.utils.utils import (
+from mlinfra import absolute_project_root
+from mlinfra.stack_processor.stack_generator import StackGenerator
+from mlinfra.terraform.state_helper import StateHelper
+from mlinfra.utils.constants import TF_PATH
+from mlinfra.utils.utils import (
     clean_tf_directory,
     create_symlinks,
     terraform_tested_version,

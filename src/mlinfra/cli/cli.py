@@ -12,7 +12,7 @@
 
 import tasks
 from invoke import Collection, Program
-from platinfra.utils.constants import VERSION
+from mlinfra.utils.constants import VERSION
 
 namespace = Collection()
 namespace.add_task(tasks.terraform)

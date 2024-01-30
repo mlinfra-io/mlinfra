@@ -14,9 +14,9 @@ import json
 from abc import ABC, abstractmethod
 
 import yaml
-from platinfra import absolute_project_root
-from platinfra.enums.cloud_provider import CloudProvider
-from platinfra.enums.deployment_type import DeploymentType
+from mlinfra import absolute_project_root
+from mlinfra.enums.cloud_provider import CloudProvider
+from mlinfra.enums.deployment_type import DeploymentType
 
 
 class AbstractStack(ABC):

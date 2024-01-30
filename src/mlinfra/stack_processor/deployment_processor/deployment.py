@@ -14,7 +14,7 @@ import json
 from abc import ABC, abstractmethod
 
 import yaml
-from platinfra.enums.cloud_provider import CloudProvider
+from mlinfra.enums.cloud_provider import CloudProvider
 
 
 class AbstractDeployment(ABC):

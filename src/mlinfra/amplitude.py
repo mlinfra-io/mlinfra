@@ -19,13 +19,13 @@ from typing import Optional
 
 from getmac import get_mac_address
 from git.config import GitConfigParser
-from platinfra.utils.constants import (
+from mlinfra.utils.constants import (
     DEV_VERSION,
     PLATINFRA_DISABLE_REPORTING,
     SESSION_ID,
     VERSION,
 )
-from platinfra.utils.utils import safe_run
+from mlinfra.utils.utils import safe_run
 from requests import codes, post
 
 

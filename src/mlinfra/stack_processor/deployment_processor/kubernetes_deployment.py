@@ -13,12 +13,12 @@
 import json
 
 import yaml
-from platinfra import absolute_project_root
-from platinfra.enums.cloud_provider import CloudProvider
-from platinfra.stack_processor.deployment_processor.deployment import (
+from mlinfra import absolute_project_root
+from mlinfra.enums.cloud_provider import CloudProvider
+from mlinfra.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
 )
-from platinfra.utils.utils import generate_tf_json
+from mlinfra.utils.utils import generate_tf_json
 
 
 class KubernetesDeployment(AbstractDeployment):

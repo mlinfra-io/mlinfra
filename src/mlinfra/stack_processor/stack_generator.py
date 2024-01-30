@@ -10,21 +10,21 @@
 #     or implied. See the License for the specific language governing
 #     permissions and limitations under the License.
 
-from platinfra.enums.cloud_provider import CloudProvider
-from platinfra.enums.deployment_type import DeploymentType
-from platinfra.stack_processor.deployment_processor.cloud_infra_deployment import (
+from mlinfra.enums.cloud_provider import CloudProvider
+from mlinfra.enums.deployment_type import DeploymentType
+from mlinfra.stack_processor.deployment_processor.cloud_infra_deployment import (
     CloudInfraDeployment,
 )
-from platinfra.stack_processor.deployment_processor.kubernetes_deployment import (
+from mlinfra.stack_processor.deployment_processor.kubernetes_deployment import (
     KubernetesDeployment,
 )
-from platinfra.stack_processor.provider_processor.aws_provider import (
+from mlinfra.stack_processor.provider_processor.aws_provider import (
     AWSProvider,
 )
-from platinfra.stack_processor.stack_processor.cloud_infra_stack import (
+from mlinfra.stack_processor.stack_processor.cloud_infra_stack import (
     CloudInfraStack,
 )
-from platinfra.stack_processor.stack_processor.kubernetes_stack import (
+from mlinfra.stack_processor.stack_processor.kubernetes_stack import (
     KubernetesStack,
 )
 

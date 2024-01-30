@@ -24,11 +24,11 @@
 import json
 
 import yaml
-from platinfra import absolute_project_root
-from platinfra.stack_processor.provider_processor.provider import (
+from mlinfra import absolute_project_root
+from mlinfra.stack_processor.provider_processor.provider import (
     AbstractProvider,
 )
-from platinfra.utils.constants import TF_PATH
+from mlinfra.utils.constants import TF_PATH
 
 
 class AWSProvider(AbstractProvider):
