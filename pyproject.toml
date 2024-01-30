@@ -31,11 +31,12 @@ dependencies = [
     "invoke",
     "boto3",
     "pyyaml",
-    "black",
+    "GitPython",
     "pytest",
     "mypy",
     "getmac",
-    "toml"
+    "toml",
+    "requests"
 ]
 
 [tool.setuptools]

@@ -8,8 +8,6 @@ babel==2.14.0
     # via
     #   mkdocs-git-revision-date-localized-plugin
     #   mkdocs-material
-black==23.12.1
-    # via mlinfra (pyproject.toml)
 boto3==1.7.84
     # via mlinfra (pyproject.toml)
 botocore==1.10.84
@@ -21,9 +19,7 @@ certifi==2023.11.17
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
-    # via
-    #   black
-    #   mkdocs
+    # via mkdocs
 colorama==0.4.6
     # via mkdocs-material
 docutils==0.20.1
@@ -35,7 +31,9 @@ ghp-import==2.1.0
 gitdb==4.0.11
     # via gitpython
 gitpython==3.1.41
-    # via mkdocs-git-revision-date-localized-plugin
+    # via
+    #   mkdocs-git-revision-date-localized-plugin
+    #   mlinfra (pyproject.toml)
 idna==3.6
     # via requests
 importlib-metadata==7.0.1
@@ -85,24 +83,17 @@ mkdocs-section-index==0.3.8
 mypy==1.8.0
     # via mlinfra (pyproject.toml)
 mypy-extensions==1.0.0
-    # via
-    #   black
-    #   mypy
+    # via mypy
 packaging==23.2
     # via
-    #   black
     #   mkdocs
     #   pytest
 paginate==0.5.6
     # via mkdocs-material
 pathspec==0.12.1
-    # via
-    #   black
-    #   mkdocs
+    # via mkdocs
 platformdirs==4.1.0
-    # via
-    #   black
-    #   mkdocs
+    # via mkdocs
 pluggy==1.3.0
     # via pytest
 pygments==2.17.2
@@ -131,7 +122,9 @@ pyyaml-env-tag==0.1
 regex==2023.12.25
     # via mkdocs-material
 requests==2.31.0
-    # via mkdocs-material
+    # via
+    #   mkdocs-material
+    #   mlinfra (pyproject.toml)
 s3transfer==0.1.13
     # via boto3
 six==1.16.0
