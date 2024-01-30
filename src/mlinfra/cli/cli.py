@@ -19,14 +19,14 @@ namespace.add_task(tasks.terraform)
 namespace.add_task(tasks.estimate_cost)
 namespace.add_task(tasks.generate_terraform_config)
 
-program = Program(version=VERSION, namespace=namespace, name="platinfra")
+program = Program(version=VERSION, namespace=namespace, name="mlinfra")
 
 
 def cli() -> None:
-    """Welcome to platinfra cli! Deploy any MLOps tooling at the click of a button.
+    """Welcome to mlinfra cli! Deploy any MLOps tooling at the click of a button.
 
-    Github: https://github.com/platinfra/platinfra
-    Documentation: https://platinfra.github.io/
+    Github: https://github.com/mlinfra-tools/mlinfra
+    Documentation: https://mlinfra.io/
     """
     program.run()
 

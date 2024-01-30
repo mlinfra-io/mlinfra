@@ -38,7 +38,7 @@ class Terraform:
     - checking if following versions are correct:
         - terraform
         - mlops_cli
-    - checking if the platinfra config file exists
+    - checking if the mlinfra config file exists
     - clean .mlops_infra folder
     - check cloud credentials
     - check if region has three AZs

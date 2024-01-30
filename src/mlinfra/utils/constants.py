@@ -21,7 +21,7 @@ TF_PATH = "./.mlops_stack"
 CREATE_VPC_DB_SUBNET = ["remote_tracking"]
 
 DEV_VERSION: Final = "dev"
-PLATINFRA_DISABLE_REPORTING: Final = "PLATINFRA_DISABLE_REPORTING"
+MLINFRA_DISABLE_REPORTING: Final = "MLINFRA_DISABLE_REPORTING"
 SESSION_ID: Final = int(time() * 1000)
 
 with open("../pyproject.toml", "r") as pyproject_toml_file:

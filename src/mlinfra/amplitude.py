@@ -21,7 +21,7 @@ from getmac import get_mac_address
 from git.config import GitConfigParser
 from mlinfra.utils.constants import (
     DEV_VERSION,
-    PLATINFRA_DISABLE_REPORTING,
+    MLINFRA_DISABLE_REPORTING,
     SESSION_ID,
     VERSION,
 )
@@ -90,7 +90,7 @@ class AmplitudeClient:
         }
         headers = {"Content-Type": "application/json", "Accept": "*/*"}
 
-        if os.environ.get(PLATINFRA_DISABLE_REPORTING) is None:
+        if os.environ.get(MLINFRA_DISABLE_REPORTING) is None:
             try:
                 r = post(
                     "https://api2.amplitude.com/2/httpapi",
