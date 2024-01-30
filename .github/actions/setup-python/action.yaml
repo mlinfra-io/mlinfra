@@ -1,0 +1,23 @@
+name: Install Python dependencies
+description: Install all core and optional Python dependencies
+inputs:
+  pythonVersion:
+    description: Python version to set up (see actions/setup-python@v4)
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.pythonVersion }}
+        cache: "pip"
+        cache-dependency-path: |
+          requirements-dev.txt
+          requirements-docs.txt
+          pyproject.toml
+    - name: Install dependencies
+      run: |
+        pip install -r requirements-dev.txt -r requirements-docs.txt
+        pip install -e . --no-deps
+      shell: bash

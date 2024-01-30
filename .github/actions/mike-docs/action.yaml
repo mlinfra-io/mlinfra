@@ -1,0 +1,35 @@
+name: Documentation
+description: Build and publish documentation using mike
+inputs:
+  version:
+    description: Version number
+    required: true
+  alias:
+    description: Alias name
+  push:
+    description: Whether to push the built documentation to the repository
+    required: true
+    default: "false"
+  pre_release:
+    description: Whether this version is a pre-release version (to render a notification banner)
+    default: "false"
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        # https://github.com/jimporter/mike#deploying-via-ci
+        git fetch origin gh-pages --depth=1
+
+        # For proper UI integration: https://github.com/actions/checkout/pull/1184
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      shell: bash
+    - env:
+        DOCS_PRERELEASE: ${{ inputs.pre_release }}
+      run: |
+        MIKE_OPTIONS=( "--update-aliases" )
+        if [ "true" = "${{ inputs.push }}" ]; then
+          MIKE_OPTIONS+=( "--push" )
+        fi
+        mike deploy ${{ inputs.version }} ${{ inputs.alias }} "${MIKE_OPTIONS[@]}"
+      shell: bash
