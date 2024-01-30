@@ -1,38 +1,39 @@
-![Banner Logo](docs/_images/platinfra-logo.png)
+![Banner Logo](docs/_images/mlinfra-banner-wide.png)
 
-[![](https://img.shields.io/pypi/v/platinfra)](https://pypi.org/project/platinfra)
-![GitHub License](https://img.shields.io/github/license/platinfra/platinfra?color=orange)
-[![docs](https://img.shields.io/badge/docs-latest-orange)](https://platinfra.github.io/)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/platinfra?color=orange)
+[![](https://img.shields.io/pypi/v/mlinfra)](https://pypi.org/project/mlinfra)
+![GitHub License](https://img.shields.io/github/license/mlinfra-tools/mlinfra?color=orange)
+[![docs](https://img.shields.io/badge/docs-latest-orange)](https://mlinfra.io/)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/mlinfra?color=orange)
 ![Discord](https://img.shields.io/discord/1199078513463009321?color=orange)
 
-> _One tool to deploy all them platforms_
 
-platinfra is a combination of python and terraform tooling put together for deploying scalable MLOps infrastructure. This project aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
+> _One tool to deploy all them mlops tools_
 
-Contribute to the project by opening a issue or joining project roadmap and design related discussion on [discord](https://discord.gg/P49NPVNj). Complete roadmap will be released soon!
+`mlinfra` is a combination of python and terraform tooling put together for deploying scalable MLOps infrastructure. This project aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
+
+Contribute to the project by opening a issue or joining project roadmap and design related discussion on [discord](https://discord.gg/8eYWVvEYmR). Complete roadmap will be released soon!
 
 ## 🚀 Installation
 
 ### Requirements
-`platinfra` has the following requirements to run perfectly:
+`mlinfra` has the following requirements to run perfectly:
 
 - `terraform` >= `1.4.0` should be installed on the system.
 
-`platinfra` can be installed simply by creating a python virtual environment and installing `platinfra` pip package
+`mlinfra` can be installed simply by creating a python virtual environment and installing `mlinfra` pip package
 ```bash
 python -m venv venv
 source venv/bin/activate
-pip install platinfra
+pip install mlinfra
 ```
 
-Copy a deployment config from the [examples](https://github.com/platinfra/platinfra/tree/b6a753160d9841c522f661261a5eb569ee923608/examples) folder, change your AWS account in the config file, configure your AWS credentials and deploy the configuration using
+Copy a deployment config from the [examples](https://github.com/mlinfra-tools/mlinfra/tree/4d21aa465fa8d40aabcf9877f3f99c4ede687459/examples) folder, change your AWS account in the config file, configure your AWS credentials and deploy the configuration using
 
 ```bash
-platinfra terraform --action apply --stack-config-path <path-to-your-config>
+mlinfra terraform --action apply --stack-config-path <path-to-your-config>
 ```
 
-For more information, read the [platinfra user guide](https://platinfra.github.io/user_guide/how_platinfra_works/)
+For more information, read the [mlinfra user guide](https://mlinfra.io/user_guide/how_mlinfra_works/)
 
 ## Supported Providers
 
@@ -57,7 +58,7 @@ This project will be supporting the following providers:
 
 ## Supported MLOps Tools
 
-`platinfra` intends to support as many [MLOps tools](https://github.com/EthicalML/awesome-production-machine-learning/) deployable in a platform in their standalone as well as high availability across different layers of an MLOps stack:
+`mlinfra` intends to support as many [MLOps tools](https://github.com/EthicalML/awesome-production-machine-learning/) deployable in a platform in their standalone as well as high availability across different layers of an MLOps stack:
 - data_versioning
 - experiment_tracker
 - orchestrator
@@ -68,7 +69,7 @@ This project will be supporting the following providers:
 
 ## Deployment Config
 
-- `platinfra` deploys infrastructure using a declarative approach
+- `mlinfra` deploys infrastructure using a declarative approach
 
 - The minimal spec for aws cloud as infra with custom applications deployed is as follows:
 
@@ -107,7 +108,7 @@ stack:
 ```
 
 - Other stacks such as feature_store, event streamers, loggers or [cost dashboards](https://www.kubecost.com/) can be added via community requests.
-- For more information, please [check out the docs](https://platinfra.github.io/) for detailed documentation.
+- For more information, please [check out the docs](https://mlinfra.io/) for detailed documentation.
 
 ## Vision
 
@@ -129,10 +130,10 @@ For more information, please refer to the Engineering Wiki of the project (Will 
 ## Contributions
 
 - Contributions are welcome! Help us onboard all of the available mlops tools on currently available cloud providers.
-- For major changes, please open [an issue](https://github.com/platinfra/platinfra/issues) first to discuss what you would like to change. A team member will get to you soon.
+- For major changes, please open [an issue](https://github.com/mlinfra-tools/mlinfra/issues) first to discuss what you would like to change. A team member will get to you soon.
 - For information on the general development workflow, see the [contribution guide](CONTRIBUTING.md).
 
 
 ## License
 
-The platinfra library is distributed under the [Apache-2 license](https://github.com/platinfra/platinfra/blob/main/LICENSE).
+The `mlinfra` library is distributed under the [Apache-2 license](https://github.com/mlinfra-tools/mlinfra/blob/main/LICENSE).

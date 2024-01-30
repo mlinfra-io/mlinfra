@@ -1,7 +1,7 @@
-site_name: "platinfra"
-site_url: https://platinfra.github.io/
-repo_name: platinfra
-repo_url: https://github.com/platinfra/platinfra
+site_name: "mlinfra"
+site_url: https://mlinfra.io/
+repo_name: mlinfra
+repo_url: https://github.com/mlinfra-tools/mlinfra
 edit_uri: edit/main/docs/
 
 strict: true
@@ -44,8 +44,8 @@ theme:
   font:
     text: Raleway
     code: mononoki
-  logo: _images/platinfra-white.png
-  favicon: _images/platinfra-minimal-white.png
+  logo: _images/mlinfra-white.png
+  favicon: _images/mlinfra-minimal-white.png
   features:
     # - content.tabs.link
     - content.code.copy
@@ -119,7 +119,7 @@ markdown_extensions:
       url_download: true
 
 extra:
-  homepage: https://platinfra.github.io/
+  homepage: https://mlinfra.io/
   generator: false
   version:
     provider: mike
@@ -131,7 +131,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/aliabbasjaffri
     - icon: fontawesome/brands/python
-      link: https://pypi.org/project/platinfra
+      link: https://pypi.org/project/mlinfra
     - icon: fontawesome/brands/discord
       link: https://discord.gg/BwuMen4XEE
     - icon: fontawesome/brands/linkedin
@@ -159,5 +159,5 @@ plugins:
       type: iso_date
 
 copyright: >
-  Copyright &copy; 2023 - 2024 platinfra –
+  Copyright &copy; 2023 - 2024 mlinfra –
   <a href="#__consent">Change cookie settings</a>

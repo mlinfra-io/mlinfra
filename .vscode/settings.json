@@ -7,9 +7,6 @@
   "[terraform-vars]": {
     "editor.tabSize": 2 // optionally
   },
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
-  },
   "[markdown]": {
     "editor.formatOnSave": false
   }

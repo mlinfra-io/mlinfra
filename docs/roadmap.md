@@ -1,4 +1,4 @@
-`platinfra` comes with the promise of deployment of MLOps stacks across all popular and available cloud providers. For each cloud provider, `platinfra` aims to cover the following deployments (if ofcourse the deployment type is supported by the cloud provider):
+`mlinfra` comes with the promise of deployment of MLOps stacks across all popular and available cloud providers. For each cloud provider, `mlinfra` aims to cover the following deployments (if ofcourse the deployment type is supported by the cloud provider):
 
 - Infrastructure-as-a-Service ( [IaaS](https://aws.amazon.com/what-is/iaas/) )
 - Platform-as-a-Service ( [PaaS](https://aws.amazon.com/types-of-cloud-computing/) )
@@ -6,7 +6,7 @@
 
 ## Deployment Environments
 
-As already mentioned, `platinfra` is currently under active development. There is a two way relationship between cloud and mlops tools with deployments which can be depicted via: MLOps-Tools :material-arrow-left-right: Deployment Type :material-arrow-left-right: Cloud Providers
+As already mentioned, `mlinfra` is currently under active development. There is a two way relationship between cloud and mlops tools with deployments which can be depicted via: MLOps-Tools :material-arrow-left-right: Deployment Type :material-arrow-left-right: Cloud Providers
 
 We use the following statuses to denote the availability of deployments across Cloud providers and MLOps toolings.
 

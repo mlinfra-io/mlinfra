@@ -17,8 +17,8 @@ A sample `stack` block can look as follows:
     --8<-- "docs/examples/kubernetes/lakefs/aws-lakefs-advanced.yaml:27:36"
     ```
 
-`platinfra` is designed to integrate a multitude of stacks, aiming to simplify the deployment process to a mere button click.
+`mlinfra` is designed to integrate a multitude of stacks, aiming to simplify the deployment process to a mere button click.
 
 
 !!! info
-    `platinfra` is under active development and some of the stacks might not be available across all `providers` and/or `deployment`. Please keep an eye on the issue tracker and roadmap for more details.
+    `mlinfra` is under active development and some of the stacks might not be available across all `providers` and/or `deployment`. Please keep an eye on the issue tracker and roadmap for more details.
