@@ -27,7 +27,7 @@ jobs:
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
         with:
-          pythonVersion: 3.10
+          pythonVersion: "3.10"
       - name: Install build tools
         run: |
           pip install build
