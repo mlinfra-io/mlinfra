@@ -7,7 +7,7 @@ name = "mlinfra"
 description = "A tool to deploy mlops tooling at the click of a button."
 version = "0.0.1"
 keywords = ["mlinfra"]
-requires-python = ">3.10"
+requires-python = ">=3.10"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Ali Abbas Jaffri", email = "ali.abbasjaffri@live.com" }]
@@ -29,7 +29,7 @@ classifiers = [
 
 dependencies = [
     "invoke",
-    "boto3>=1.34.11",
+    "boto3",
     "pyyaml",
     "GitPython",
     "pytest",
