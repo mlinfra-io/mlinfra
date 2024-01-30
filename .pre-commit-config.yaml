@@ -31,6 +31,7 @@ repos:
     rev: v4.5.0
     hooks:
       - id: check-yaml
+        exclude: "mkdocs.yml"
       - id: end-of-file-fixer
       - id: trailing-whitespace
       - id: check-added-large-files
@@ -39,7 +40,6 @@ repos:
       - id: pretty-format-json
         args: ["--autofix"]
       - id: check-toml
-        exclude: "mkdocs.yml"
       - id: mixed-line-ending
       - id: check-symlinks
   # - repo: https://github.com/pre-commit/mirrors-mypy
