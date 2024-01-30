@@ -1,4 +1,4 @@
-The config file is made with simplicity in mind. It is comprised of 4 distinct sections which allow both simplicity and maximum room for configurability of the underlying cloud infrastructure as well as the mlops stack tooling being deployed using `platinfra`. The 4 different components are as follows:
+The config file is made with simplicity in mind. It is comprised of 4 distinct sections which allow both simplicity and maximum room for configurability of the underlying cloud infrastructure as well as the mlops stack tooling being deployed using `mlinfra`. The 4 different components are as follows:
 
 
 <figure markdown>
@@ -17,7 +17,7 @@ The config file is made with simplicity in mind. It is comprised of 4 distinct s
 
 !!! info
 
-    The `name` of the config must not exceed _37 characters_ otherwise an error would be thrown at the `platinfra terraform --action=apply` time.
+    The `name` of the config must not exceed _37 characters_ otherwise an error would be thrown at the `mlinfra terraform --action=apply` time.
 
 ### [provider](provider.md)
 
