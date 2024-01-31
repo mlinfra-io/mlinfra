@@ -32,7 +32,7 @@ pip install -r requirements-docs.txt
 ### Report Bug
 
 - The best way to report a bug is to file an issue on GitHub. Please make sure there is an open issue discussing your contribution.
-- Before opening a new issue, please check for [existing issues](https://github.com/mlinfra-tools/mlinfra/issues). If you find an existing issue that matches closely with yours, please thumbs-up or comment on it, so we know that the issue is relevant to many people. For any new issue please include:
+- Before opening a new issue, please check for [existing issues](https://github.com/mlinfra-io/mlinfra/issues). If you find an existing issue that matches closely with yours, please thumbs-up or comment on it, so we know that the issue is relevant to many people. For any new issue please include:
     - Your operating system name and version.
     - Opta version.
     - Detailed steps to reproduce the bug.
@@ -76,4 +76,4 @@ Finally, please never submit a PR that will put the main branch in broken state.
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [mlinfra Code of Conduct](https://github.com/mlinfra-tools/mlinfra/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior via [`ali.abbasjaffri [at] live dot com`](mailto:ali.abbasjaffri@live.com?subject=code-of-conduct-violation-mlinfra).
+This project and everyone participating in it is governed by the [mlinfra Code of Conduct](https://github.com/mlinfra-io/mlinfra/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior via [`ali.abbasjaffri [at] live dot com`](mailto:ali.abbasjaffri@live.com?subject=code-of-conduct-violation-mlinfra).
