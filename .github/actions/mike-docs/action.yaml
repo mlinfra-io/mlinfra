@@ -20,8 +20,9 @@ runs:
         # https://github.com/jimporter/mike#deploying-via-ci
         git fetch origin gh-pages --depth=1
 
-        git config user.name ci-bot
-        git config user.email ci-bot@example.com
+        # For proper UI integration: https://github.com/actions/checkout/pull/1184
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       shell: bash
     - env:
         DOCS_PRERELEASE: ${{ inputs.pre_release }}
