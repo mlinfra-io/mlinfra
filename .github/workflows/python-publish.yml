@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  pages: write
 
 jobs:
   build:
