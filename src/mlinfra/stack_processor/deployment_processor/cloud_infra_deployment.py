@@ -13,7 +13,7 @@
 import json
 
 import yaml
-from mlinfra import relative_project_root
+from mlinfra import absolute_project_root
 from mlinfra.enums.cloud_provider import CloudProvider
 from mlinfra.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
@@ -38,14 +38,14 @@ class CloudInfraDeployment(AbstractDeployment):
 
     def configure_required_provider_config(self):
         with open(
-            relative_project_root() / f"modules/cloud/{self.provider.value}/terraform.tf.json",
+            absolute_project_root() / f"modules/cloud/{self.provider.value}/terraform.tf.json",
             "r",
         ) as data_json:
             data = json.load(data_json)
 
             # add random provider
             with open(
-                relative_project_root() / "modules/terraform_providers/random/terraform.tf.json",
+                absolute_project_root() / "modules/terraform_providers/random/terraform.tf.json",
                 "r",
             ) as random_tf:
                 random_tf_json = json.load(random_tf)
