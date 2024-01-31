@@ -1306,8 +1306,9 @@ as well as any project-related communication through discussions.</p>
 <li>
 <p><code>mlinfra</code> is organised as follows:</p>
 <ul>
-<li><code>mlinfra</code> cli, all terraform modules and docs are in the <code>mlinfra</code> repo</li>
-<li>Generated docs are in <code>mlinfra.io</code> repo but the source code is in <code>mlinfra</code> repo.</li>
+<li>Docs are in <code>docs</code> folder and are built using <a href="https://squidfunk.github.io/mkdocs-material/">mkdocs-material</a></li>
+<li>Python code can be located in <code>src/mlinfra</code> repo</li>
+<li>All terraform modules can be found in <code>src/mlinfra/modules</code> folder.</li>
 </ul>
 </li>
 <li>
@@ -1318,11 +1319,10 @@ as well as any project-related communication through discussions.</p>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">source</span><span class="w"> </span>venv/bin/activate
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </span></code></pre></div></li>
-<li>To update the docs, fork the repo <code>mlinfra</code> and clone it to your local machine.</li>
-<li>Next, you'd need to first install the docs dependencies:
+<li>To update the docs, you'd need to first install the docs dependencies:
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements-docs.txt
 </span></code></pre></div></li>
-<li>go to <code>mlinfra/docs</code> and run <code>mkdocs serve</code> to view the docs locally.</li>
+<li>go to <code>mlinfra</code> root and run <code>mkdocs serve</code> to view the docs locally.</li>
 </ul>
 <h2 id="types-of-contributions">Types of Contributions</h2>
 <h3 id="report-bug">Report Bug</h3>
