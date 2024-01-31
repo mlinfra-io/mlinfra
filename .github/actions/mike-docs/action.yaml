@@ -31,5 +31,5 @@ runs:
         if [ "true" = "${{ inputs.push }}" ]; then
           MIKE_OPTIONS+=( "--push" )
         fi
-        mike deploy ${{ inputs.version }} ${{ inputs.alias }} "${MIKE_OPTIONS[@]}" --debug
+        mike deploygi ${{ inputs.version }} ${{ inputs.alias }} "${MIKE_OPTIONS[@]}"
       shell: bash
