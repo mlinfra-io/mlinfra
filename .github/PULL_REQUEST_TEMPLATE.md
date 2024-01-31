@@ -37,6 +37,5 @@ Issue Number: Closes #N/A
 
 ## Does this PR introduce a breaking change?
 
-- [ ] Yes
-  - if yes, please describe the impact and migration path for existing applications.
+- [ ] Yes (if yes, the please describe the impact and migration path for existing applications.)
 - [ ] No

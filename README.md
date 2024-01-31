@@ -9,14 +9,14 @@
 
 > _One tool to deploy all them mlops tools_
 
-`mlinfra` is a combination of python and terraform tooling put together for deploying scalable MLOps infrastructure. This project aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
+`mlinfra` is the swiss army knife for deploying scalable MLOps infrastructure. It aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
 
 Contribute to the project by opening a issue or joining project roadmap and design related discussion on [discord](https://discord.gg/8eYWVvEYmR). Complete roadmap will be released soon!
 
 ## 🚀 Installation
 
 ### Requirements
-`mlinfra` has the following requirements to run perfectly:
+`mlinfra` requires the following to run perfectly:
 
 - `terraform` >= `1.4.0` should be installed on the system.
 
@@ -33,7 +33,7 @@ Copy a deployment config from the [examples](https://github.com/mlinfra-tools/ml
 mlinfra terraform --action apply --stack-config-path <path-to-your-config>
 ```
 
-For more information, read the [mlinfra user guide](https://mlinfra.io/user_guide/how_mlinfra_works/)
+For more information, read the [mlinfra user guide](https://mlinfra.io/user_guide/)
 
 ## Supported Providers
 
@@ -63,15 +63,13 @@ This project will be supporting the following providers:
 - experiment_tracker
 - orchestrator
 - artifact_tracker / model_registry
-- model_serving / model_inference
+- model_inference
 - monitoring
 - alerting
 
 ## Deployment Config
 
-- `mlinfra` deploys infrastructure using a declarative approach
-
-- The minimal spec for aws cloud as infra with custom applications deployed is as follows:
+- `mlinfra` deploys infrastructure using declarative approach. It requires resources to be defined in a `yaml` file with the following format
 
 ```yaml
 name: aws-mlops-stack
@@ -107,25 +105,21 @@ stack:
     - mlflow # can be mlflow or neptune or determined or weaveworks or prometheus or grafana and so on...
 ```
 
-- Other stacks such as feature_store, event streamers, loggers or [cost dashboards](https://www.kubecost.com/) can be added via community requests.
+- This was minimal spec for aws cloud as infra with custom applications. Other stacks such as feature_store, event streamers, loggers or [cost dashboards](https://www.kubecost.com/) can be added via community requests.
 - For more information, please [check out the docs](https://mlinfra.io/) for detailed documentation.
 
 ## Vision
 
 - I realised MLOps infrastructure deployment is not as easy and common over the years of creating and deploying ML platforms for multiple teams. A lot of the times, teams start on wrong foot, leading to months of planning and implementation of MLOps infrastructure. This project is an attempt to create a common MLOps infrastructure deployment framework that can be used by any ML team to deploy their MLOps stack in a single command.
 
-- The idea is that for anyone willing to deploy MLOps infrastructure, they should be able to do so by providing basic minimum configuration and just running a single command.
-
-- The project also aims to provide feasibility of deployment ranging from local environment, using [k3s](https://k3s.io/) or [kind](https://kind.sigs.k8s.io/) for local testing and validation, to all the way on major public cloud providers for more production ready usecases.
-
 ## Development
 
 - This project relies on terraform for IaC code and python to glue it all together.
 - To get started, install terraform and python.
 - You can install the required python packages by running `pip install -r requirements-dev.txt`
-- You can run any of the available examples from the `examples` folder by running `cd src` and `invoke terraform --stack-config-path examples/<application>/<cloud>-<application>.yaml --action <action>` where `<action>` corresponds to terraform actions such as `plan`, `apply`, `destroy` and `output`.
+- You can run any of the available examples from the `examples` folder by running `cd src` and `invoke terraform --stack-config-path examples/<application>/<cloud>-<application>.yaml --action <action>` where `<action>` corresponds to terraform actions such as `plan`, `apply` and `destroy`.
 
-For more information, please refer to the Engineering Wiki of the project (Will be released soon!) regarding what are the different components of the project and how they work together.
+For more information, please refer to the Engineering Wiki of the project (https://mlinfra.io/user_guide/) regarding what are the different components of the project and how they work together.
 
 ## Contributions
 
