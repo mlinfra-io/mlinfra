@@ -1,3 +1,5 @@
+default_language_version:
+  python: python3.10
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
@@ -16,7 +18,7 @@ repos:
         types: [python]
         files: "deploy/devops"
   # - repo: https://github.com/PyCQA/bandit
-  #   rev: 1.7.6
+  #   rev: 1.7.7
   #   hooks:
   #     - id: bandit
   #       args: [-c, pyproject.toml]
@@ -31,15 +33,17 @@ repos:
     rev: v4.5.0
     hooks:
       - id: check-yaml
+        exclude: "mkdocs.yml"
       - id: end-of-file-fixer
       - id: trailing-whitespace
       - id: check-added-large-files
         args: ["--maxkb=5120"]
       - id: check-json
+        exclude: ".vscode/settings.json"
       - id: pretty-format-json
         args: ["--autofix"]
+        exclude: ".vscode/settings.json"
       - id: check-toml
-        exclude: "mkdocs.yml"
       - id: mixed-line-ending
       - id: check-symlinks
   # - repo: https://github.com/pre-commit/mirrors-mypy
