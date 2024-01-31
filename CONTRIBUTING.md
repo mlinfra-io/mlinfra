@@ -10,8 +10,9 @@ as well as any project-related communication through discussions.
 - To get started, first pat yourself!
 
 - `mlinfra` is organised as follows:
-    - `mlinfra` cli, all terraform modules and docs are in the `mlinfra` repo
-    - Generated docs are in `mlinfra.io` repo but the source code is in `mlinfra` repo.
+    - Docs are in `docs` folder and are built using [mkdocs-material](https://squidfunk.github.io/mkdocs-material/)
+    - Python code can be located in `src/mlinfra` repo
+    - All terraform modules can be found in `src/mlinfra/modules` folder.
 
 - Fork the `mlinfra` repo and clone it to your local machine.
 - Create a python virtual environment and install the dependencies:
@@ -21,12 +22,11 @@ source venv/bin/activate
 pip install -e .
 
 ```
-- To update the docs, fork the repo `mlinfra` and clone it to your local machine.
-- Next, you'd need to first install the docs dependencies:
+- To update the docs, you'd need to first install the docs dependencies:
 ```bash
 pip install -r requirements-docs.txt
 ```
-- go to `mlinfra/docs` and run `mkdocs serve` to view the docs locally.
+- go to `mlinfra` root and run `mkdocs serve` to view the docs locally.
 
 ## Types of Contributions
 
