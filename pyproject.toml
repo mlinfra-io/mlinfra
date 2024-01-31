@@ -46,8 +46,8 @@ package-dir = { "" = "src" }
 mlinfra = ["**/*.tf", "**/*.tpl", "**/*.json", "**/*.yaml"]
 
 [project.urls]
-Homepage = "https://github.com/mlinfra-tools/mlinfra"
-Repository = "https://github.com/mlinfra-tools/mlinfra.git"
+Homepage = "https://github.com/mlinfra-io/mlinfra"
+Repository = "https://github.com/mlinfra-io/mlinfra.git"
 Documentation = "https://mlinfra.io/"
 
 [project.optional-dependencies]

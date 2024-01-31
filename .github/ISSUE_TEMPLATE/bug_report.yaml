@@ -56,7 +56,7 @@ body:
 
   - type: markdown
     attributes:
-      value: "## Code of Conduct\nBy submitting this issue, I agree to abide by the [Code of Conduct](https://github.com/mlinfra-tools/mlinfra/blob/main/CODE_OF_CONDUCT.md)."
+      value: "## Code of Conduct\nBy submitting this issue, I agree to abide by the [Code of Conduct](https://github.com/mlinfra-io/mlinfra/blob/main/CODE_OF_CONDUCT.md)."
 
   - type: checkboxes
     id: issue-checked

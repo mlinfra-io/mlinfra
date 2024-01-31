@@ -25,7 +25,7 @@ program = Program(version=VERSION, namespace=namespace, name="mlinfra")
 def cli() -> None:
     """Welcome to mlinfra cli! Deploy any MLOps tooling at the click of a button.
 
-    Github: https://github.com/mlinfra-tools/mlinfra
+    Github: https://github.com/mlinfra-io/mlinfra
     Documentation: https://mlinfra.io/
     """
     program.run()

@@ -1,7 +1,7 @@
 ![Banner Logo](docs/_images/mlinfra-banner-wide.png)
 
 [![](https://img.shields.io/pypi/v/mlinfra)](https://pypi.org/project/mlinfra)
-![GitHub License](https://img.shields.io/github/license/mlinfra-tools/mlinfra?color=orange)
+![GitHub License](https://img.shields.io/github/license/mlinfra-io/mlinfra?color=orange)
 [![docs](https://img.shields.io/badge/docs-latest-orange)](https://mlinfra.io/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/mlinfra?color=orange)
 ![Discord](https://img.shields.io/discord/1199078513463009321?color=orange)
@@ -27,7 +27,7 @@ source venv/bin/activate
 pip install mlinfra
 ```
 
-Copy a deployment config from the [examples](https://github.com/mlinfra-tools/mlinfra/tree/4d21aa465fa8d40aabcf9877f3f99c4ede687459/examples) folder, change your AWS account in the config file, configure your AWS credentials and deploy the configuration using
+Copy a deployment config from the [examples](https://github.com/mlinfra-io/mlinfra/tree/4d21aa465fa8d40aabcf9877f3f99c4ede687459/examples) folder, change your AWS account in the config file, configure your AWS credentials and deploy the configuration using
 
 ```bash
 mlinfra terraform --action apply --stack-config-path <path-to-your-config>
@@ -124,10 +124,10 @@ For more information, please refer to the Engineering Wiki of the project (https
 ## Contributions
 
 - Contributions are welcome! Help us onboard all of the available mlops tools on currently available cloud providers.
-- For major changes, please open [an issue](https://github.com/mlinfra-tools/mlinfra/issues) first to discuss what you would like to change. A team member will get to you soon.
+- For major changes, please open [an issue](https://github.com/mlinfra-io/mlinfra/issues) first to discuss what you would like to change. A team member will get to you soon.
 - For information on the general development workflow, see the [contribution guide](CONTRIBUTING.md).
 
 
 ## License
 
-The `mlinfra` library is distributed under the [Apache-2 license](https://github.com/mlinfra-tools/mlinfra/blob/main/LICENSE).
+The `mlinfra` library is distributed under the [Apache-2 license](https://github.com/mlinfra-io/mlinfra/blob/main/LICENSE).
