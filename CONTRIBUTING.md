@@ -18,7 +18,8 @@ as well as any project-related communication through discussions.
 ```bash
 python -m venv venv
 source venv/bin/activate
-pip install -r requirements-dev.txt
+pip install -e .
+
 ```
 - To update the docs, fork the repo `mlinfra` and clone it to your local machine.
 - Next, you'd need to first install the docs dependencies:
