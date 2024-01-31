@@ -1,7 +1,7 @@
 site_name: "mlinfra"
 site_url: https://mlinfra.io/
 repo_name: mlinfra
-repo_url: https://github.com/mlinfra-tools/mlinfra
+repo_url: https://github.com/mlinfra-io/mlinfra
 edit_uri: edit/main/docs/
 
 strict: true
