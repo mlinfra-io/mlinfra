@@ -1,4 +1,7 @@
+<center>
+
 ![Banner Logo](docs/_images/mlinfra-banner-wide.png)
+
 
 [![](https://img.shields.io/pypi/v/mlinfra)](https://pypi.org/project/mlinfra)
 ![GitHub License](https://img.shields.io/github/license/mlinfra-io/mlinfra?color=orange)
@@ -8,6 +11,8 @@
 
 
 > _One tool to deploy all them mlops tools_
+
+</center>
 
 `mlinfra` is the swiss army knife for deploying scalable MLOps infrastructure. It aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
 
