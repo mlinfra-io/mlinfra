@@ -35,8 +35,7 @@ dependencies = [
     "pytest",
     "mypy",
     "getmac",
-    "requests",
-    "pre-commit>=3.3.3"
+    "requests"
 ]
 
 [tool.setuptools]
@@ -51,6 +50,9 @@ Repository = "https://github.com/mlinfra-io/mlinfra.git"
 Documentation = "https://mlinfra.io/"
 
 [project.optional-dependencies]
+dev = [
+    "pre-commit>=3.3.3"
+]
 docs = [
     "mkdocs-material",
     "mkdocs-git-revision-date-localized-plugin",
