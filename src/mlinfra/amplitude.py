@@ -97,6 +97,7 @@ class AmplitudeClient:
                     params={},
                     headers=headers,
                     json=body,
+                    timeout=10,
                 )
                 if r.status_code != codes.ok:
                     raise Exception(
