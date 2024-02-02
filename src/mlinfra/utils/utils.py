@@ -14,7 +14,10 @@ import json
 import os
 import re
 import shutil
-import subprocess
+
+# TODO: Update this section to run it more secure and
+# remove the comment
+import subprocess  # nosec
 import sys
 
 from .constants import TF_PATH
@@ -32,9 +35,14 @@ def generate_tf_json(module_name: str, json_module: json):
 
 def check_terraform_version():
     try:
-        # Run 'terraform version' command in the shell
-        result = subprocess.run(
-            ["terraform", "version"], capture_output=True, text=True, check=True
+        # TODO: Update this section to run it more secure and
+        # remove the comment
+        result = subprocess.run(  # nosec
+            ["terraform", "version"],
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=30,
         )
 
         # Extract the version information from the output

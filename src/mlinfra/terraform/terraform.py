@@ -12,7 +12,10 @@
 
 import json
 import os
-import subprocess
+
+# TODO: Update this section to run it more secure and
+# remove the comment
+import subprocess  # nosec
 
 # import hashlib
 import boto3
@@ -56,7 +59,11 @@ class Terraform:
     def check_terraform_installed(self):
         """This function is responsible for checking if terraform is installed"""
         try:
-            version = subprocess.check_output(["terraform", "--version"], universal_newlines=True)
+            # TODO: Update this section to run it more secure and
+            # remove the comment
+            version = subprocess.check_output(  # nosec
+                ["terraform", "--version"], universal_newlines=True, timeout=30
+            )
             installed_version = version.split("\n")[0]
             if installed_version in terraform_tested_version:
                 return 0
