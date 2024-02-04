@@ -1,18 +1,28 @@
-<center>
+<div align="center">
 
-![Banner Logo](docs/_images/mlinfra-banner-wide.png)
+  ![Banner Logo](docs/_images/mlinfra-banner-wide.png)
 
-
-[![](https://img.shields.io/pypi/v/mlinfra)](https://pypi.org/project/mlinfra)
-![GitHub License](https://img.shields.io/github/license/mlinfra-io/mlinfra?color=orange)
-[![docs](https://img.shields.io/badge/docs-latest-orange)](https://mlinfra.io/)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/mlinfra?color=orange)
-![Discord](https://img.shields.io/discord/1199078513463009321?color=orange)
-
-
-> _One tool to deploy all them mlops tools_
-
-</center>
+  <h3>
+    Open source MLOps infrastructure deployment on Public Cloud providers
+  </h3>
+  <div>
+    <strong>Open source MLOps:</strong> Open source tools for different stages in an MLOps lifecycle.
+  </div>
+  <div>
+    <strong>Public Cloud Providers:</strong> Supporting all major cloud providers including AWS, GCP, Azure and AliBaba
+  </div>
+  </br>
+  <div>
+    <img alt="GitHub License" src="https://img.shields.io/github/license/mlinfra-io/mlinfra?color=orange">
+    <a href="https://discord.gg/8eYWVvEYmR"><img src="https://img.shields.io/discord/1199078513463009321?logo=Discord&logoColor=white&label=Discord&color=%23434EE4" alt="Discord"></a>
+    <a href="https://github.com/mlinfra-io/mlinfra/releases"><img src="https://img.shields.io/github/v/release/mlinfra-io/mlinfra?include_prereleases&color=orange" alt="mlinfra releases"></a>
+    <a href="https://mlinfra.io/development/"><img src="https://img.shields.io/badge/docs-latest-orange" alt="Documentation"></a>
+    <a href="https://github.com/mlinfra-io/mlinfra/actions/workflows/on_pr.yml?query=branch:main"><img src="https://img.shields.io/github/actions/workflow/status/mlinfra-io/mlinfra/on_pr.yml?&label=All%20tests&color=orange" alt="CI test status"></a>
+    <a href="https://pypi.org/project/mlinfra/"><img src="https://img.shields.io/pypi/v/mlinfra.svg?label=pypi+mlinfra&color=orange" alt="mlinfra Python package on PyPi"></a>
+    <img src="https://img.shields.io/pypi/dm/mlinfra?color=orange" alt="mlinfra Python package downloads on PyPi">
+  </div>
+</div>
+</br>
 
 `mlinfra` is the swiss army knife for deploying scalable MLOps infrastructure. It aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
 
