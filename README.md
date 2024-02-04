@@ -14,12 +14,12 @@
   </br>
   <div>
     <img alt="GitHub License" src="https://img.shields.io/github/license/mlinfra-io/mlinfra?color=orange">
-    <a href="https://discord.gg/8eYWVvEYmR"><img src="https://img.shields.io/discord/1199078513463009321?logo=Discord&logoColor=white&label=Discord&color=%23434EE4" alt="Discord"></a>
     <a href="https://github.com/mlinfra-io/mlinfra/releases"><img src="https://img.shields.io/github/v/release/mlinfra-io/mlinfra?include_prereleases&color=orange" alt="mlinfra releases"></a>
     <a href="https://mlinfra.io/development/"><img src="https://img.shields.io/badge/docs-latest-orange" alt="Documentation"></a>
     <a href="https://github.com/mlinfra-io/mlinfra/actions/workflows/on_pr.yml?query=branch:main"><img src="https://img.shields.io/github/actions/workflow/status/mlinfra-io/mlinfra/on_pr.yml?&label=All%20tests&color=orange" alt="CI test status"></a>
     <a href="https://pypi.org/project/mlinfra/"><img src="https://img.shields.io/pypi/v/mlinfra.svg?label=pypi+mlinfra&color=orange" alt="mlinfra Python package on PyPi"></a>
     <img src="https://img.shields.io/pypi/dm/mlinfra?color=orange" alt="mlinfra Python package downloads on PyPi">
+    <a href="https://discord.gg/8eYWVvEYmR"><img src="https://img.shields.io/discord/1199078513463009321?logo=Discord&logoColor=white&label=Discord&color=%23434EE4" alt="Discord"></a>
   </div>
 </div>
 </br>
