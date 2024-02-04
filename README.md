@@ -20,6 +20,11 @@
     <a href="https://pypi.org/project/mlinfra/"><img src="https://img.shields.io/pypi/v/mlinfra.svg?label=pypi+mlinfra&color=orange" alt="mlinfra Python package on PyPi"></a>
     <img src="https://img.shields.io/pypi/dm/mlinfra?color=orange" alt="mlinfra Python package downloads on PyPi">
     <a href="https://discord.gg/8eYWVvEYmR"><img src="https://img.shields.io/discord/1199078513463009321?logo=Discord&logoColor=white&label=Discord&color=%23434EE4" alt="Discord"></a>
+    <img src="https://img.shields.io/badge/Cloud%20Providers-orange" alt="cloud providers"/>
+    <a href="https://mlinfra.io/code/aws/cloud_infra/"><img src="docs/_images/aws_icon.svg" height="20" alt="AWS Examples"/></a>
+    <img src="docs/_images/gcp_icon.svg" height="20" alt="GCP Examples"/>
+    <img src="docs/_images/azure_icon.svg" height="20" alt="Azure Examples"/>
+    <img src="docs/_images/alibaba_icon.svg" height="20" alt="Alibaba Examples"/>
   </div>
 </div>
 </br>
