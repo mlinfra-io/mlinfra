@@ -92,33 +92,39 @@ def terraform(
     """
     Run terraform for the config file with the given action and args.
     """
-    Terraform(stack_config_path=stack_config_path).apply()
-    # targets_list = Terraform(stack_config_path=stack_config_path).apply()
-    # print(targets_list)
+    targets_list = Terraform(stack_config_path=stack_config_path).plan()
+    print(targets_list)
 
     ctx.run(f"terraform -chdir={TF_PATH} init")
 
-    if action == "apply":
+    if action == "plan":
+        action += f" {targets_list} -lock=false -input=false -compact-warnings"
+        amplitude_client.send_event(
+            amplitude_client.PLAN_EVENT,
+            event_properties={},
+        )
+        print(f"terraform -chdir={TF_PATH} {action} -out tfplan.binary")
+        ctx.run(f"terraform -chdir={TF_PATH} {action} -out tfplan.binary")
+    elif action == "apply":
         action += " -auto-approve"
         amplitude_client.send_event(
             amplitude_client.APPLY_EVENT,
             event_properties={},
         )
+        ctx.run(
+            f"terraform -chdir={TF_PATH} plan {targets_list} -no-color -lock=false -input=false -compact-warnings -out tfplan.binary"
+        )
+        ctx.run(f"terraform -chdir={TF_PATH} apply {args}")
     elif action == "destroy":
         action += " -auto-approve"
         amplitude_client.send_event(
             amplitude_client.DESTROY_EVENT,
             event_properties={},
         )
+        ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")
     # elif action == "force-unlock":
     #     file_processor.force_unlock()
     #     action = f"plan {args} -lock=false"
-    elif action == "plan":
-        action += " -lock=false -input=false -compact-warnings"
-        amplitude_client.send_event(
-            amplitude_client.PLAN_EVENT,
-            event_properties={},
-        )
 
     # print(f"terraform -chdir={TF_PATH} {action} {args}")
-    ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")
+    # ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")
