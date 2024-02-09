@@ -123,6 +123,7 @@ class CloudInfraStack(AbstractStack):
     def process_stack_inputs(self):
         pass
 
+    # TODO: Outputs are not being populated completely
     def process_stack_outputs(self):
         self.output["output"].append({"state_storage": {"value": self.state_file_name}})
         self.output["output"].append(

@@ -211,15 +211,4 @@ class Terraform:
         self.check_region_has_three_azs(aws_region=aws_region)
         self.check_terraform_state_storage(state_name=state_name, aws_region=aws_region)
         modules_list = self.generate_modules_list()
-        return modules_list
-
-    def apply(self) -> str:
-        """
-        This function is responsible for running terraform apply command
-        """
-        modules_list = self.plan()
-        target_string = ""
-        for item in modules_list:
-            target_string += f" -target={item}"
-
-        return target_string
+        return "".join(f" -target={item}" for item in modules_list)
