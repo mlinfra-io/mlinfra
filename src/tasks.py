@@ -93,7 +93,6 @@ def terraform(
     Run terraform for the config file with the given action and args.
     """
     targets_list = Terraform(stack_config_path=stack_config_path).plan()
-    print(targets_list)
 
     ctx.run(f"terraform -chdir={TF_PATH} init")
 
@@ -103,7 +102,6 @@ def terraform(
             amplitude_client.PLAN_EVENT,
             event_properties={},
         )
-        print(f"terraform -chdir={TF_PATH} {action} -out tfplan.binary")
         ctx.run(f"terraform -chdir={TF_PATH} {action} -out tfplan.binary")
     elif action == "apply":
         action += " -auto-approve"
