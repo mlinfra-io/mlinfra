@@ -93,6 +93,7 @@ def terraform(
     Run terraform for the config file with the given action and args.
     """
     targets_list = Terraform(stack_config_path=stack_config_path).plan()
+    targets_list = ""
 
     ctx.run(f"terraform -chdir={TF_PATH} init")
 
