@@ -97,32 +97,27 @@ def terraform(
     ctx.run(f"terraform -chdir={TF_PATH} init")
 
     if action == "plan":
-        action += f" {targets_list} -lock=false -input=false -compact-warnings"
+        args += f"{targets_list} -lock=false -input=false -compact-warnings"
         amplitude_client.send_event(
             amplitude_client.PLAN_EVENT,
             event_properties={},
         )
-        ctx.run(f"terraform -chdir={TF_PATH} {action} -out tfplan.binary")
+        ctx.run(f"terraform -chdir={TF_PATH} plan {args} -out tfplan.binary")
     elif action == "apply":
-        action += " -auto-approve"
+        args += f"{targets_list} -lock=false -input=false -compact-warnings"
         amplitude_client.send_event(
             amplitude_client.APPLY_EVENT,
             event_properties={},
         )
-        ctx.run(
-            f"terraform -chdir={TF_PATH} plan {targets_list} -no-color -lock=false -input=false -compact-warnings -out tfplan.binary"
-        )
-        ctx.run(f"terraform -chdir={TF_PATH} apply {args}")
+        ctx.run(f"terraform -chdir={TF_PATH} plan {args} -out tfplan.binary")
+        ctx.run(f"terraform -chdir={TF_PATH} apply -auto-approve tfplan.binary")
     elif action == "destroy":
-        action += " -auto-approve"
+        args = "-auto-approve"
         amplitude_client.send_event(
             amplitude_client.DESTROY_EVENT,
             event_properties={},
         )
-        ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")
+        ctx.run(f"terraform -chdir={TF_PATH} destroy {args}")
     # elif action == "force-unlock":
     #     file_processor.force_unlock()
     #     action = f"plan {args} -lock=false"
-
-    # print(f"terraform -chdir={TF_PATH} {action} {args}")
-    # ctx.run(f"terraform -chdir={TF_PATH} {action} {args}")
