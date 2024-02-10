@@ -32,7 +32,6 @@ dependencies = [
     "boto3",
     "pyyaml",
     "GitPython",
-    "pytest",
     "mypy",
     "getmac",
     "requests"
@@ -51,7 +50,9 @@ Documentation = "https://mlinfra.io/"
 
 [project.optional-dependencies]
 dev = [
-    "pre-commit>=3.3.3"
+    "pre-commit>=3.3.3",
+    "pytest",
+    "pytest-mock",
 ]
 docs = [
     "mkdocs-material",
@@ -99,3 +100,10 @@ skip_glob = ['**/venv/**']
 
 [project.scripts]
 mlinfra = "mlinfra.cli.cli:cli"
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "WARNING"
+
+[tool.bandit]
+exclude_dirs = ["tests/", "docs/"]
