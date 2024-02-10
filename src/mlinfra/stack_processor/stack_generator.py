@@ -30,7 +30,30 @@ from mlinfra.stack_processor.stack_processor.kubernetes_stack import (
 
 
 class StackGenerator:
+    """
+    A class that generates and configures infrastructure stacks based on the provided stack configuration.
+
+    Attributes:
+        stack_config (dict): The stack configuration provided to the StackGenerator object.
+        stack_name (str): The name of the stack.
+        account_id (str): The account ID associated with the stack.
+        provider (str): The cloud provider for the stack.
+        deployment_type (str): The type of deployment (cloud infrastructure or Kubernetes).
+        state_file_name (str): The name of the state file.
+        is_stack_component (bool): A flag indicating if the stack is a component of a larger stack.
+        output (dict): The output configuration for the stack.
+    """
+
     def __init__(self, stack_config):
+        """
+        Initializes the StackGenerator object with the provided stack configuration.
+
+        Args:
+            stack_config (dict): The stack configuration provided to the StackGenerator object.
+
+        Raises:
+            Exception: If the stack configuration is missing any required components.
+        """
         self.stack_config = stack_config
         self.stack_name = ""
         self.account_id = ""
@@ -58,13 +81,28 @@ class StackGenerator:
 
     # TODO: refactor statefile name
     def get_state_file_name(self):
+        """
+        Generates the state file name based on the stack name and region.
+
+        Returns:
+            str: The state file name.
+        """
         self.state_file_name = f"tfstate-{self.stack_name}-{self.region}"
         return self.state_file_name
 
     def get_region(self):
+        """
+        Returns the region specified in the stack configuration.
+
+        Returns:
+            str: The region.
+        """
         return self.region
 
     def generate(self):
+        """
+        Generates and configures the infrastructure stacks based on the deployment type.
+        """
         if DeploymentType(self.stack_config["deployment"]["type"]) == DeploymentType.CLOUD_INFRA:
             CloudInfraDeployment(
                 stack_name=self.stack_name,
@@ -99,9 +137,20 @@ class StackGenerator:
             ).generate()
 
     def configure_provider(self) -> CloudProvider:
+        """
+        Configures the provider details based on the stack configuration.
+
+        Returns:
+            CloudProvider: The cloud provider.
+
+        Raises:
+            NotImplementedError: If the cloud provider is not supported.
+        """
         if CloudProvider(self.stack_config["provider"]["name"]) == CloudProvider.AWS:
             aws_provider = AWSProvider(
                 stack_name=self.stack_name, config=self.stack_config["provider"]
             )
             aws_provider.configure_provider()
             return CloudProvider.AWS
+        else:
+            raise NotImplementedError("Cloud provider not supported")
