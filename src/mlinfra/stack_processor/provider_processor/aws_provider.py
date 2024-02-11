@@ -13,7 +13,6 @@
 import json
 from importlib import resources
 
-import yaml
 from mlinfra import modules
 from mlinfra.stack_processor.provider_processor.provider import (
     AbstractProvider,
@@ -26,10 +25,10 @@ class AWSProvider(AbstractProvider):
     Represents a provider for the AWS infrastructure.
     Args:
         stack_name (str): The name of the stack.
-        config (yaml): The configuration object containing the provider settings.
+        config (dict): The configuration object containing the provider settings.
     Attributes:
         stack_name (str): The name of the stack.
-        config (yaml): The configuration object containing the provider settings.
+        config (dict): The configuration object containing the provider settings.
         account_id (str): The AWS account ID.
         region (str): The AWS region.
         access_key (str): The AWS access key (optional).
@@ -37,7 +36,7 @@ class AWSProvider(AbstractProvider):
         role_arn (str): The AWS role ARN (optional).
     """
 
-    def __init__(self, stack_name: str, config: yaml):
+    def __init__(self, stack_name: str, config: dict):
         super().__init__(stack_name=stack_name, config=config)
         # required
         self.account_id = config.get("account_id")
