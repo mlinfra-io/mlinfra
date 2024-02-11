@@ -180,9 +180,9 @@ class KubernetesDeployment(AbstractDeployment):
                 generate_tf_json(module_name="nodegroups", json_module=nodegroups_json_module)
 
         elif self.provider == CloudProvider.GCP:
-            pass
+            raise ValueError(f"Provider {self.provider} is not yet supported")
         elif self.provider == CloudProvider.AZURE:
-            pass
+            raise ValueError(f"Provider {self.provider} is not yet supported")
         else:
             raise ValueError(f"Provider {self.provider} is not supported")
 
