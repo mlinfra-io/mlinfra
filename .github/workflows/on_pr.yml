@@ -37,6 +37,22 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('requirements-dev.txt', '.pre-commit-config.yaml') }}-linter-cache
       - name: Run pre-commit checks
         run: pre-commit run --all-files --verbose --show-diff-on-failure
+  test:
+    name: Test mlinfra on ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python and dependencies
+        uses: ./.github/actions/setup-python
+        with:
+          pythonVersion: "3.10"
+          dependencyType: "dev"
+      - name: Run Tests
+        run: |
+          pytest
+
   docs:
     name: Build documentation for mlinfra
     runs-on: ubuntu-latest
