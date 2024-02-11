@@ -16,12 +16,13 @@ import os
 # TODO: Update this section to run it more secure and
 # remove the comment
 import subprocess  # nosec
+from importlib import resources
 
 # import hashlib
 import boto3
 import yaml
 from botocore.config import Config
-from mlinfra import absolute_project_root
+from mlinfra import modules
 from mlinfra.stack_processor.stack_generator import StackGenerator
 from mlinfra.terraform.state_helper import StateHelper
 from mlinfra.utils.constants import TF_PATH
@@ -105,7 +106,7 @@ class Terraform:
 
         # create the stack folder
         os.makedirs(TF_PATH, mode=0o777)
-        create_symlinks(absolute_project_root() / "modules", TF_PATH + "/modules")
+        create_symlinks(resources.files(modules), TF_PATH + "/modules")
 
         # TODO: generate hash of the stack config to not generate config all the time
         # sha256_hash = hashlib.sha256()
@@ -191,7 +192,7 @@ class Terraform:
                         modules_list.append(f"module.{key}")
         return modules_list
 
-    def generate_terraform_config(self) -> (str, str):
+    def generate_terraform_config(self) -> tuple[str, str]:
         """This function is responsible for generating the terraform config file"""
         self.check_terraform_installed()
         # TODO: perform this after the cli package has been released

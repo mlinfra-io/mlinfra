@@ -11,9 +11,10 @@
 #     permissions and limitations under the License.
 
 import json
+from importlib import resources
+from typing import Any, Dict
 
-import yaml
-from mlinfra import absolute_project_root
+from mlinfra import modules
 from mlinfra.enums.cloud_provider import CloudProvider
 from mlinfra.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
@@ -29,7 +30,7 @@ class CloudInfraDeployment(AbstractDeployment):
         stack_name (str): The name of the stack.
         provider (CloudProvider): The cloud provider (AWS, GCP, or Azure).
         region (str): The region where the resources will be deployed.
-        deployment_config (yaml): The deployment configuration in YAML format.
+        deployment_config (Dict[str, Any]): The deployment configuration in dictionary format.
     """
 
     def __init__(
@@ -37,29 +38,25 @@ class CloudInfraDeployment(AbstractDeployment):
         stack_name: str,
         provider: CloudProvider,
         region: str,
-        deployment_config: yaml,
+        deployment_config: Dict[str, Any],
     ):
-        super(CloudInfraDeployment, self).__init__(
-            stack_name=stack_name,
-            provider=provider,
-            region=region,
-            deployment_config=deployment_config,
-        )
+        super().__init__(stack_name, provider, region, deployment_config)
 
     def configure_required_provider_config(self):
         """
         Configures the required provider configuration for the deployment.
         Updates the Terraform JSON file with the necessary provider information.
         """
+
         with open(
-            absolute_project_root() / f"modules/cloud/{self.provider.value}/terraform.tf.json",
+            resources.files(modules) / f"cloud/{self.provider.value}/terraform.tf.json",
             "r",
         ) as data_json:
             data = json.load(data_json)
 
             # add random provider
             with open(
-                absolute_project_root() / "modules/terraform_providers/random/terraform.tf.json",
+                resources.files(modules) / "terraform_providers/random/terraform.tf.json",
                 "r",
             ) as random_tf:
                 random_tf_json = json.load(random_tf)
@@ -76,17 +73,17 @@ class CloudInfraDeployment(AbstractDeployment):
         Configures the deployment configuration based on the provider.
         Generates a Terraform JSON file for the specific provider.
         """
-        # inject vpc module
         if self.provider == CloudProvider.AWS:
-            json_module = {"module": {"vpc": {}}}
-            json_module["module"]["vpc"]["name"] = f"{self.stack_name}-vpc"
-            json_module["module"]["vpc"]["source"] = "./modules/cloud/aws/vpc"
-
-            if "config" in self.deployment_config and "vpc" in self.deployment_config["config"]:
-                for vpc_config in self.deployment_config["config"]["vpc"]:
-                    json_module["module"]["vpc"][vpc_config] = self.deployment_config["config"][
-                        "vpc"
-                    ].get(vpc_config, None)
+            json_module = {
+                "module": {
+                    "vpc": {
+                        "name": f"{self.stack_name}-vpc",
+                        "source": "./modules/cloud/aws/vpc",
+                    }
+                }
+            }
+            vpc_config = self.deployment_config.get("config", {}).get("vpc", {})
+            json_module["module"]["vpc"].update(vpc_config)
 
             generate_tf_json(module_name="vpc", json_module=json_module)
         elif self.provider == CloudProvider.GCP:

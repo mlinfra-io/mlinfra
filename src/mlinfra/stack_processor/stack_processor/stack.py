@@ -12,9 +12,10 @@
 
 import json
 from abc import ABC, abstractmethod
+from importlib import resources
 
 import yaml
-from mlinfra import absolute_project_root
+from mlinfra import modules
 from mlinfra.enums.cloud_provider import CloudProvider
 from mlinfra.enums.deployment_type import DeploymentType
 
@@ -60,8 +61,8 @@ class AbstractStack(ABC):
             extension (str, optional): The extension of the config file.
         """
         with open(
-            absolute_project_root()
-            / f"modules/applications/{self.deployment_type.value}/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}",
+            resources.files(modules)
+            / f"applications/{self.deployment_type.value}/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}",
             "r",
             encoding="utf-8",
         ) as tf_config:
