@@ -50,7 +50,8 @@ class KubernetesDeployment(AbstractDeployment):
         """
         Generate the required provider configuration for the Kubernetes deployment.
 
-        This method reads the necessary provider configuration files and generates the required provider configuration for the Kubernetes deployment. It updates the 'terraform.tf.json' file with the required provider information.
+        This method reads the necessary provider configuration files and generates the required provider configuration for the Kubernetes deployment.
+        It updates the 'terraform.tf.json' file with the required provider information.
 
         Parameters:
         - None
@@ -102,7 +103,8 @@ class KubernetesDeployment(AbstractDeployment):
         """
         Generate the deployment configuration for the Kubernetes deployment.
 
-        This method generates the deployment configuration for the Kubernetes deployment based on the specified provider. It injects the necessary modules and configurations into the Terraform configuration files.
+        This method generates the deployment configuration for the Kubernetes deployment based on the specified provider.
+        It injects the necessary modules and configurations into the Terraform configuration files.
 
         Parameters:
         - None
