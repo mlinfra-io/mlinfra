@@ -12,9 +12,11 @@
 
 import json
 from abc import ABC, abstractmethod
+from importlib import resources
+from typing import Any, Dict, Union
 
 import yaml
-from mlinfra import absolute_project_root
+from mlinfra import modules
 from mlinfra.enums.cloud_provider import CloudProvider
 from mlinfra.enums.deployment_type import DeploymentType
 
@@ -37,8 +39,12 @@ class AbstractStack(ABC):
         Initializes the stack.
 
         Args:
-            provider (Provider): The cloud provider.
-            stacks (yaml): The stack config.
+            state_file_name (str): The name of the state file for the stack.
+            region (str): The region where the stack will be deployed.
+            account_id (str): The ID of the account associated with the stack.
+            provider (CloudProvider): The cloud provider for the stack.
+            deployment_type (DeploymentType): The type of deployment for the stack.
+            stacks (yaml): The stack configuration in YAML format.
         """
         self.state_file_name = state_file_name
         self.region = region
@@ -49,59 +55,60 @@ class AbstractStack(ABC):
 
     def _read_config_file(
         self, stack_type: str, application_name: str, extension: str = "yaml"
-    ) -> json:
+    ) -> Union[Dict, Any]:
         """
         Reads the config file for the application and returns the config
-        as a json object for application config and yaml for stack config.
+        as a JSON object for application config and YAML for stack config.
 
         Args:
             stack_type (str): The type of the stack.
             application_name (str): The name of the application.
             extension (str, optional): The extension of the config file.
+
+        Returns:
+            Union[Dict, Any]: The configuration as a JSON object or YAML.
         """
-        with open(
-            absolute_project_root()
-            / f"modules/applications/{self.deployment_type.value}/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}",
-            "r",
-            encoding="utf-8",
-        ) as tf_config:
-            return (
-                yaml.safe_load(tf_config.read())
-                if extension == "yaml"
-                else json.loads(tf_config.read())
-            )
+        file_path = (
+            resources.files(modules)
+            / f"applications/{self.deployment_type.value}/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}"
+        )
+        with open(file_path, "r", encoding="utf-8") as config_file:
+            if extension == "yaml":
+                return yaml.safe_load(config_file.read())
+            else:
+                return json.loads(config_file.read())
 
     @abstractmethod
-    def process_stack_config():
+    def process_stack_config(self):
         """
         Process the stack configuration and validates the config.
         """
         pass
 
     @abstractmethod
-    def process_stack_inputs():
+    def process_stack_inputs(self):
         """
         Process the stack inputs and validates the inputs.
         """
         pass
 
     @abstractmethod
-    def process_stack_modules():
+    def process_stack_modules(self):
         """
-        Generates the stack modules terraform json configuration
+        Generates the stack modules Terraform JSON configuration
         and validates the modules against the stack config and parameters.
         """
         pass
 
     @abstractmethod
-    def process_stack_outputs():
+    def process_stack_outputs(self):
         """
         Generates the required stack outputs.
         """
         pass
 
     @abstractmethod
-    def generate():
+    def generate(self):
         """
         Generates the stack configuration.
         """

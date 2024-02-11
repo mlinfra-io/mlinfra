@@ -55,6 +55,10 @@ pluggy==1.3.0
 pre-commit==3.6.0
     # via mlinfra (pyproject.toml)
 pytest==7.4.4
+    # via
+    #   mlinfra (pyproject.toml)
+    #   pytest-mock
+pytest-mock==3.12.0
     # via mlinfra (pyproject.toml)
 python-dateutil==2.8.2
     # via botocore

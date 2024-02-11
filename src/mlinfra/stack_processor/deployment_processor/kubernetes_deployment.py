@@ -11,9 +11,10 @@
 #     permissions and limitations under the License.
 
 import json
+from importlib import resources
 
 import yaml
-from mlinfra import absolute_project_root
+from mlinfra import modules
 from mlinfra.enums.cloud_provider import CloudProvider
 from mlinfra.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
@@ -29,6 +30,15 @@ class KubernetesDeployment(AbstractDeployment):
         region: str,
         deployment_config: yaml,
     ):
+        """
+        Initialize a new instance of the KubernetesDeployment class.
+
+        Parameters:
+        - stack_name (str): The name of the stack.
+        - provider (CloudProvider): The cloud provider for the deployment.
+        - region (str): The region for the deployment.
+        - deployment_config (yaml): The deployment configuration.
+        """
         super(KubernetesDeployment, self).__init__(
             stack_name=stack_name,
             provider=provider,
@@ -37,8 +47,20 @@ class KubernetesDeployment(AbstractDeployment):
         )
 
     def generate_required_provider_config(self):
+        """
+        Generate the required provider configuration for the Kubernetes deployment.
+
+        This method reads the necessary provider configuration files and generates the required provider configuration for the Kubernetes deployment.
+        It updates the 'terraform.tf.json' file with the required provider information.
+
+        Parameters:
+        - None
+
+        Returns:
+        - None
+        """
         with open(
-            absolute_project_root() / f"modules/cloud/{self.provider.value}/terraform.tf.json",
+            resources.files(modules) / f"cloud/{self.provider.value}/terraform.tf.json",
             "r",
         ) as data_json:
             data = json.load(data_json)
@@ -48,8 +70,8 @@ class KubernetesDeployment(AbstractDeployment):
 
             for required_provider in required_providers:
                 with open(
-                    absolute_project_root()
-                    / f"modules/terraform_providers/{required_provider}/terraform.tf.json",
+                    resources.files(modules)
+                    / f"terraform_providers/{required_provider}/terraform.tf.json",
                     "r",
                 ) as provider_tf:
                     provider_tf_json = json.load(provider_tf)
@@ -69,8 +91,7 @@ class KubernetesDeployment(AbstractDeployment):
 
         for provider in providers:
             with open(
-                absolute_project_root()
-                / f"modules/terraform_providers/{provider}/provider.tf.json",
+                resources.files(modules) / f"terraform_providers/{provider}/provider.tf.json",
                 "r",
             ) as provider_tf:
                 provider_tf_json = json.load(provider_tf)
@@ -79,6 +100,21 @@ class KubernetesDeployment(AbstractDeployment):
         generate_tf_json(module_name="k8s_provider", json_module=data)
 
     def generate_deployment_config(self):
+        """
+        Generate the deployment configuration for the Kubernetes deployment.
+
+        This method generates the deployment configuration for the Kubernetes deployment based on the specified provider.
+        It injects the necessary modules and configurations into the Terraform configuration files.
+
+        Parameters:
+        - None
+
+        Returns:
+        - None
+
+        Raises:
+        - ValueError: If the specified provider is not supported.
+        """
         if self.provider == CloudProvider.AWS:
             # TODO: Make these blocks generic
             # inject vpc module
@@ -109,7 +145,7 @@ class KubernetesDeployment(AbstractDeployment):
             ):
                 # read values from the yaml config file
                 with open(
-                    absolute_project_root() / f"./modules/cloud/{self.provider.value}/eks/eks.yaml",
+                    resources.files(modules) / f"cloud/{self.provider.value}/eks/eks.yaml",
                     "r",
                     encoding="utf-8",
                 ) as tf_config:
@@ -180,9 +216,9 @@ class KubernetesDeployment(AbstractDeployment):
                 generate_tf_json(module_name="nodegroups", json_module=nodegroups_json_module)
 
         elif self.provider == CloudProvider.GCP:
-            pass
+            raise ValueError(f"Provider {self.provider} is not yet supported")
         elif self.provider == CloudProvider.AZURE:
-            pass
+            raise ValueError(f"Provider {self.provider} is not yet supported")
         else:
             raise ValueError(f"Provider {self.provider} is not supported")
 

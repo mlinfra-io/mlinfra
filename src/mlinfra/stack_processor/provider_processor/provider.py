@@ -12,19 +12,26 @@
 
 from abc import ABC, abstractmethod
 
-import yaml
-
 
 class AbstractProvider(ABC):
     """
     Abstract class for providers
     """
 
-    @abstractmethod
-    def __init__(self, stack_name: str, config: yaml):
+    def __init__(self, stack_name: str, config: dict):
+        """
+        Initializes the AbstractProvider object with the provided stack name and configuration object.
+
+        Args:
+            stack_name (str): The name of the stack.
+            config (dict): The configuration for the provider.
+        """
         self.stack_name = stack_name
         self.config = config
 
     @abstractmethod
     def configure_provider(self):
+        """
+        Abstract method that needs to be implemented by subclasses to configure the provider.
+        """
         pass
