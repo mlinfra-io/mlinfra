@@ -22,6 +22,16 @@ from mlinfra.utils.utils import generate_tf_json
 
 
 class CloudInfraDeployment(AbstractDeployment):
+    """
+    A class that configures the deployment of cloud infrastructure resources based on the specified provider.
+
+    Args:
+        stack_name (str): The name of the stack.
+        provider (CloudProvider): The cloud provider (AWS, GCP, or Azure).
+        region (str): The region where the resources will be deployed.
+        deployment_config (yaml): The deployment configuration in YAML format.
+    """
+
     def __init__(
         self,
         stack_name: str,
@@ -37,6 +47,10 @@ class CloudInfraDeployment(AbstractDeployment):
         )
 
     def configure_required_provider_config(self):
+        """
+        Configures the required provider configuration for the deployment.
+        Updates the Terraform JSON file with the necessary provider information.
+        """
         with open(
             absolute_project_root() / f"modules/cloud/{self.provider.value}/terraform.tf.json",
             "r",
@@ -58,6 +72,10 @@ class CloudInfraDeployment(AbstractDeployment):
             generate_tf_json(module_name="terraform", json_module=data)
 
     def configure_deployment_config(self):
+        """
+        Configures the deployment configuration based on the provider.
+        Generates a Terraform JSON file for the specific provider.
+        """
         # inject vpc module
         if self.provider == CloudProvider.AWS:
             json_module = {"module": {"vpc": {}}}
@@ -79,6 +97,9 @@ class CloudInfraDeployment(AbstractDeployment):
             raise ValueError(f"Provider {self.provider} is not supported")
 
     def configure_deployment(self):
+        """
+        Configures the deployment by calling the `configure_required_provider_config()` and `configure_deployment_config()` methods.
+        """
         self.configure_required_provider_config()
         self.configure_deployment_config()
 
