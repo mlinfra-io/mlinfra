@@ -22,6 +22,21 @@ from mlinfra.utils.constants import TF_PATH
 
 
 class AWSProvider(AbstractProvider):
+    """
+    Represents a provider for the AWS infrastructure.
+    Args:
+        stack_name (str): The name of the stack.
+        config (yaml): The configuration object containing the provider settings.
+    Attributes:
+        stack_name (str): The name of the stack.
+        config (yaml): The configuration object containing the provider settings.
+        account_id (str): The AWS account ID.
+        region (str): The AWS region.
+        access_key (str): The AWS access key (optional).
+        secret_key (str): The AWS secret key (optional).
+        role_arn (str): The AWS role ARN (optional).
+    """
+
     def __init__(self, stack_name: str, config: yaml):
         super().__init__(stack_name=stack_name, config=config)
         # required
@@ -35,9 +50,19 @@ class AWSProvider(AbstractProvider):
 
     # TODO: refactor statefile name
     def get_statefile_name(self) -> str:
+        """
+        Returns the name of the statefile for the current stack and region.
+        Returns:
+            str: The name of the statefile.
+        """
         return f"tfstate-{self.stack_name}-{self.region}"
 
     def configure_provider(self):
+        """
+        Configures the provider by updating the provider configuration file.
+        It sets the AWS region, allowed account IDs, and default tags.
+        It also adds a random provider.
+        """
         with open(resources.files(modules) / "cloud/aws/provider.tf.json", "r") as data_json:
             with open(f"./{TF_PATH}/provider.tf.json", "w", encoding="utf-8") as tf_json:
                 data = json.load(data_json)
