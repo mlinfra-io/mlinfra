@@ -16,7 +16,7 @@ import pytest
 from mlinfra.terraform.terraform import Terraform
 
 
-class TestPlan:
+class Test:
     # Generates a list of modules to be applied via the -target function of terraform
     def test_generate_modules_list(self, mocker):
         # Mock the necessary dependencies
@@ -123,5 +123,57 @@ class TestPlan:
         terraform = Terraform(stack_config_path)
 
         # Invoke and assert the exception
+        with pytest.raises(ValueError):
+            terraform.check_config_file_exists()
+
+    # The test checks if the method 'generate_terraform_config' returns a tuple of strings representing the state name and AWS region
+    def test_returns_state_name_and_aws_region_with_mocked_yaml_safe_load_with_mocked_configure_provider(
+        self, mocker
+    ):
+        mocker.patch.object(Terraform, "check_terraform_installed")
+        mocker.patch.object(Terraform, "check_config_file_exists")
+        mocker.patch.object(Terraform, "clean_mlops_infra_folder")
+        mocker.patch("os.path.isfile", return_value=True)
+        mocker.patch.object(
+            Terraform, "process_config_file", return_value=("stack_name", "aws_region")
+        )
+        stack_config_path = "path/to/stack/config.yaml"
+        terraform = Terraform(stack_config_path)
+        state_name, aws_region = terraform.generate_terraform_config()
+        assert state_name == "stack_name"
+        assert aws_region == "aws_region"
+
+    # check_terraform_installed returns an error message when an exception is encountered
+    def test_check_terraform_installed_returns_error_message(self, mocker):
+        mocker.patch("subprocess.check_output", side_effect=Exception("An error occurred"))
+        stack_config_path = "path/to/stack/config.yaml"
+        terraform = Terraform(stack_config_path)
+        result = terraform.check_terraform_installed()
+        assert isinstance(result, str)
+        assert "An error occurred while checking the Terraform version" in result
+
+    # stack config file does not exist, raises FileNotFoundError
+    def test_stack_config_file_not_found(self, mocker):
+        mocker.patch("os.path.isfile", return_value=False)
+        stack_config_path = "path/to/stack/config.yaml"
+        terraform = Terraform(stack_config_path)
+        with pytest.raises(FileNotFoundError):
+            terraform.check_config_file_exists()
+
+    # stack config file is invalid YAML, raises ValueError
+    def test_stack_config_file_invalid_yaml(self, mocker):
+        mocker.patch("os.path.isfile", return_value=True)
+        mocker.patch("builtins.open", mocker.mock_open(read_data="invalid_yaml"))
+        stack_config_path = "path/to/stack/config.yaml"
+        terraform = Terraform(stack_config_path)
+        with pytest.raises(ValueError):
+            terraform.check_config_file_exists()
+
+    # stack config file is missing required keys, raises ValueError
+    def test_stack_config_file_missing_keys(self, mocker):
+        mocker.patch("os.path.isfile", return_value=True)
+        mocker.patch("builtins.open", mocker.mock_open(read_data='{"name": "stack_name"}\n'))
+        stack_config_path = "path/to/stack/config.yaml"
+        terraform = Terraform(stack_config_path)
         with pytest.raises(ValueError):
             terraform.check_config_file_exists()

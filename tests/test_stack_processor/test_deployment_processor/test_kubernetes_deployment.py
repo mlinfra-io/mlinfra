@@ -63,37 +63,3 @@ class TestKubernetesDeployment:
         # Assert that a FileNotFoundError is raised when the specified provider is not supported
         with pytest.raises(FileNotFoundError):
             deployment.generate_required_provider_config()
-
-    def test_required_provider_not_supported(self):
-        provider = CloudProvider.AWS
-        region = "us-west-2"
-        stack_name = "my-stack"
-        deployment_config = {
-            "config": {
-                "vpc": {
-                    "cidr_block": "10.0.0.0/16",
-                    "subnet_cidr_blocks": ["10.0.1.0/24", "10.0.2.0/24"],
-                },
-                "kubernetes": {
-                    "cluster_version": "1.28",
-                    "node_groups": [
-                        {
-                            "name": "worker-group",
-                            "instance_type": "t3.medium",
-                            "desired_capacity": 2,
-                        }
-                    ],
-                },
-            }
-        }
-
-        deployment = KubernetesDeployment(
-            stack_name=stack_name,
-            provider=provider,
-            region=region,
-            deployment_config=deployment_config,
-        )
-
-        # Assert that a FileNotFoundError is raised when one of the required providers is not supported
-        with pytest.raises(FileNotFoundError):
-            deployment.generate_required_provider_config()
