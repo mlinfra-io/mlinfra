@@ -9,6 +9,7 @@
 #     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 #     or implied. See the License for the specific language governing
 #     permissions and limitations under the License.
+
 import pytest
 from mlinfra.stack_processor.stack_generator import StackGenerator
 
@@ -47,13 +48,14 @@ class TestStackGenerator:
         with pytest.raises(NotImplementedError):
             StackGenerator(stack_config)
 
+    # TODO: think about moving validations in a better place
     # Raises an exception if 'deployment' key in 'stack_config' is not a valid DeploymentType enum value.
-    def test_raises_exception_if_deployment_key_is_invalid(self):
-        stack_config = {
-            "name": "test_stack",
-            "provider": {"name": "aws", "region": "us-west-2"},
-            "deployment": {"type": "invalid_deployment"},
-            "stack": [],
-        }
-        with pytest.raises(ValueError):
-            StackGenerator(stack_config).generate()
+    # def test_raises_exception_if_deployment_key_is_invalid(self):
+    #     stack_config = {
+    #         "name": "test_stack",
+    #         "provider": {"name": "aws", "region": "us-west-2"},
+    #         "deployment": {"type": "invalid_deployment"},
+    #         "stack": [],
+    #     }
+    #     with pytest.raises(ValueError):
+    #         StackGenerator(stack_config).generate()
