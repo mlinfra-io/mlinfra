@@ -202,10 +202,10 @@ class Terraform:
         state_name, aws_region = self.process_config_file()
         return state_name, aws_region
 
-    def plan(self):
+    def plan(self) -> str:
         """
         This function is responsible for running terraform plan command
-        along with couple of other preleminary checks
+        along with a couple of other preliminary checks.
         """
         state_name, aws_region = self.generate_terraform_config()
         self.check_cloud_credentials()
