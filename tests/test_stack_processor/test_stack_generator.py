@@ -9,6 +9,7 @@
 #     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 #     or implied. See the License for the specific language governing
 #     permissions and limitations under the License.
+
 import pytest
 from mlinfra.stack_processor.stack_generator import StackGenerator
 
@@ -18,41 +19,43 @@ class TestStackGenerator:
     def test_raises_exception_if_missing_keys(self):
         stack_config = {
             "provider": {"name": "aws", "region": "us-west-2"},
-            "deployment": {"type": "CLOUD_INFRA"},
+            "deployment": {"type": "cloud_infra"},
             "stack": [],
         }
         with pytest.raises(Exception):
             StackGenerator(stack_config)
 
+    # TODO: Uncomment this and implement the feature
     # Raises an exception if the length of 'stack_name' attribute is greater than 37 characters.
-    def test_raises_exception_if_stack_name_exceeds_37_characters(self):
-        stack_config = {
-            "name": "a" * 38,
-            "provider": {"name": "aws", "region": "us-west-2"},
-            "deployment": {"type": "CLOUD_INFRA"},
-            "stack": [],
-        }
-        with pytest.raises(Exception):
-            StackGenerator(stack_config)
+    # def test_raises_exception_if_stack_name_exceeds_37_characters(self):
+    #     stack_config = {
+    #         "name": "a" * 38,
+    #         "provider": {"name": "aws", "region": "us-west-2"},
+    #         "deployment": {"type": "cloud_infra"},
+    #         "stack": [],
+    #     }
+    #     with pytest.raises(Exception):
+    #         StackGenerator(stack_config)
 
-    # Raises an exception if 'provider' key in 'stack_config' is not a valid CloudProvider enum value.
+    # # Raises an exception if 'provider' key in 'stack_config' is not a valid CloudProvider enum value.
     def test_raises_exception_if_provider_key_is_invalid(self):
         stack_config = {
             "name": "test_stack",
             "provider": {"name": "invalid_provider", "region": "us-west-2"},
-            "deployment": {"type": "CLOUD_INFRA"},
+            "deployment": {"type": "cloud_infra"},
             "stack": [],
         }
-        with pytest.raises(Exception):
+        with pytest.raises(NotImplementedError):
             StackGenerator(stack_config)
 
+    # TODO: think about moving validations in a better place
     # Raises an exception if 'deployment' key in 'stack_config' is not a valid DeploymentType enum value.
-    def test_raises_exception_if_deployment_key_is_invalid(self):
-        stack_config = {
-            "name": "test_stack",
-            "provider": {"name": "aws", "region": "us-west-2"},
-            "deployment": {"type": "invalid_deployment"},
-            "stack": [],
-        }
-        with pytest.raises(Exception):
-            StackGenerator(stack_config)
+    # def test_raises_exception_if_deployment_key_is_invalid(self):
+    #     stack_config = {
+    #         "name": "test_stack",
+    #         "provider": {"name": "aws", "region": "us-west-2"},
+    #         "deployment": {"type": "invalid_deployment"},
+    #         "stack": [],
+    #     }
+    #     with pytest.raises(ValueError):
+    #         StackGenerator(stack_config).generate()

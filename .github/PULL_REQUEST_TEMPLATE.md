@@ -1,6 +1,8 @@
 ## This PR proposes the following changes
 -
 
+<!-- If applicable Issue Number: Closes #N/A -->
+
 ### PR Checklist
 
 <!-- Please check if your PR fulfills the following requirements: -->
@@ -21,21 +23,4 @@ What kind of change does this PR introduce?
 - [ ] Build related changes
 - [ ] CI related changes
 - [ ] Documentation content changes
-- [ ] Other... (Please describe in the section below)
-
-
-## What is the current behavior?
-<!-- Please describe the current behavior that you are modifying, or link to a relevant issue. -->
-<!-- Use the following format for issue references: Closes #issue-number -->
--
-
-Issue Number: Closes #N/A
-
-
-## What is the new behavior?
--
-
-## Does this PR introduce a breaking change?
-
-- [ ] Yes (if yes, the please describe the impact and migration path for existing applications.)
-- [ ] No
+- [ ] Tests

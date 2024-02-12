@@ -103,7 +103,9 @@ class StackGenerator:
         """
         Generates and configures the infrastructure stacks based on the deployment type.
         """
-        if DeploymentType(self.stack_config["deployment"]["type"]) == DeploymentType.CLOUD_INFRA:
+        deployment_type = self.stack_config["deployment"]["type"]
+
+        if deployment_type == DeploymentType.CLOUD_INFRA.value:
             CloudInfraDeployment(
                 stack_name=self.stack_name,
                 provider=CloudProvider(self.stack_config["provider"]["name"]),
@@ -116,25 +118,28 @@ class StackGenerator:
                 region=self.region,
                 account_id=self.account_id,
                 provider=self.provider,
-                deployment_type=DeploymentType.CLOUD_INFRA,
+                deployment_type=deployment_type,
                 stacks=self.stack_config["stack"],
             ).generate()
 
-        elif DeploymentType(self.stack_config["deployment"]["type"]) == DeploymentType.KUBERNETES:
+        elif deployment_type == DeploymentType.KUBERNETES.value:
             KubernetesDeployment(
                 stack_name=self.stack_name,
                 provider=CloudProvider(self.stack_config["provider"]["name"]),
                 region=self.region,
                 deployment_config=self.stack_config["deployment"],
             ).configure_deployment()
+
             KubernetesStack(
                 state_file_name=self.state_file_name,
                 region=self.region,
                 account_id=self.account_id,
                 provider=self.provider,
-                deployment_type=DeploymentType.KUBERNETES,
+                deployment_type=deployment_type,
                 stacks=self.stack_config["stack"],
             ).generate()
+        else:
+            raise ValueError(f"Deployment type {deployment_type} not supported")
 
     def configure_provider(self) -> CloudProvider:
         """
@@ -146,7 +151,8 @@ class StackGenerator:
         Raises:
             NotImplementedError: If the cloud provider is not supported.
         """
-        if CloudProvider(self.stack_config["provider"]["name"]) == CloudProvider.AWS:
+        provider_name = self.stack_config["provider"]["name"]
+        if provider_name == CloudProvider.AWS.value:
             aws_provider = AWSProvider(
                 stack_name=self.stack_name, config=self.stack_config["provider"]
             )

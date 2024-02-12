@@ -14,6 +14,10 @@ from enum import Enum
 
 
 class DeploymentType(Enum):
+    """
+    Enumeration that represents different types of deployments.
+    """
+
     CLOUD_NATIVE = "cloud_native"
     CLOUD_INFRA = "cloud_infra"
     KUBERNETES = "kubernetes"
