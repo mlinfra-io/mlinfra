@@ -14,7 +14,7 @@ from mlinfra.enums.cloud_provider import CloudProvider
 from mlinfra.stack_processor.deployment_processor.cloud_vm_deployment import CloudVMDeployment
 
 
-class TestCloudInfraDeployment:
+class TestCloudVMDeployment:
     # can be instantiated with required parameters
     def test_instantiation(self):
         stack_name = "test_stack"
