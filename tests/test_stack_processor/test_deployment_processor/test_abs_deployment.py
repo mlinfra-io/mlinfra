@@ -25,7 +25,7 @@ class TestAbstractDeployment:
 
         yaml_config = """
         deployment:
-            type: cloud_infra
+            type: cloud_vm
         """
         deployment_config = yaml.safe_load(yaml_config)
 
@@ -40,7 +40,7 @@ class TestAbstractDeployment:
 
         yaml_config = """
         deployment:
-            type: cloud_infra
+            type: cloud_vm
         """
         deployment_config = yaml.safe_load(yaml_config)
 
