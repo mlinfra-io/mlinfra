@@ -21,8 +21,8 @@ from mlinfra.stack_processor.stack_processor.stack import (
 from mlinfra.utils.constants import TF_PATH
 
 
-class CloudInfraStack(AbstractStack):
-    """Class representing the CloudInfraStack class."""
+class CloudVMStack(AbstractStack):
+    """Class representing the CloudVMStack class."""
 
     def __init__(
         self,
@@ -34,7 +34,7 @@ class CloudInfraStack(AbstractStack):
         stacks: yaml,
     ):
         """
-        Constructor for the CloudInfraStack class.
+        Constructor for the CloudVMStack class.
 
         :param provider: The cloud provider
         :type provider: Provider
