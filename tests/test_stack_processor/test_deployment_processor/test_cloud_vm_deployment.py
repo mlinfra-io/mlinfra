@@ -11,7 +11,7 @@
 #     permissions and limitations under the License.
 
 from mlinfra.enums.cloud_provider import CloudProvider
-from mlinfra.stack_processor.deployment_processor.cloud_infra_deployment import CloudInfraDeployment
+from mlinfra.stack_processor.deployment_processor.cloud_vm_deployment import CloudVMDeployment
 
 
 class TestCloudInfraDeployment:
@@ -22,7 +22,7 @@ class TestCloudInfraDeployment:
         region = "us-west-2"
         deployment_config = {"config": {"vpc": {"cidr_block": "10.0.0.0/16"}}}
 
-        deployment = CloudInfraDeployment(stack_name, provider, region, deployment_config)
+        deployment = CloudVMDeployment(stack_name, provider, region, deployment_config)
 
         assert deployment.stack_name == stack_name
         assert deployment.provider == provider
@@ -36,7 +36,7 @@ class TestCloudInfraDeployment:
         region = "us-west-2"
         deployment_config = {"config": {"vpc": {"cidr_block": "10.0.0.0/16"}}}
 
-        deployment = CloudInfraDeployment(stack_name, provider, region, deployment_config)
+        deployment = CloudVMDeployment(stack_name, provider, region, deployment_config)
 
         mocker.patch.object(deployment, "configure_required_provider_config")
         mocker.patch.object(deployment, "configure_deployment_config")
