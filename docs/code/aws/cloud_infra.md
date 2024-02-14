@@ -1,15 +1,15 @@
-`cloud_infra` deploys MLOps `stack` on top of Cloud provider VMs.
+`cloud_vm` deploys MLOps `stack` on top of Cloud provider VMs.
 
 
 ## Complete example with all stacks
 
 === "Simple Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/complete/aws-complete.yaml"
+    --8<-- "docs/examples/cloud_vm/complete/aws-complete.yaml"
     ```
 === "Advanced Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/complete/aws-complete-advanced.yaml"
+    --8<-- "docs/examples/cloud_vm/complete/aws-complete-advanced.yaml"
     ```
 
 ## data_versioning
@@ -18,11 +18,11 @@
 
 === "Simple Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/lakefs/aws-lakefs.yaml"
+    --8<-- "docs/examples/cloud_vm/lakefs/aws-lakefs.yaml"
     ```
 === "Advanced Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/lakefs/aws-lakefs-advanced.yaml"
+    --8<-- "docs/examples/cloud_vm/lakefs/aws-lakefs-advanced.yaml"
     ```
 
 ## experiment_tracking
@@ -31,22 +31,22 @@
 
 === "Simple Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/mlflow/aws-mlflow.yaml"
+    --8<-- "docs/examples/cloud_vm/mlflow/aws-mlflow.yaml"
     ```
 === "Advanced Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/mlflow/aws-mlflow-advanced.yaml"
+    --8<-- "docs/examples/cloud_vm/mlflow/aws-mlflow-advanced.yaml"
     ```
 
 #### wandb
 
 === "Simple Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/wandb/aws-wandb.yaml"
+    --8<-- "docs/examples/cloud_vm/wandb/aws-wandb.yaml"
     ```
 === "Advanced Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/wandb/aws-wandb-advanced.yaml"
+    --8<-- "docs/examples/cloud_vm/wandb/aws-wandb-advanced.yaml"
     ```
 
 
@@ -56,20 +56,20 @@
 
 === "Simple Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/prefect/aws-prefect.yaml"
+    --8<-- "docs/examples/cloud_vm/prefect/aws-prefect.yaml"
     ```
 === "Advanced Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/prefect/aws-prefect-advanced.yaml"
+    --8<-- "docs/examples/cloud_vm/prefect/aws-prefect-advanced.yaml"
     ```
 
 #### dagster
 
 === "Simple Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/dagster/aws-dagster.yaml"
+    --8<-- "docs/examples/cloud_vm/dagster/aws-dagster.yaml"
     ```
 === "Advanced Deployment Configuration"
     ```yaml
-    --8<-- "docs/examples/cloud_infra/dagster/aws-dagster-advanced.yaml"
+    --8<-- "docs/examples/cloud_vm/dagster/aws-dagster-advanced.yaml"
     ```
