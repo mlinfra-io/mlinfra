@@ -22,7 +22,7 @@ from mlinfra.stack_processor.deployment_processor.deployment import (
 from mlinfra.utils.utils import generate_tf_json
 
 
-class CloudInfraDeployment(AbstractDeployment):
+class CloudVMDeployment(AbstractDeployment):
     """
     A class that configures the deployment of cloud infrastructure resources based on the specified provider.
 
