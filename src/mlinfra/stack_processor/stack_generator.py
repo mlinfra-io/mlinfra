@@ -118,7 +118,7 @@ class StackGenerator:
                 region=self.region,
                 account_id=self.account_id,
                 provider=self.provider,
-                deployment_type=deployment_type,
+                deployment_type=DeploymentType.CLOUD_VM,
                 stacks=self.stack_config["stack"],
             ).generate()
 
@@ -135,7 +135,7 @@ class StackGenerator:
                 region=self.region,
                 account_id=self.account_id,
                 provider=self.provider,
-                deployment_type=deployment_type,
+                deployment_type=DeploymentType.KUBERNETES,
                 stacks=self.stack_config["stack"],
             ).generate()
         else:
