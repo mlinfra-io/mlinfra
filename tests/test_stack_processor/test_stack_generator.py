@@ -19,7 +19,7 @@ class TestStackGenerator:
     def test_raises_exception_if_missing_keys(self):
         stack_config = {
             "provider": {"name": "aws", "region": "us-west-2"},
-            "deployment": {"type": "cloud_infra"},
+            "deployment": {"type": "cloud_vm"},
             "stack": [],
         }
         with pytest.raises(Exception):
@@ -31,7 +31,7 @@ class TestStackGenerator:
     #     stack_config = {
     #         "name": "a" * 38,
     #         "provider": {"name": "aws", "region": "us-west-2"},
-    #         "deployment": {"type": "cloud_infra"},
+    #         "deployment": {"type": "cloud_vm"},
     #         "stack": [],
     #     }
     #     with pytest.raises(Exception):
@@ -42,7 +42,7 @@ class TestStackGenerator:
         stack_config = {
             "name": "test_stack",
             "provider": {"name": "invalid_provider", "region": "us-west-2"},
-            "deployment": {"type": "cloud_infra"},
+            "deployment": {"type": "cloud_vm"},
             "stack": [],
         }
         with pytest.raises(NotImplementedError):

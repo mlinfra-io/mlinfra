@@ -19,5 +19,5 @@ class DeploymentType(Enum):
     """
 
     CLOUD_NATIVE = "cloud_native"
-    CLOUD_INFRA = "cloud_infra"
+    CLOUD_VM = "cloud_vm"
     KUBERNETES = "kubernetes"

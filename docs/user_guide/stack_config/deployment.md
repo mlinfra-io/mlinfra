@@ -1,11 +1,11 @@
 The deployment section is designed to enable configuration of the deployment type, either IaaS or PaaS, within your chosen cloud provider. This section is highly adaptable, requiring only one mandatory field: `type`. The `type` field accepts one of two values:
 
-- [IaaS](https://aws.amazon.com/what-is/iaas/): Specified as `cloud_infra`.
+- [IaaS](https://aws.amazon.com/what-is/iaas/): Specified as `cloud_vm`.
 - [PaaS](https://aws.amazon.com/types-of-cloud-computing/): Specified as `kubernetes`.
 
 Additionally, the `config` subsection under `deployment` offers detailed, fine-grained configuration options for the respective cloud resources. These options vary based on the deployment type:
 
-For `cloud_infra`, the configuration is limited to `vpc`.
+For `cloud_vm`, the configuration is limited to `vpc`.
 For `kubernetes`, configurations extend to `vpc`, `kubernetes`, and `node_groups`.
 
 A sample `deployment` block can look as follows:

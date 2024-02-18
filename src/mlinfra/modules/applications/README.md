@@ -2,7 +2,7 @@
 
 ## Rules for adding an application module
 
-- Define a cloud_infra and kubernetes module
+- Define a cloud_vm and kubernetes module
 - Define a `yaml` declarative file for the application module
 - Set the following fields for the inputs:
 

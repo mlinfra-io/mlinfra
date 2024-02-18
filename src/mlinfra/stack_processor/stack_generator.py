@@ -12,8 +12,8 @@
 
 from mlinfra.enums.cloud_provider import CloudProvider
 from mlinfra.enums.deployment_type import DeploymentType
-from mlinfra.stack_processor.deployment_processor.cloud_infra_deployment import (
-    CloudInfraDeployment,
+from mlinfra.stack_processor.deployment_processor.cloud_vm_deployment import (
+    CloudVMDeployment,
 )
 from mlinfra.stack_processor.deployment_processor.kubernetes_deployment import (
     KubernetesDeployment,
@@ -21,8 +21,8 @@ from mlinfra.stack_processor.deployment_processor.kubernetes_deployment import (
 from mlinfra.stack_processor.provider_processor.aws_provider import (
     AWSProvider,
 )
-from mlinfra.stack_processor.stack_processor.cloud_infra_stack import (
-    CloudInfraStack,
+from mlinfra.stack_processor.stack_processor.cloud_vm_stack import (
+    CloudVMStack,
 )
 from mlinfra.stack_processor.stack_processor.kubernetes_stack import (
     KubernetesStack,
@@ -105,20 +105,20 @@ class StackGenerator:
         """
         deployment_type = self.stack_config["deployment"]["type"]
 
-        if deployment_type == DeploymentType.CLOUD_INFRA.value:
-            CloudInfraDeployment(
+        if deployment_type == DeploymentType.CLOUD_VM.value:
+            CloudVMDeployment(
                 stack_name=self.stack_name,
                 provider=CloudProvider(self.stack_config["provider"]["name"]),
                 region=self.region,
                 deployment_config=self.stack_config["deployment"],
             ).configure_deployment()
 
-            CloudInfraStack(
+            CloudVMStack(
                 state_file_name=self.state_file_name,
                 region=self.region,
                 account_id=self.account_id,
                 provider=self.provider,
-                deployment_type=deployment_type,
+                deployment_type=DeploymentType.CLOUD_VM,
                 stacks=self.stack_config["stack"],
             ).generate()
 
@@ -135,7 +135,7 @@ class StackGenerator:
                 region=self.region,
                 account_id=self.account_id,
                 provider=self.provider,
-                deployment_type=deployment_type,
+                deployment_type=DeploymentType.KUBERNETES,
                 stacks=self.stack_config["stack"],
             ).generate()
         else:

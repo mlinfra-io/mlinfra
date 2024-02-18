@@ -41,11 +41,11 @@ mlinfra terraform --action=destroy --stack-config-path=aws-lakefs-k8s.yaml
 
 ===+ "Simple Deployment Configuration"
     ```yaml title="This stack config deploys EC2 instances with config stacks"
-    --8<-- "docs/examples/cloud_infra/complete/aws-complete.yaml"
+    --8<-- "docs/examples/cloud_vm/complete/aws-complete.yaml"
     ```
 === "Advanced Deployment Configuration"
     ```yaml title="The same stack config can be configured to quite an extent"
-    --8<-- "docs/examples/cloud_infra/complete/aws-complete-advanced.yaml"
+    --8<-- "docs/examples/cloud_vm/complete/aws-complete-advanced.yaml"
     ```
 
 - Whereas sample mlops stack for deployment on Cloud PaaS looks as follows:

@@ -29,7 +29,7 @@ The config file is made with simplicity in mind. It is comprised of 4 distinct s
 ### [deployment](deployment.md)
 
 - The `deployment` block configures the type of deployment (whether IaaS or PaaS) on the cloud provider and provides a space for adding any further configurations to the underlying cloud components.
-- The `deployment.type` can be set to `cloud_infra` for IaaS or `kubernetes` for PaaS deployments.
+- The `deployment.type` can be set to `cloud_vm` for IaaS or `kubernetes` for PaaS deployments.
 - The `deployment.config` can be used to further configure the cloud components; such as the `vpc` or `kubernetes` cluster for more user defined customisations.
 
 - For more details, see the deployment page.
