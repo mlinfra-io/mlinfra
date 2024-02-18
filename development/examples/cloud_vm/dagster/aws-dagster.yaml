@@ -1,10 +1,10 @@
-name: aws-mlops-stack-mlflow
+name: aws-mlops-stack-dagster
 provider:
   name: aws
   account_id: "793009824629"
   region: "eu-central-1"
 deployment:
-  type: cloud_infra
+  type: cloud_vm
 stack:
-  - experiment_tracking:
-      name: mlflow
+  - orchestrator:
+      name: dagster

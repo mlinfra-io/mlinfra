@@ -4,7 +4,7 @@ provider:
   account_id: "793009824629"
   region: "eu-central-1"
 deployment:
-  type: cloud_infra
+  type: cloud_vm
   config:
     vpc:
       create_database_subnets: true
