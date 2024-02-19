@@ -154,6 +154,8 @@ plugins:
   - privacy
   - search
   - section-index
+  - mike:
+      canonical_version: latest
   - git-revision-date-localized:
       enable_creation_date: false
       type: iso_date
