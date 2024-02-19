@@ -32,4 +32,7 @@ runs:
           MIKE_OPTIONS+=( "--push" )
         fi
         mike deploy ${{ inputs.version }} ${{ inputs.alias }} "${MIKE_OPTIONS[@]}"
+        if [ "true" = "${{ inputs.push }}" ]; then
+          mike set-default ${{ inputs.version }}
+        fi
       shell: bash
