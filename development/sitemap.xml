@@ -1,82 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://mlinfra.io/development/</loc>
+         <loc>https://mlinfra.io/latest/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/CONTRIBUTING/</loc>
+         <loc>https://mlinfra.io/latest/CONTRIBUTING/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/RELEASE_NOTES/</loc>
+         <loc>https://mlinfra.io/latest/RELEASE_NOTES/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/SECURITY/</loc>
+         <loc>https://mlinfra.io/latest/SECURITY/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/about_me/</loc>
+         <loc>https://mlinfra.io/latest/about_me/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/acknowledgements/</loc>
+         <loc>https://mlinfra.io/latest/acknowledgements/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/roadmap/</loc>
+         <loc>https://mlinfra.io/latest/roadmap/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/code/aws/cloud_vm/</loc>
+         <loc>https://mlinfra.io/latest/code/aws/cloud_vm/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/code/aws/kubernetes/</loc>
+         <loc>https://mlinfra.io/latest/code/aws/kubernetes/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/user_guide/</loc>
+         <loc>https://mlinfra.io/latest/user_guide/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/user_guide/application_config/</loc>
+         <loc>https://mlinfra.io/latest/user_guide/application_config/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/user_guide/cloud_config/</loc>
+         <loc>https://mlinfra.io/latest/user_guide/cloud_config/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/user_guide/stack_config/</loc>
+         <loc>https://mlinfra.io/latest/user_guide/stack_config/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/user_guide/stack_config/deployment/</loc>
+         <loc>https://mlinfra.io/latest/user_guide/stack_config/deployment/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/user_guide/stack_config/provider/</loc>
+         <loc>https://mlinfra.io/latest/user_guide/stack_config/provider/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://mlinfra.io/development/user_guide/stack_config/stack/</loc>
+         <loc>https://mlinfra.io/latest/user_guide/stack_config/stack/</loc>
          <lastmod>2024-02-19</lastmod>
          <changefreq>daily</changefreq>
     </url>
