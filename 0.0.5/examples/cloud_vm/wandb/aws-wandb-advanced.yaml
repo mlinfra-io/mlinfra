@@ -1,0 +1,17 @@
+name: aws-mlops-stack-wandb
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: cloud_vm
+  config:
+    vpc:
+      create_database_subnets: true
+stack:
+  - experiment_tracking:
+      name: wandb
+      params:
+        remote_tracking: true
+        wandb_artifacts_bucket_name: "wandb-artifacts-bucket"
+        ec2_application_port: 8000
