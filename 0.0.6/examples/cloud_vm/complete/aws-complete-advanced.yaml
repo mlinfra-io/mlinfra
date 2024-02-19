@@ -1,0 +1,28 @@
+name: aws-mlops-stack-complete-advanced
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: cloud_vm
+  config:
+    vpc:
+      create_database_subnets: true
+stack:
+  - data_versioning:
+      name: lakefs
+      params:
+        remote_tracking: true
+        database_type: "dynamodb"
+        lakefs_data_bucket_name: "lakefs-repository-data-bucket"
+        dynamodb_table_name: "lakefs_kvstore"
+  - experiment_tracking:
+      name: mlflow
+      params:
+        remote_tracking: true
+        mlflow_artifacts_bucket_name: "artifacts-storage-bucket"
+  - orchestrator:
+      name: prefect
+      params:
+        remote_tracking: true
+        ec2_application_port: 9500
