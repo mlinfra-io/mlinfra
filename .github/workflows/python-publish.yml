@@ -13,10 +13,6 @@ on:
   release:
     types: [published]
 
-permissions:
-  contents: write
-  pages: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -43,6 +39,9 @@ jobs:
     name: Publish documentation
     needs: [build]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -64,6 +63,7 @@ jobs:
     needs: [build]
     runs-on: ubuntu-latest
     permissions:
+      contents: write
       id-token: write
     steps:
       - name: Download build artifacts
