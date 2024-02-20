@@ -31,9 +31,8 @@ runs:
         if [ "true" = "${{ inputs.push }}" ]; then
           MIKE_OPTIONS+=( " --push" )
         fi
-        echo "mike deploy ${{ inputs.version }} ${{ inputs.alias }} ${MIKE_OPTIONS[@]}"
         mike deploy ${{ inputs.version }} ${{ inputs.alias }} "${MIKE_OPTIONS[@]}"
         if [ "true" = "${{ inputs.push }}" ]; then
-          mike set-default --push ${{ inputs.version }}
+          mike set-default --push latest
         fi
       shell: bash
