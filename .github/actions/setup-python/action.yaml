@@ -22,11 +22,12 @@ runs:
           pyproject.toml
     - name: Install dependencies
       run: |
-        pip install --upgrade pip
+        pip install uv
+        uv pip install --upgrade pip
         if [[ "${{ inputs.dependencyType }}" == "dev" ]]; then
-          pip install -r requirements-dev.txt
+          uv pip install -r requirements-dev.txt
         elif [[ "${{ inputs.dependencyType }}" == "docs" ]]; then
-          pip install -r requirements-docs.txt
+          uv pip install -r requirements-docs.txt
         fi
-        pip install -e . --no-deps
+        uv pip install -e . --no-deps
       shell: bash
