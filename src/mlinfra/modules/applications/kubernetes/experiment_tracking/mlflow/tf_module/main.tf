@@ -1,13 +1,5 @@
 data "aws_region" "current" {}
 
-resource "random_password" "mlflow_auth_key" {
-  count = var.remote_tracking ? 1 : 0
-
-  length           = 64
-  special          = false
-  override_special = "_%@"
-}
-
 # TODO: possibility to bring your own bucket
 module "mlflow_data_artifacts_bucket" {
   source = "../../../../../cloud/aws/s3"
@@ -141,8 +133,16 @@ resource "aws_iam_role" "mlflow_iam_role" {
   tags = var.tags
 }
 
+resource "random_password" "mlflow_auth_key" {
+  count = var.remote_tracking ? 1 : 0
+
+  length           = 64
+  special          = false
+  override_special = "_%@"
+}
+
 locals {
-  secret_data = var.remote_tracking ? {
+  rds_connection_secret = var.remote_tracking ? {
     auth_encrypt_secret_key    = resource.random_password.mlflow_auth_key[0].result
     database_connection_string = "postgresql://${module.mlflow_rds_backend.db_instance_username}:${module.mlflow_rds_backend.db_instance_password}@${module.mlflow_rds_backend.db_instance_endpoint}/${module.mlflow_rds_backend.db_instance_name}"
   } : {}
@@ -166,7 +166,7 @@ resource "kubernetes_secret_v1" "mlflow_secret" {
     name      = var.mlflow_secret
     namespace = var.service_account_namespace
   }
-  data = local.secret_data
+  data = local.rds_connection_secret
   type = "Opaque"
 
   depends_on = [kubernetes_namespace_v1.mlflow_namespace]
@@ -184,69 +184,98 @@ resource "kubernetes_service_account_v1" "mlflow_sa" {
   depends_on = [aws_iam_role.mlflow_iam_role, kubernetes_namespace_v1.mlflow_namespace]
 }
 
-# locals {
-#   mlflow_helmchart_set = var.remote_tracking ? [{
-#     name  = "serviceAccount.create"
-#     value = "true"
-#     type  = "auto"
-#     }, {
-#     name  = "serviceAccount.name"
-#     value = "${var.service_account_name}"
-#     type  = "auto"
-#     }, {
-#     name  = "existingSecret"
-#     value = "${var.mlflow_secret}"
-#     type  = "auto"
-#     }, {
-#     name  = "secretKeys.databaseConnectionString"
-#     value = var.database_type == "postgres" ? "database_connection_string" : "null"
-#     type  = "auto"
-#     }] : [{
-#     name  = "blockstore.s3.region"
-#     value = "${data.aws_region.current.name}"
-#     type  = "auto"
-#   }]
-# }
+locals {
+  common_helmchart_values = [{
+    name  = "serviceAccount.create"
+    value = "true"
+    type  = "auto"
+    }, {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com\\/role-arn"
+    value = "${aws_iam_role.mlflow_iam_role[0].arn}"
+    type  = "auto"
+    }, {
+    name  = "serviceAccount.name"
+    value = var.service_account_name
+    type  = "auto"
+  }]
 
-# module "mlflow_helmchart" {
-#   source = "../../../../../cloud/aws/helm_chart"
+  mlflow_helmchart_values = var.remote_tracking ? [{
+    # configuration for remote deployment
+    name  = "backendStore.postgresql.enabled"
+    value = "true"
+    type  = "auto"
+    }, {
+    name  = "backendStore.postgresql.host"
+    value = "${module.mlflow_rds_backend.db_instance_endpoint}"
+    type  = "auto"
+    }, {
+    name  = "backendStore.postgresql.port"
+    value = "${module.mlflow_rds_backend.db_instance_port}"
+    type  = "auto"
+    }, {
+    name  = "backendStore.postgresql.database"
+    value = "${module.mlflow_rds_backend.db_instance_name}"
+    type  = "auto"
+    }, {
+    name  = "backendStore.postgresql.user"
+    value = "${module.mlflow_rds_backend.db_instance_username}"
+    type  = "auto"
+    }, {
+    name  = "backendStore.postgresql.password"
+    value = "${module.mlflow_rds_backend.db_instance_password}"
+    type  = "auto"
+    }, {
+    name  = "artifactRoot.s3.enabled"
+    value = "true"
+    type  = "auto"
+    }, {
+    name  = "artifactRoot.s3.bucket"
+    value = "${module.mlflow_data_artifacts_bucket[0].bucket_name}"
+    type  = "auto"
+    }] : [{
+    # configuration for non remote deployment
+    name  = "backendStore.postgresql.enabled"
+    value = "false"
+    type  = "auto"
+    }, {
+    name  = "artifactRoot.s3.enabled"
+    value = "false"
+    type  = "auto"
+  }]
+}
 
-#   name             = "mlflow"
-#   namespace        = var.service_account_namespace
-#   create_namespace = false
-#   repository       = "https://charts.mlflow.io"
-#   chart            = "mlflow"
-#   chart_version    = var.mlflow_chart_version
-#   values = templatefile("${path.module}/values.yaml", {
-#     nodeSelector = jsonencode(var.nodeSelector)
-#     tolerations  = jsonencode(var.tolerations)
-#     affinity     = jsonencode(var.affinity)
-#     resources    = jsonencode(var.resources)
-#   })
-#   set = concat(local.mlflow_helmchart_set, [{
-#     name  = "useDevPostgres"
-#     value = var.remote_tracking ? "false" : "true"
-#     type  = "auto"
-#   }])
+module "mlflow_helmchart" {
+  source = "../../../../../cloud/aws/helm_chart"
 
-#   depends_on = [kubernetes_service_account_v1.mlflow_sa]
-# }
+  name             = "mlflow"
+  namespace        = var.service_account_namespace
+  create_namespace = true
+  repository       = "https://community-charts.github.io"
+  chart            = "mlflow"
+  chart_version    = var.mlflow_chart_version
+  values = templatefile("${path.module}/values.yaml", {
+    nodeSelector = jsonencode(var.nodeSelector)
+    tolerations  = jsonencode(var.tolerations)
+    affinity     = jsonencode(var.affinity)
+    resources    = jsonencode(var.resources)
+  })
+  set = concat(local.common_helmchart_values, local.mlflow_helmchart_values)
 
-# module "secrets_manager" {
-#   source = "../../../../../cloud/aws/secrets_manager"
-#   count  = var.remote_tracking ? 1 : 0
+  depends_on = [kubernetes_service_account_v1.mlflow_sa]
+}
 
-#   secret_name = "mlflow-secrets"
-#   secret_value = var.remote_tracking ? var.database_type == "postgres" ? {
-#     auth_secret_key            = resource.random_password.mlflow_auth_key[0].result
-#     bucket_id                  = module.mlflow_data_artifacts_bucket[0].bucket_id
-#     database_connection_string = "postgresql://${module.mlflow_rds_backend.db_instance_username}:${module.mlflow_rds_backend.db_instance_password}@${module.mlflow_rds_backend.db_instance_endpoint}/${module.mlflow_rds_backend.db_instance_name}"
-#     } : {
-#     auth_secret_key = resource.random_password.mlflow_auth_key[0].result
-#     bucket_id       = module.mlflow_data_artifacts_bucket[0].bucket_id
-#     } : {
-#     bucket_id = module.mlflow_data_artifacts_bucket[0].bucket_id
-#   }
+module "secrets_manager" {
+  source = "../../../../../cloud/aws/secrets_manager"
+  count  = var.remote_tracking ? 1 : 0
 
-#   depends_on = [module.mlflow_helmchart]
-# }
+  secret_name = "mlflow-secrets"
+  secret_value = var.remote_tracking ? {
+    auth_secret_key            = resource.random_password.mlflow_auth_key[0].result
+    bucket_id                  = module.mlflow_data_artifacts_bucket[0].bucket_id
+    database_connection_string = "postgresql://${module.mlflow_rds_backend.db_instance_username}:${module.mlflow_rds_backend.db_instance_password}@${module.mlflow_rds_backend.db_instance_endpoint}/${module.mlflow_rds_backend.db_instance_name}"
+    } : {
+    bucket_id = module.mlflow_data_artifacts_bucket[0].bucket_id
+  }
+
+  depends_on = [module.mlflow_helmchart]
+}
