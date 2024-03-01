@@ -1,0 +1,58 @@
+inputs:
+  - name: vpc_id
+    user_facing: false
+    description: VPC id
+    value: module.vpc.vpc_id
+    default: None
+  - name: vpc_cidr_block
+    user_facing: false
+    description: VPC CIDR block required for SG of RDS
+    value: module.vpc.vpc_cidr_block
+    default: None
+  - name: db_subnet_group_name
+    user_facing: false
+    description: DB Subnet group name
+    value: module.vpc.database_subnet_group
+    default: None
+  - name: oidc_provider_arn
+    user_facing: false
+    description: The ARN of the OIDC provider to use for authentication
+    value: module.eks.oidc_provider_arn
+    default: None
+  - name: oidc_provider
+    user_facing: false
+    description: The OIDC provider to use for authentication
+    value: module.eks.oidc_provider
+    default: None
+  - name: remote_tracking
+    user_facing: true
+    description: Deploys an external Postgres RDS server as backend store and S3 as artifact store for mlflow.
+    default: true
+  - name: rds_instance_class
+    user_facing: true
+    description: RDS instance class to deploy mlflow backend on
+    default: "db.t4g.medium"
+  - name: mlflow_chart_version
+    user_facing: true
+    description: mlflow Chart version. See here for more details; https://artifacthub.io/packages/helm/mlflow/mlflow
+    default: "1.0.8"
+  - name: service_account_namespace
+    user_facing: true
+    description: The namespace where the service account would be installed
+    default: mlflow
+  - name: service_account_name
+    user_facing: true
+    description: The name of the service account to use for mlflow
+    default: mlflow-sa
+  - name: mlflow_data_bucket_name
+    user_facing: true
+    description: mlflow S3 data bucket name
+    default: "mlflow-data-bucket"
+  - name: tags
+    user_facing: true
+    description: Tags for mlflow module
+    default:
+      data_versioning: "mlflow"
+outputs:
+clouds:
+  - aws
