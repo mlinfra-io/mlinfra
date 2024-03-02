@@ -185,7 +185,8 @@ resource "kubernetes_service_account_v1" "mlflow_sa" {
 }
 
 locals {
-  common_helmchart_values = [{
+  mlflow_helmchart_values = var.remote_tracking ? [{
+    # configuration for remote deployment
     name  = "serviceAccount.create"
     value = "true"
     type  = "auto"
@@ -197,10 +198,7 @@ locals {
     name  = "serviceAccount.name"
     value = var.service_account_name
     type  = "auto"
-  }]
-
-  mlflow_helmchart_values = var.remote_tracking ? [{
-    # configuration for remote deployment
+    }, {
     name  = "backendStore.postgresql.enabled"
     value = "true"
     type  = "auto"
@@ -210,7 +208,7 @@ locals {
     type  = "auto"
     }, {
     name  = "backendStore.postgresql.port"
-    value = "${module.mlflow_rds_backend.db_instance_port}"
+    value = "5432"
     type  = "auto"
     }, {
     name  = "backendStore.postgresql.database"
@@ -230,7 +228,7 @@ locals {
     type  = "auto"
     }, {
     name  = "artifactRoot.s3.bucket"
-    value = "${module.mlflow_data_artifacts_bucket[0].bucket_name}"
+    value = "${var.mlflow_data_bucket_name}"
     type  = "auto"
     }] : [{
     # configuration for non remote deployment
@@ -259,8 +257,7 @@ module "mlflow_helmchart" {
     affinity     = jsonencode(var.affinity)
     resources    = jsonencode(var.resources)
   })
-  set = concat(local.common_helmchart_values, local.mlflow_helmchart_values)
-
+  set        = local.mlflow_helmchart_values
   depends_on = [kubernetes_service_account_v1.mlflow_sa]
 }
 
