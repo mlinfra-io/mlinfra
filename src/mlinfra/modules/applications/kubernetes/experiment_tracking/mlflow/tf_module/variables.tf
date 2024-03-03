@@ -57,7 +57,7 @@ variable "rds_instance_class" {
 variable "mlflow_chart_version" {
   type        = string
   description = "mlflow Chart version."
-  default     = "1.0.8"
+  default     = "0.7.19"
 }
 
 variable "skip_final_snapshot" {
@@ -78,11 +78,11 @@ variable "resources" {
   default = {
     requests = {
       cpu    = "100m"
-      memory = "128Mi"
+      memory = "512Mi"
     }
     limits = {
       cpu    = "200m"
-      memory = "256Mi"
+      memory = "1024Mi"
     }
   }
   validation {
