@@ -248,7 +248,7 @@ module "mlflow_helmchart" {
   name             = "mlflow"
   namespace        = var.service_account_namespace
   create_namespace = true
-  repository       = "https://community-charts.github.io"
+  repository       = "https://community-charts.github.io/helm-charts"
   chart            = "mlflow"
   chart_version    = var.mlflow_chart_version
   values = templatefile("${path.module}/values.yaml", {
