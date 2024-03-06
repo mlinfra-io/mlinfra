@@ -78,11 +78,11 @@ variable "resources" {
   default = {
     requests = {
       cpu    = "100m"
-      memory = "512Mi"
+      memory = "1024Mi"
     }
     limits = {
-      cpu    = "200m"
-      memory = "1024Mi"
+      cpu    = "500m"
+      memory = "4096Mi"
     }
   }
   validation {
