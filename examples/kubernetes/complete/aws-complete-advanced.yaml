@@ -38,7 +38,7 @@ stack:
       name: mlflow
       params:
         remote_tracking: true
-        mlflow_artifacts_bucket_name: "mlflow-bucket"
+        mlflow_data_bucket_name: "mlflow-bucket"
         tags:
           database_type: "postgres"
           experiment_tracking: "mlflow"
