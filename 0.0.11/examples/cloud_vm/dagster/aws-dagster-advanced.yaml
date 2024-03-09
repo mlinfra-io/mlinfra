@@ -1,0 +1,20 @@
+name: aws-mlops-stack-dagster
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: cloud_vm
+  config:
+    vpc:
+      create_database_subnets: true
+stack:
+  - orchestrator:
+      name: dagster
+      params:
+        remote_tracking: true
+        database_type: "postgres"
+        ec2_application_port: 3500
+        app_versions:
+          dagit: "1.3.13"
+          dagster: "1.3.13"
