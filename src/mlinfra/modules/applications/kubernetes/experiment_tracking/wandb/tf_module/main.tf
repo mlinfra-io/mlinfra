@@ -209,8 +209,13 @@ locals {
     name  = "artifactRoot.s3.bucket"
     value = "${var.wandb_data_bucket_name}"
     type  = "auto"
-    }] : [{
-    # configuration for non remote deployment
+  }] : [{}]
+
+  general_configuration = [{
+    name  = "license"
+    value = "${var.license}"
+    type  = "auto"
+    }, {
     name  = "enableAdminApi"
     value = "true"
     type  = "auto"
@@ -232,7 +237,7 @@ module "wandb_helmchart" {
     affinity     = jsonencode(var.affinity)
     resources    = jsonencode(var.resources)
   })
-  set        = local.wandb_helmchart_values
+  set        = concat(local.general_configuration, local.wandb_helmchart_values)
   depends_on = [kubernetes_secret_v1.wandb_secret]
 }
 

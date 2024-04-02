@@ -182,3 +182,8 @@ variable "tags" {
     name = "wandb-on-k8s"
   }
 }
+
+variable "license" {
+  type        = string
+  description = "WandB license for deployment. For more information, see https://github.com/wandb/helm-charts/blob/25e032149ad1dd63fdcc6c68011a4479ff00a8e4/README.md"
+}
