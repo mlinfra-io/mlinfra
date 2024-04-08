@@ -209,7 +209,7 @@ locals {
     name  = "artifactRoot.s3.bucket"
     value = "${var.wandb_data_bucket_name}"
     type  = "auto"
-  }] : [{}]
+  }] : []
 
   general_configuration = [{
     name  = "license"
