@@ -50,7 +50,7 @@ variable "wandb_data_bucket_name" {
 
 variable "rds_instance_class" {
   type        = string
-  description = ""
+  description = "The RDS instance class to use"
   default     = "db.t4g.medium"
 }
 
@@ -63,7 +63,7 @@ variable "wandb_chart_version" {
 variable "skip_final_snapshot" {
   type        = bool
   description = "If set to true, no final snapshot of the RDS instance will be created"
-  default     = false
+  default     = true
 }
 
 variable "wandb_secret" {
