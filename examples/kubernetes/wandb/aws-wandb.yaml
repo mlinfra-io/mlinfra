@@ -8,3 +8,5 @@ deployment:
 stack:
   - experiment_tracking:
       name: wandb
+      params:
+        license: "<wandb-licence>"
