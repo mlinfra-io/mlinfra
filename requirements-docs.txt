@@ -32,7 +32,7 @@ gitpython==3.1.41
     # via
     #   mkdocs-git-revision-date-localized-plugin
     #   mlinfra (pyproject.toml)
-idna==3.6
+idna==3.7
     # via requests
 importlib-metadata==7.0.1
     # via mike
