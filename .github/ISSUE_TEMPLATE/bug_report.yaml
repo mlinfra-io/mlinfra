@@ -12,7 +12,7 @@ body:
     attributes:
       label: Python Version
       description: "Please specify your Python version."
-      placeholder: "e.g., Python 3.10"
+      placeholder: "e.g., Python 3.11"
     validations:
       required: true
 
