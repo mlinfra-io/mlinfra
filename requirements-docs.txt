@@ -104,8 +104,6 @@ six==1.16.0
     # via python-dateutil
 smmap==5.0.1
     # via gitdb
-tomli==2.0.1
-    # via mypy
 typing-extensions==4.9.0
     # via mypy
 urllib3==2.0.7
