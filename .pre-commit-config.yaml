@@ -65,6 +65,7 @@ repos:
         name: pip-compile requirements-dev.txt
         args:
           - --extra=dev
+          - --python-version=3.11
           - --output-file=requirements-dev.txt
           - pyproject.toml
         files: ^(pyproject\.toml|requirements-dev\.txt)$
