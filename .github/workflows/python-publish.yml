@@ -24,7 +24,7 @@ jobs:
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
         with:
-          pythonVersion: "3.10"
+          pythonVersion: "3.11"
           dependencyType: "dev"
       - name: Install build tools
         run: |
@@ -50,7 +50,7 @@ jobs:
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
         with:
-          pythonVersion: "3.10"
+          pythonVersion: "3.11"
           dependencyType: "docs"
       - name: Publish documentation
         uses: ./.github/actions/mike-docs

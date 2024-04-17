@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
         with:
-          pythonVersion: "3.10"
+          pythonVersion: "3.11"
           dependencyType: "dev"
       - name: Cache pre-commit tools
         uses: actions/cache@v4
@@ -47,7 +47,7 @@ jobs:
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
         with:
-          pythonVersion: "3.10"
+          pythonVersion: "3.11"
           dependencyType: "dev"
       - name: Run Tests
         run: |
@@ -63,7 +63,7 @@ jobs:
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
         with:
-          pythonVersion: "3.10"
+          pythonVersion: "3.11"
           dependencyType: "docs"
       - name: Build documentation using mike
         uses: ./.github/actions/mike-docs
