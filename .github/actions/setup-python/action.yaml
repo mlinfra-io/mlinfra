@@ -23,10 +23,12 @@ runs:
     - name: Install uv
       run: |
         pip install uv
+        uv venv venv
+        source venv/bin/activate
       shell: bash
     - name: Install dependencies
       run: |
-        uv pip install --upgrade pip
+        uv pip install --upgrade pip && uv pip install pip-tools
         if [[ "${{ inputs.dependencyType }}" == "dev" ]]; then
           uv pip install -r requirements-dev.txt
         elif [[ "${{ inputs.dependencyType }}" == "docs" ]]; then
