@@ -58,8 +58,8 @@ repos:
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
-  - repo: https://github.com/jazzband/pip-tools
-    rev: 7.3.0
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.1.33
     hooks:
       - id: pip-compile
         name: pip-compile requirements-dev.txt
