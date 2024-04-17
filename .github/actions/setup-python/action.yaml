@@ -22,9 +22,7 @@ runs:
           pyproject.toml
     - name: Install uv
       run: |
-        pip install uv
-        uv venv venv
-        source venv/bin/activate
+        pip install uv && uv venv venv && source venv/bin/activate
       shell: bash
     - name: Install dependencies
       run: |
