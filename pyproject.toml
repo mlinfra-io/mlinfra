@@ -82,8 +82,8 @@ ignore_missing_imports = true
 src = ["mlinfra"]
 line-length = 100
 # Enable pycodestyle errors & warnings (`E`, `W`), Pyflakes (`F`), and isort (`I`) by default.
-select = ["E", "F", "I", "W"]
-ignore = [
+lint.select = ["E", "F", "I", "W"]
+lint.ignore = [
     # Line too long
     "E501",
     # Allow capitalized variable names
