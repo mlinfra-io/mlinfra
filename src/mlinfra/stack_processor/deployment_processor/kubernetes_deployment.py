@@ -192,9 +192,9 @@ class KubernetesDeployment(AbstractDeployment):
             ):
                 # inject k8s module
                 nodegroups_json_module = {"module": {"eks_nodegroup": {"node_groups": []}}}
-                nodegroups_json_module["module"]["eks_nodegroup"][
-                    "source"
-                ] = "./modules/cloud/aws/eks_nodegroup/tf_module"
+                nodegroups_json_module["module"]["eks_nodegroup"]["source"] = (
+                    "./modules/cloud/aws/eks_nodegroup/tf_module"
+                )
 
                 for nodegroup_config in self.deployment_config["config"]["node_groups"]:
                     nodegroup_object = {}
@@ -202,12 +202,12 @@ class KubernetesDeployment(AbstractDeployment):
                     nodegroup_object["subnet_ids"] = "${ module.vpc.private_subnets_ids }"
                     nodegroup_object["cluster_name"] = "${ module.eks.cluster_name }"
                     nodegroup_object["cluster_version"] = "${ module.eks.cluster_version }"
-                    nodegroup_object[
-                        "cluster_primary_security_group_id"
-                    ] = "${ module.eks.cluster_primary_security_group_id }"
-                    nodegroup_object[
-                        "node_security_group_id"
-                    ] = "${ module.eks.node_security_group_id }"
+                    nodegroup_object["cluster_primary_security_group_id"] = (
+                        "${ module.eks.cluster_primary_security_group_id }"
+                    )
+                    nodegroup_object["node_security_group_id"] = (
+                        "${ module.eks.node_security_group_id }"
+                    )
 
                     nodegroups_json_module["module"]["eks_nodegroup"]["node_groups"].append(
                         nodegroup_object
