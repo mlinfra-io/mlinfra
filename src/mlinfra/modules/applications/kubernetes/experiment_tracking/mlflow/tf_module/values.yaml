@@ -1,0 +1,4 @@
+nodeSelector: ${nodeSelector}
+tolerations: ${tolerations}
+affinity: ${affinity}
+resources: ${resources}
