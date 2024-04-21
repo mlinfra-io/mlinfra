@@ -7,15 +7,8 @@ repos:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
-  # - repo: https://github.com/PyCQA/isort
-  #   rev: 5.12.0
-  #   hooks:
-  #     - id: isort
-  #       args: ["--profile", "black"]
-  #       types: [python]
-  #       files: "deploy/devops"
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.7
+    rev: 1.7.8
     hooks:
       - id: bandit
         args: [-c, pyproject.toml]
