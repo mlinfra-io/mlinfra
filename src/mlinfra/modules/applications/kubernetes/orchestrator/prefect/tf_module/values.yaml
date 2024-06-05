@@ -1,4 +1,4 @@
-server:
+${prefect_deplyoment_type}:
   nodeSelector: ${nodeSelector}
   tolerations: ${tolerations}
   affinity: ${affinity}
