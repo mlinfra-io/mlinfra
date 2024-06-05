@@ -123,7 +123,7 @@ resource "kubernetes_secret_v1" "prefect_secret" {
 }
 
 locals {
-  mlflow_helmchart_values = var.remote_tracking ? [{
+  prefect_server_helmchart_values = var.remote_tracking ? [{
     # configuration for remote deployment
     name  = "serviceAccount.create"
     value = "true"
@@ -179,17 +179,18 @@ module "prefect_server_helmchart" {
 
   name             = "prefect"
   namespace        = var.service_account_namespace
-  create_namespace = true
+  create_namespace = false
   repository       = "https://prefecthq.github.io/prefect-helm"
   chart            = "prefect-server"
   chart_version    = var.prefect_chart_version
   values = templatefile("${path.module}/values.yaml", {
-    nodeSelector = jsonencode(var.nodeSelector)
-    tolerations  = jsonencode(var.tolerations)
-    affinity     = jsonencode(var.affinity)
-    resources    = jsonencode(var.resources)
+    prefect_deplyoment_type = "server"
+    nodeSelector            = jsonencode(var.nodeSelector)
+    tolerations             = jsonencode(var.tolerations)
+    affinity                = jsonencode(var.affinity)
+    resources               = jsonencode(var.resources)
   })
-  set = concat(local.mlflow_helmchart_values, [{
+  set = concat(local.prefect_server_helmchart_values, [{
     name  = "postgresql.enabled"
     value = "true"
     type  = "auto"
@@ -197,24 +198,53 @@ module "prefect_server_helmchart" {
   depends_on = [kubernetes_secret_v1.prefect_secret]
 }
 
-# module "prefect_worker_helmchart" {
-#   source = "../../../../../cloud/aws/helm_chart"
+locals {
+  prefect_worker_helmchart_values = [{
+    name  = "serviceAccount.create"
+    value = "true"
+    type  = "auto"
+    }, {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com\\/role-arn"
+    value = "${aws_iam_role.prefect_iam_role[0].arn}"
+    type  = "auto"
+    }, {
+    name  = "serviceAccount.name"
+    value = var.service_account_name
+    type  = "auto"
+    }, {
+    name  = "worker.apiConfig"
+    value = "server"
+    type  = "auto"
+    }, {
+    name  = "worker.config.workPool"
+    value = "Kubernetes-workpool"
+    type  = "auto"
+    }, {
+    name  = "worker.serverApiConfig.apiUrl"
+    value = "prefect-server.${var.service_account_namespace}.svc.cluster.local:4200/api"
+    type  = "auto"
+  }]
+}
 
-#   name             = "mlflow"
-#   namespace        = var.service_account_namespace
-#   create_namespace = true
-#   repository       = "https://prefecthq.github.io/prefect-helm"
-#   chart            = "mlflow"
-#   chart_version    = var.mlflow_chart_version
-#   values = templatefile("${path.module}/values.yaml", {
-#     nodeSelector = jsonencode(var.nodeSelector)
-#     tolerations  = jsonencode(var.tolerations)
-#     affinity     = jsonencode(var.affinity)
-#     resources    = jsonencode(var.resources)
-#   })
-#   set        = local.mlflow_helmchart_values
-#   depends_on = [kubernetes_secret_v1.mlflow_secret]
-# }
+module "prefect_worker_helmchart" {
+  source = "../../../../../cloud/aws/helm_chart"
+
+  name             = "prefect"
+  namespace        = var.service_account_namespace
+  create_namespace = false
+  repository       = "https://prefecthq.github.io/prefect-helm"
+  chart            = "prefect-worker"
+  chart_version    = var.prefect_chart_version
+  values = templatefile("${path.module}/values.yaml", {
+    prefect_deplyoment_type = "worker"
+    nodeSelector            = jsonencode(var.nodeSelector)
+    tolerations             = jsonencode(var.tolerations)
+    affinity                = jsonencode(var.affinity)
+    resources               = jsonencode(var.resources)
+  })
+  set        = local.prefect_worker_helmchart_values
+  depends_on = [module.prefect_server_helmchart]
+}
 
 
 module "secrets_manager" {
