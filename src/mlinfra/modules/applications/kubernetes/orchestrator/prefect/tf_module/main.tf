@@ -177,7 +177,7 @@ locals {
 module "prefect_server_helmchart" {
   source = "../../../../../cloud/aws/helm_chart"
 
-  name             = "prefect"
+  name             = "prefect-server"
   namespace        = var.service_account_namespace
   create_namespace = false
   repository       = "https://prefecthq.github.io/prefect-helm"
@@ -200,18 +200,18 @@ module "prefect_server_helmchart" {
 
 locals {
   prefect_worker_helmchart_values = [{
-    name  = "serviceAccount.create"
-    value = "true"
-    type  = "auto"
-    }, {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com\\/role-arn"
-    value = "${aws_iam_role.prefect_iam_role[0].arn}"
-    type  = "auto"
-    }, {
-    name  = "serviceAccount.name"
-    value = var.service_account_name
-    type  = "auto"
-    }, {
+    # name  = "serviceAccount.create"
+    # value = "true"
+    # type  = "auto"
+    # }, {
+    # name  = "serviceAccount.annotations.eks\\.amazonaws\\.com\\/role-arn"
+    # value = "${aws_iam_role.prefect_iam_role[0].arn}"
+    # type  = "auto"
+    # }, {
+    # name  = "serviceAccount.name"
+    # value = var.service_account_name
+    # type  = "auto"
+    # }, {
     name  = "worker.apiConfig"
     value = "server"
     type  = "auto"
@@ -221,7 +221,7 @@ locals {
     type  = "auto"
     }, {
     name  = "worker.serverApiConfig.apiUrl"
-    value = "prefect-server.${var.service_account_namespace}.svc.cluster.local:4200/api"
+    value = "http://prefect-server.${var.service_account_namespace}.svc.cluster.local:4200/api"
     type  = "auto"
   }]
 }
@@ -229,7 +229,7 @@ locals {
 module "prefect_worker_helmchart" {
   source = "../../../../../cloud/aws/helm_chart"
 
-  name             = "prefect"
+  name             = "prefect-worker"
   namespace        = var.service_account_namespace
   create_namespace = false
   repository       = "https://prefecthq.github.io/prefect-helm"
