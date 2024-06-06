@@ -67,9 +67,9 @@ locals {
   managed_policy_arns = var.remote_tracking ? [aws_iam_policy.prefect_rds_iam_policy[0].arn] : []
 }
 
-resource "aws_iam_role" "prefect_iam_role" {
+resource "aws_iam_role" "prefect_server_iam_role" {
   count       = var.remote_tracking ? 1 : 0
-  name_prefix = "PrefectRDSAccess"
+  name_prefix = "PrefectServerAccess"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement : [
@@ -82,7 +82,7 @@ resource "aws_iam_role" "prefect_iam_role" {
         "Condition" : {
           "StringEquals" : {
             "${var.oidc_provider}:aud" : "sts.amazonaws.com",
-            "${var.oidc_provider}:sub" : "system:serviceaccount:${var.service_account_namespace}:${var.service_account_name}"
+            "${var.oidc_provider}:sub" : "system:serviceaccount:${var.service_account_namespace}:${var.prefect_server_service_account_name}"
           }
         }
       }
@@ -108,7 +108,7 @@ resource "kubernetes_namespace_v1" "prefect_namespace" {
       "name"                        = var.service_account_namespace
     }
   }
-  depends_on = [module.prefect_rds_backend, aws_iam_role.prefect_iam_role]
+  depends_on = [module.prefect_rds_backend, aws_iam_role.prefect_server_iam_role]
 }
 
 resource "kubernetes_secret_v1" "prefect_secret" {
@@ -130,11 +130,11 @@ locals {
     type  = "auto"
     }, {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com\\/role-arn"
-    value = "${aws_iam_role.prefect_iam_role[0].arn}"
+    value = "${aws_iam_role.prefect_server_iam_role[0].arn}"
     type  = "auto"
     }, {
     name  = "serviceAccount.name"
-    value = var.service_account_name
+    value = var.prefect_server_service_account_name
     type  = "auto"
     }, {
     name  = "postgresql.useSubChart"
@@ -198,20 +198,45 @@ module "prefect_server_helmchart" {
   depends_on = [kubernetes_secret_v1.prefect_secret]
 }
 
+resource "aws_iam_role" "prefect_worker_iam_role" {
+  name_prefix = "PrefectWorkerAccess"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Federated" : var.oidc_provider_arn
+        },
+        "Action" : "sts:AssumeRoleWithWebIdentity",
+        "Condition" : {
+          "StringEquals" : {
+            "${var.oidc_provider}:aud" : "sts.amazonaws.com",
+            "${var.oidc_provider}:sub" : "system:serviceaccount:${var.service_account_namespace}:${var.prefect_worker_service_account_name}"
+          }
+        }
+      }
+    ]
+  })
+  managed_policy_arns = local.managed_policy_arns
+
+  tags = var.tags
+}
+
 locals {
   prefect_worker_helmchart_values = [{
-    # name  = "serviceAccount.create"
-    # value = "true"
-    # type  = "auto"
-    # }, {
-    # name  = "serviceAccount.annotations.eks\\.amazonaws\\.com\\/role-arn"
-    # value = "${aws_iam_role.prefect_iam_role[0].arn}"
-    # type  = "auto"
-    # }, {
-    # name  = "serviceAccount.name"
-    # value = var.service_account_name
-    # type  = "auto"
-    # }, {
+    name  = "serviceAccount.create"
+    value = "true"
+    type  = "auto"
+    }, {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com\\/role-arn"
+    value = "${aws_iam_role.prefect_worker_iam_role.arn}"
+    type  = "auto"
+    }, {
+    name  = "serviceAccount.name"
+    value = var.prefect_worker_service_account_name
+    type  = "auto"
+    }, {
     name  = "worker.apiConfig"
     value = "server"
     type  = "auto"
@@ -259,5 +284,5 @@ module "secrets_manager" {
     db_instance_name     = module.prefect_rds_backend.db_instance_name
   }
 
-  depends_on = [module.prefect_server_helmchart]
+  depends_on = [module.prefect_worker_helmchart]
 }

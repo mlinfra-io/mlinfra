@@ -30,10 +30,16 @@ variable "service_account_namespace" {
   default     = "prefect"
 }
 
-variable "service_account_name" {
+variable "prefect_server_service_account_name" {
   type        = string
-  description = "The name of the service account to use for prefect"
-  default     = "prefect-sa"
+  description = "The name of the service account to use for prefect server"
+  default     = "prefect-server"
+}
+
+variable "prefect_worker_service_account_name" {
+  type        = string
+  description = "The name of the service account to use for prefect worker"
+  default     = "prefect-worker"
 }
 
 variable "remote_tracking" {
