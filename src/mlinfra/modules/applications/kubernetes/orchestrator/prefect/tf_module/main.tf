@@ -197,6 +197,7 @@ module "prefect_server_helmchart" {
 }
 
 resource "aws_iam_role" "prefect_worker_iam_role" {
+  count       = var.create_prefect_kubernetes_worker ? 1 : 0
   name_prefix = "PrefectWorkerAccess"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -222,13 +223,13 @@ resource "aws_iam_role" "prefect_worker_iam_role" {
 }
 
 locals {
-  prefect_worker_helmchart_values = [{
+  prefect_worker_helmchart_values = var.create_prefect_kubernetes_worker ? [{
     name  = "serviceAccount.create"
     value = "true"
     type  = "auto"
     }, {
     name  = "serviceAccount.annotations.eks\\.amazonaws\\.com\\/role-arn"
-    value = "${aws_iam_role.prefect_worker_iam_role.arn}"
+    value = "${aws_iam_role.prefect_worker_iam_role[0].arn}"
     type  = "auto"
     }, {
     name  = "serviceAccount.name"
@@ -246,10 +247,12 @@ locals {
     name  = "worker.serverApiConfig.apiUrl"
     value = "http://prefect-server.${var.service_account_namespace}.svc.cluster.local:4200/api"
     type  = "auto"
-  }]
+  }] : []
 }
 
 module "prefect_worker_helmchart" {
+  count = var.create_prefect_kubernetes_worker ? 1 : 0
+
   source = "../../../../../cloud/aws/helm_chart"
 
   name             = "prefect-worker"
@@ -281,6 +284,4 @@ module "secrets_manager" {
     db_instance_endpoint = module.prefect_rds_backend.db_instance_endpoint
     db_instance_name     = module.prefect_rds_backend.db_instance_name
   }
-
-  depends_on = [module.prefect_worker_helmchart]
 }

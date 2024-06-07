@@ -176,6 +176,12 @@ variable "affinity" {
   }
 }
 
+variable "create_prefect_kubernetes_worker" {
+  type        = bool
+  default     = true
+  description = "Determines if the user wants to create and configure the default Kubernetes worker"
+}
+
 variable "tags" {
   type = map(string)
   default = {
