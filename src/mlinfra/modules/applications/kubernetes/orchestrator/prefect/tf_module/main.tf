@@ -172,8 +172,6 @@ locals {
   }]
 }
 
-# We need to create prefect server and workers
-# separately...
 module "prefect_server_helmchart" {
   source = "../../../../../cloud/aws/helm_chart"
 
