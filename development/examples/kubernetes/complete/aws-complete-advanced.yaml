@@ -43,3 +43,11 @@ stack:
           database_type: "postgres"
           experiment_tracking: "mlflow"
           remote_tracking: true
+  - orchestrator:
+      name: prefect
+      params:
+        remote_tracking: true
+        tags:
+          database_type: "postgres"
+          orchestrator: "prefect"
+          remote_tracking: true
