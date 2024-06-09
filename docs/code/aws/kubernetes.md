@@ -33,3 +33,14 @@
     ```yaml
     --8<-- "docs/examples/kubernetes/mlflow/aws-mlflow-advanced.yaml"
     ```
+
+#### Prefect (Server & Worker)
+
+===+ "Simple Deployment Configuration"
+    ```yaml
+    --8<-- "docs/examples/kubernetes/prefect/aws-prefect.yaml"
+    ```
+=== "Advanced Deployment Configuration"
+    ```yaml
+    --8<-- "docs/examples/kubernetes/prefect/aws-prefect-advanced.yaml"
+    ```
