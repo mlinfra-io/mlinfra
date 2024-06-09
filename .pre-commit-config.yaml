@@ -2,7 +2,7 @@ default_language_version:
   python: python3.11
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.1
+    rev: v0.4.8
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -47,12 +47,12 @@ repos:
   #           --scripts-are-modules,
   #         ]
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.89.0
+    rev: v1.91.0
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.2.5
+    rev: 0.2.9
     hooks:
       - id: pip-compile
         name: pip-compile requirements-dev.txt
