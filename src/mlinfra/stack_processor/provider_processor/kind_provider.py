@@ -26,11 +26,17 @@ class KindProvider(AbstractProvider):
     """
 
     def __init__(self, stack_name: str, config: dict):
-        """ """
+        """
+        Inits the KinD Provider
+        """
         super().__init__(stack_name, config)
 
     def configure_provider(self):
-        """ """
+        """
+        Configures KinD provider
+        This is a simple configuration which copies the existing configuration from
+        KinD provider into the TF_PATH location
+        """
         with open(resources.files(modules) / "local/kind/provider.tf.json", "r") as data_json:
             with open(f"./{TF_PATH}/provider.tf.json", "w", encoding="utf-8") as tf_json:
                 data = json.load(data_json)
