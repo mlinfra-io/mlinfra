@@ -1,0 +1,10 @@
+{
+  "terraform": {
+    "required_providers": {
+      "aws": {
+        "source": "tehcyx/kind",
+        "version": "0.5.1"
+      }
+    }
+  }
+}
