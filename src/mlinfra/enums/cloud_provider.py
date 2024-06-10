@@ -18,6 +18,7 @@ class CloudProvider(Enum):
     All providers under one class
     """
 
+    KIND = "kind"
     AWS = "aws"
     GCP = "gcp"
     AZURE = "azure"
