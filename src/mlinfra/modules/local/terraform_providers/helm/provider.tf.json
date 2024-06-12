@@ -1,0 +1,12 @@
+{
+  "provider": {
+    "helm": {
+      "kubernetes": {
+        "client_certificate": "${kind_cluster.local_kind_cluster.client_certificate}",
+        "client_key": "${kind_cluster.local_kind_cluster.client_key}",
+        "cluster_ca_certificate": "${ base64decode(kind_cluster.local_kind_cluster.cluster_ca_certificate) }",
+        "host": "${kind_cluster.local_kind_cluster.endpoint}"
+      }
+    }
+  }
+}
