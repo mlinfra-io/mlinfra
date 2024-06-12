@@ -1,6 +1,7 @@
 resource "kind_cluster" "local_kind_cluster" {
-  name       = var.name
-  node_image = var.node_image[var.k8s_version]
+  name           = var.cluster_name
+  node_image     = var.node_image[var.k8s_version]
+  wait_for_ready = var.wait_for_control_plane
 
   kind_config {
     kind        = "Cluster"
