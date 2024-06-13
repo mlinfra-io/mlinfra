@@ -14,7 +14,7 @@ inputs:
   - name: kubeconfig_path
     user_facing: true
     description: "kubeconfig path set after the the cluster is created or by the user to override defaults."
-    default: ""
+    default: null
   # re-enable after initial KinD cluster deployment
   # - name: labels
   #   user_facing: true
