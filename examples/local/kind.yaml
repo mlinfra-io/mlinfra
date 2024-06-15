@@ -1,0 +1,12 @@
+name: local-kind-k8s
+provider:
+  name: local
+deployment:
+  type: kind
+  # config:
+  #   kubernetes:
+  #     k8s_version: 1.29
+  #     wait_for_control_plane: false
+stack:
+  - data_versioning:
+      name: lakefs
