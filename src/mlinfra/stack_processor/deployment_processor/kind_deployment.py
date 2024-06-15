@@ -60,7 +60,8 @@ class KindDeployment(AbstractDeployment):
         - None
         """
         with open(
-            resources.files(modules) / f"local/{self.provider.value}/terraform.tf.json",
+            resources.files(modules)
+            / f"{self.provider.value}/{self.deployment_config['type']}/terraform.tf.json",
             "r",
         ) as data_json:
             data = json.load(data_json)
@@ -71,7 +72,7 @@ class KindDeployment(AbstractDeployment):
             for required_provider in required_providers:
                 with open(
                     resources.files(modules)
-                    / f"terraform_providers/{required_provider}/terraform.tf.json",
+                    / f"local/terraform_providers/{required_provider}/terraform.tf.json",
                     "r",
                 ) as provider_tf:
                     provider_tf_json = json.load(provider_tf)
@@ -92,7 +93,7 @@ class KindDeployment(AbstractDeployment):
 
         for provider in providers:
             with open(
-                resources.files(modules) / f"terraform_providers/{provider}/provider.tf.json",
+                resources.files(modules) / f"local/terraform_providers/{provider}/provider.tf.json",
                 "r",
             ) as provider_tf:
                 provider_tf_json = json.load(provider_tf)
@@ -116,112 +117,56 @@ class KindDeployment(AbstractDeployment):
         Raises:
         - ValueError: If the specified provider is not supported.
         """
-        if self.provider == CloudProvider.AWS:
-            # TODO: Make these blocks generic
-            # inject vpc module
-            vpc_json_module = {"module": {"vpc": {}}}
-            vpc_json_module["module"]["vpc"]["source"] = "./modules/cloud/aws/vpc"
 
-            vpc_json_module["module"]["vpc"]["name"] = f"{self.stack_name}-vpc"
+        # inject k8s module
+        k8s_json_module = {"module": {"kind": {}}}
+        k8s_json_module["module"]["kind"]["source"] = (
+            f"./modules/{self.provider}/{self.deployment_config['type']}/k8s/tf_module"
+        )
+        k8s_json_module["module"]["kind"]["cluster_name"] = f"{self.stack_name}-cluster"
 
-            if "config" in self.deployment_config and "vpc" in self.deployment_config["config"]:
-                for vpc_config in self.deployment_config["config"]["vpc"]:
-                    vpc_json_module["module"]["vpc"][vpc_config] = self.deployment_config["config"][
-                        "vpc"
-                    ].get(vpc_config, None)
+        if "config" in self.deployment_config and "kubernetes" in self.deployment_config["config"]:
+            # read values from the yaml config file
+            with open(
+                resources.files(modules) / f"local/{self.deployment_config['type']}/k8s/k8s.yaml",
+                "r",
+                encoding="utf-8",
+            ) as tf_config:
+                k8s_application_config = yaml.safe_load(tf_config.read())
 
-            generate_tf_json(module_name="vpc", json_module=vpc_json_module)
-            # inject vpc module
-
-            # inject k8s module
-            k8s_json_module = {"module": {"eks": {}}}
-            k8s_json_module["module"]["eks"]["source"] = "./modules/cloud/aws/eks/tf_module"
-            k8s_json_module["module"]["eks"]["cluster_name"] = f"{self.stack_name}-cluster"
-            k8s_json_module["module"]["eks"]["vpc_id"] = "${ module.vpc.vpc_id }"
-            k8s_json_module["module"]["eks"]["subnet_ids"] = "${ module.vpc.private_subnets_ids }"
-
+            # check if values exist in the yaml config file
             if (
-                "config" in self.deployment_config
-                and "kubernetes" in self.deployment_config["config"]
+                k8s_application_config is not None
+                and "inputs" in k8s_application_config
+                and k8s_application_config["inputs"]
             ):
-                # read values from the yaml config file
-                with open(
-                    resources.files(modules) / f"cloud/{self.provider.value}/eks/eks.yaml",
-                    "r",
-                    encoding="utf-8",
-                ) as tf_config:
-                    eks_application_config = yaml.safe_load(tf_config.read())
-
-                # check if values exist in the yaml config file
-                if (
-                    eks_application_config is not None
-                    and "inputs" in eks_application_config
-                    and eks_application_config["inputs"]
-                ):
-                    # iterate through the config defined in the deployment section
-                    # of the stack file
-                    for k8s_config in self.deployment_config["config"]["kubernetes"]:
-                        # if the application config exists in the eks config and is
-                        # configured to be user_facing, only then add this config
-                        config_lookup = next(
-                            (
-                                item
-                                for item in eks_application_config["inputs"]
-                                if item["name"] == k8s_config and item["user_facing"]
-                            ),
-                            None,
+                print(self.deployment_config["config"]["kubernetes"])
+                # iterate through the config defined in the deployment section
+                # of the stack file
+                for k8s_config in self.deployment_config["config"]["kubernetes"]:
+                    # if the application config exists in the kind config and is
+                    # configured to be user_facing, only then add this config
+                    config_lookup = next(
+                        (
+                            item
+                            for item in k8s_application_config["inputs"]
+                            if item["name"] == k8s_config and item["user_facing"]
+                        ),
+                        None,
+                    )
+                    if config_lookup is not None:
+                        k8s_json_module["module"]["kind"][k8s_config] = self.deployment_config[
+                            "config"
+                        ]["kubernetes"].get(k8s_config, None)
+                    else:
+                        print(
+                            """
+                            WARNING: The config value {k8s_config} is not user facing.
+                            Please check the k8s.yaml config file to see if this is a valid config value.
+                            """
                         )
-                        if config_lookup is not None:
-                            k8s_json_module["module"]["eks"][k8s_config] = self.deployment_config[
-                                "config"
-                            ]["kubernetes"].get(k8s_config, None)
-                        else:
-                            print(
-                                """
-                                WARNING: The config value {k8s_config} is not user facing.
-                                Please check the eks.yaml config file to see if this is a valid config value.
-                                """
-                            )
 
-            generate_tf_json(module_name="eks", json_module=k8s_json_module)
-
-            # TODO: read defaults from the config file if anything is missing
-
-            if (
-                "config" in self.deployment_config
-                and "node_groups" in self.deployment_config["config"]
-            ):
-                # inject k8s module
-                nodegroups_json_module = {"module": {"eks_nodegroup": {"node_groups": []}}}
-                nodegroups_json_module["module"]["eks_nodegroup"]["source"] = (
-                    "./modules/cloud/aws/eks_nodegroup/tf_module"
-                )
-
-                for nodegroup_config in self.deployment_config["config"]["node_groups"]:
-                    nodegroup_object = {}
-                    nodegroup_object = nodegroup_config
-                    nodegroup_object["subnet_ids"] = "${ module.vpc.private_subnets_ids }"
-                    nodegroup_object["cluster_name"] = "${ module.eks.cluster_name }"
-                    nodegroup_object["cluster_version"] = "${ module.eks.cluster_version }"
-                    nodegroup_object["cluster_primary_security_group_id"] = (
-                        "${ module.eks.cluster_primary_security_group_id }"
-                    )
-                    nodegroup_object["node_security_group_id"] = (
-                        "${ module.eks.node_security_group_id }"
-                    )
-
-                    nodegroups_json_module["module"]["eks_nodegroup"]["node_groups"].append(
-                        nodegroup_object
-                    )
-
-                generate_tf_json(module_name="nodegroups", json_module=nodegroups_json_module)
-
-        elif self.provider == CloudProvider.GCP:
-            raise ValueError(f"Provider {self.provider} is not yet supported")
-        elif self.provider == CloudProvider.AZURE:
-            raise ValueError(f"Provider {self.provider} is not yet supported")
-        else:
-            raise ValueError(f"Provider {self.provider} is not supported")
+        generate_tf_json(module_name="kind", json_module=k8s_json_module)
 
     def configure_deployment(self):
         self.generate_required_provider_config()
