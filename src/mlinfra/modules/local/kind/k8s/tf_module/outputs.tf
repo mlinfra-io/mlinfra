@@ -1,23 +1,23 @@
-output "kind_endpoint" {
-  value       = kind_cluster.local_kind_cluster.endpoint
+output "endpoint" {
+  value       = module.kind.endpoint
   description = ""
 }
 
-output "kind_client_certificate" {
-  value       = kind_cluster.local_kind_cluster.client_certificate
+output "client_certificate" {
+  value       = module.kind.client_certificate
   description = ""
 }
 
-output "kind_cluster_ca_certificate" {
-  value       = kind_cluster.local_kind_cluster.cluster_ca_certificate
+output "cluster_ca_certificate" {
+  value       = module.kind.cluster_ca_certificate
   description = ""
 }
 
-output "kind_client_key" {
-  value = kind_cluster.local_kind_cluster.client_key
+output "client_key" {
+  value = module.kind.client_key
 }
 
-output "kind_kubeconfig" {
-  value       = kind_cluster.local_kind_cluster.kubeconfig
+output "kubeconfig" {
+  value       = module.kind.kubeconfig
   description = ""
 }
