@@ -10,7 +10,7 @@ inputs:
   - name: wait_for_control_plane
     user_facing: true
     description: "Defines wether or not the provider will wait for the control plane to be ready. Defaults to false."
-    default: "false"
+    default: false
   - name: kubeconfig_path
     user_facing: true
     description: "kubeconfig path set after the the cluster is created or by the user to override defaults."
