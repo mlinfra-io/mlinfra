@@ -111,6 +111,15 @@ class StackGenerator:
         """
         return self.provider
 
+    def get_stack_name(self) -> str:
+        """
+        Returns the stack name.
+
+        Returns:
+            str: The stack name.
+        """
+        return self.stack_name
+
     def generate(self):
         """
         Generates and configures the infrastructure stacks based on the deployment type.
