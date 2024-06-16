@@ -13,6 +13,7 @@
 from abc import ABC, abstractmethod
 
 from mlinfra.enums.cloud_provider import CloudProvider
+from mlinfra.utils.constants import TF_LOCAL_STATE_PATH
 
 
 class AbstractDeployment(ABC):
@@ -80,6 +81,14 @@ class AbstractDeployment(ABC):
                         "dynamodb_table": self.get_statefile_name(),
                         "region": self.region,
                         "encrypt": True,
+                    }
+                }
+            }
+        elif provider == CloudProvider.LOCAL:
+            return {
+                "backend": {
+                    "local": {
+                        "path": f"{TF_LOCAL_STATE_PATH}/{self.stack_name}/terraform.tfstate",
                     }
                 }
             }
