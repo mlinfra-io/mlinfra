@@ -80,8 +80,7 @@ class KindDeployment(AbstractDeployment):
                     provider_tf_json["terraform"]["required_providers"]
                 )
 
-            # Not required for local deployment
-            # data["terraform"].update(self.get_provider_backend(provider=self.provider))
+            data["terraform"].update(self.get_provider_backend(provider=self.provider))
 
             generate_tf_json(module_name="terraform", json_module=data)
 
@@ -121,7 +120,7 @@ class KindDeployment(AbstractDeployment):
         # inject k8s module
         k8s_json_module = {"module": {"kind": {}}}
         k8s_json_module["module"]["kind"]["source"] = (
-            f"./modules/{self.provider}/{self.deployment_config['type']}/k8s/tf_module"
+            f"./modules/{self.provider.value}/{self.deployment_config['type']}/k8s/tf_module"
         )
         k8s_json_module["module"]["kind"]["cluster_name"] = f"{self.stack_name}-cluster"
 
