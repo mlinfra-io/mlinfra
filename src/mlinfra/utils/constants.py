@@ -16,6 +16,7 @@ from typing import Final
 
 # TODO: update this to path.cwd
 TF_PATH = "./.mlops_stack"
+TF_LOCAL_STATE_PATH = "../.mlinfra_local_state"
 
 CREATE_VPC_DB_SUBNET = ["remote_tracking"]
 
