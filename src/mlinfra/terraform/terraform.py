@@ -23,7 +23,7 @@ from mlinfra import modules
 from mlinfra.enums.cloud_provider import CloudProvider
 from mlinfra.stack_processor.stack_generator import StackGenerator
 from mlinfra.terraform.state_helper import StateHelper
-from mlinfra.utils.constants import TF_PATH
+from mlinfra.utils.constants import TF_LOCAL_STATE_PATH, TF_PATH
 from mlinfra.utils.utils import (
     check_docker_installed,
     check_kind_installed,
@@ -118,12 +118,13 @@ class Terraform:
             raise FileNotFoundError(f"Stack config file not found: {self.stack_config_path}")
 
     # TODO: write getters for state file name and region
-    def process_config_file(self) -> Tuple[str, str, str]:
+    def process_config_file(self) -> Tuple[str, str, str, str]:
         """This function is responsible for processing the config file"""
         stack_processor = StackGenerator(stack_config=self.read_stack_config())
         stack_processor.generate()
 
         return (
+            stack_processor.get_stack_name(),
             stack_processor.get_state_file_name(),
             stack_processor.get_region(),
             stack_processor.get_provider(),
@@ -167,6 +168,12 @@ class Terraform:
 
         state_helper.manage_aws_state_storage()
 
+    def check_local_state_storage(self, state_name: str):
+        """
+        This function is responsible for checking if the local state storage is present
+        """
+        os.makedirs(f"{TF_LOCAL_STATE_PATH}/{state_name}", mode=0o777, exist_ok=True)
+
     def generate_modules_list(self):
         """
         This function is responsible for generating a list of modules
@@ -182,22 +189,22 @@ class Terraform:
                         modules_list.append(f"module.{key}")
         return modules_list
 
-    def generate_terraform_config(self) -> Tuple[str, str]:
+    def generate_terraform_config(self) -> Tuple[str, str, str, str]:
         """This function is responsible for generating the terraform config file"""
         check_terraform_installed()
         # TODO: perform this after the cli package has been released
-        # self.check_mlops_cli_installed()
+        # self.check_mlinfra_cli_installed()
         self.check_config_file_exists()
         self.clean_ml_infra_folder()
-        state_name, aws_region, provider_type = self.process_config_file()
-        return state_name, aws_region, provider_type
+        stack_name, state_name, aws_region, provider_type = self.process_config_file()
+        return stack_name, state_name, aws_region, provider_type
 
     def plan(self) -> str:
         """
         This function is responsible for running terraform plan command
         along with a couple of other preliminary checks.
         """
-        state_name, aws_region, provider_type = self.generate_terraform_config()
+        stack_name, state_name, aws_region, provider_type = self.generate_terraform_config()
         if provider_type is not CloudProvider.LOCAL:
             self.check_cloud_credentials()
             self.check_region_has_three_azs(aws_region=aws_region)
@@ -205,5 +212,8 @@ class Terraform:
         else:
             check_kind_installed()
             check_docker_installed()
+            # state name is set to stack as in local deployment, there is no
+            # region and hence no state name.
+            self.check_local_state_storage(state_name=stack_name)
         modules_list = self.generate_modules_list()
         return "".join(f" -target={item}" for item in modules_list)
