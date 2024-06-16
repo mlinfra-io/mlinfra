@@ -1,0 +1,8 @@
+inputs:
+  - name: lakefs_chart_version
+    user_facing: true
+    description: LakeFS Chart version. See here for more details; https://artifacthub.io/packages/helm/lakefs/lakefs
+    default: "1.0.8"
+outputs:
+clouds:
+  - aws
