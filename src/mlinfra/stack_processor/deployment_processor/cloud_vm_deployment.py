@@ -56,7 +56,8 @@ class CloudVMDeployment(AbstractDeployment):
 
             # add random provider
             with open(
-                resources.files(modules) / "terraform_providers/random/terraform.tf.json",
+                resources.files(modules)
+                / f"cloud/{self.provider.value}/terraform_providers/random/terraform.tf.json",
                 "r",
             ) as random_tf:
                 random_tf_json = json.load(random_tf)
