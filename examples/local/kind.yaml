@@ -10,3 +10,5 @@ deployment:
 stack:
   - data_versioning:
       name: lakefs
+  - experiment_tracking:
+      name: mlflow
