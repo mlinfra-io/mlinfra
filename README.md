@@ -38,7 +38,7 @@ Contribute to the project by opening a issue or joining project roadmap and desi
 ### Requirements
 `mlinfra` requires the following to run perfectly:
 
-- `terraform` >= `1.4.0` should be installed on the system.
+- `terraform` >= `1.8.0` should be installed on the system.
 
 `mlinfra` can be installed simply by creating a python virtual environment and installing `mlinfra` pip package
 ```bash
@@ -74,7 +74,7 @@ This project will be supporting the following providers:
 - [ ] [Openstack](https://www.openstack.org/)
 - [ ] [docker compose](https://docs.docker.com/compose/)
 - [ ] [k3s](https://k3s.io/)
-- [ ] [kind](https://kind.sigs.k8s.io/)
+- [x] [kind](https://kind.sigs.k8s.io/)
 
 ## Supported MLOps Tools
 
