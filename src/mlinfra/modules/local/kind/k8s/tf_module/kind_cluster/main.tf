@@ -25,9 +25,23 @@ resource "kind_cluster" "local_kind_cluster" {
         host_port      = 443
       }
     }
-
     node {
       role = "worker"
     }
   }
+}
+
+resource "time_sleep" "cluster_creation" {
+  depends_on      = [kind_cluster.local_kind_cluster]
+  create_duration = "30s"
+}
+
+resource "null_resource" "ingress_controller_manifest" {
+  provisioner "local-exec" {
+    command = <<EOT
+      kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+    EOT
+  }
+
+  depends_on = [time_sleep.cluster_creation]
 }
