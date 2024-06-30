@@ -46,6 +46,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://mlinfra.io/latest/code/local/kind/</loc>
+         <lastmod>2024-06-30</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://mlinfra.io/latest/user_guide/</loc>
          <lastmod>2024-06-30</lastmod>
          <changefreq>daily</changefreq>
