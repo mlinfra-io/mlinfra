@@ -18,6 +18,10 @@ locals {
     value = "true"
     type  = "auto"
     }, {
+    name  = "tracking.readinessProbe.enabled"
+    value = "true"
+    type  = "auto"
+    }, {
     name  = "tracking.ingress.hostname"
     value = var.mlflow_endpoint
     type  = "auto"
