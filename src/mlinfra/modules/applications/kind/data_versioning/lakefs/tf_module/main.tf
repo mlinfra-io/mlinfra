@@ -8,9 +8,6 @@ module "lakefs_helmchart" {
   chart            = "lakefs"
   chart_version    = var.lakefs_chart_version
   values = templatefile("${path.module}/values.yaml", {
-    # nodeSelector = jsonencode(var.nodeSelector)
-    # tolerations  = jsonencode(var.tolerations)
-    # affinity     = jsonencode(var.affinity)
     resources       = jsonencode(var.resources)
     lakefs_endpoint = var.lakefs_endpoint
   })
