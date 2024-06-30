@@ -150,7 +150,7 @@ class KindStack(AbstractStack):
         self.process_stack_config()
         self.process_stack_inputs()
         self.process_stack_modules()
-        # self.process_stack_outputs()
+        self.process_stack_outputs()
 
 
 if __name__ == "__main__":
