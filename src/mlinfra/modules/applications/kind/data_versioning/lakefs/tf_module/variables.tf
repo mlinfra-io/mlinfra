@@ -1,7 +1,7 @@
 variable "lakefs_chart_version" {
   type        = string
   description = "LakeFS Chart version. See here for more details; https://artifacthub.io/packages/helm/lakefs/lakefs"
-  default     = "1.0.8"
+  default     = "1.3.1"
 }
 
 variable "resources" {
@@ -106,4 +106,9 @@ variable "affinity" {
       }
     }
   }
+}
+
+variable "lakefs_endpoint" {
+  type    = string
+  default = "lakefs.localhost"
 }
