@@ -15,7 +15,9 @@ from time import time
 from typing import Final
 
 # TODO: update this to path.cwd
-TF_PATH = "./.mlops_stack"
+TF_PATH = "./.mlinfra_stack"
+# This folder is created outside TF_PATH so that its not deleted when the
+# user checks state again
 TF_LOCAL_STATE_PATH = "../.mlinfra_local_state"
 
 CREATE_VPC_DB_SUBNET = ["remote_tracking"]
