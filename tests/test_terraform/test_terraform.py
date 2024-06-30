@@ -41,7 +41,7 @@ class Test:
         # Mock the necessary dependencies
         mocker.patch(
             "mlinfra.terraform.terraform.Terraform.generate_terraform_config",
-            return_value=("state_name", "aws_region", "provider"),
+            return_value=("stack_name", "state_name", "aws_region", "provider"),
         )
         mocker.patch("mlinfra.terraform.terraform.Terraform.check_cloud_credentials")
         mocker.patch("mlinfra.terraform.terraform.Terraform.check_region_has_three_azs")
@@ -69,7 +69,7 @@ class Test:
         mocker.patch("mlinfra.terraform.terraform.Terraform.clean_ml_infra_folder")
         mocker.patch(
             "mlinfra.terraform.terraform.Terraform.process_config_file",
-            return_value=("state_name", "aws_region", "provider"),
+            return_value=("stack_name", "state_name", "aws_region", "provider"),
         )
 
         # Initialize the class object
@@ -77,9 +77,10 @@ class Test:
         terraform = Terraform(stack_config_path)
 
         # Invoke the method
-        state_name, aws_region, provider = terraform.generate_terraform_config()
+        stack_name, state_name, aws_region, provider = terraform.generate_terraform_config()
 
         # Assert the result
+        assert stack_name == "stack_name"
         assert state_name == "state_name"
         assert aws_region == "aws_region"
         assert provider == "provider"
@@ -133,12 +134,15 @@ class Test:
         mocker.patch.object(Terraform, "clean_ml_infra_folder")
         mocker.patch("os.path.isfile", return_value=True)
         mocker.patch.object(
-            Terraform, "process_config_file", return_value=("stack_name", "aws_region", "provider")
+            Terraform,
+            "process_config_file",
+            return_value=("stack_name", "state_name", "aws_region", "provider"),
         )
         stack_config_path = "path/to/stack/config.yaml"
         terraform = Terraform(stack_config_path)
-        state_name, aws_region, provider = terraform.generate_terraform_config()
-        assert state_name == "stack_name"
+        stack_name, state_name, aws_region, provider = terraform.generate_terraform_config()
+        assert stack_name == "stack_name"
+        assert state_name == "state_name"
         assert aws_region == "aws_region"
         assert provider == "provider"
 
