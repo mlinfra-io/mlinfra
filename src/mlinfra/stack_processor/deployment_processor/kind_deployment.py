@@ -139,7 +139,6 @@ class KindDeployment(AbstractDeployment):
                 and "inputs" in k8s_application_config
                 and k8s_application_config["inputs"]
             ):
-                print(self.deployment_config["config"]["kubernetes"])
                 # iterate through the config defined in the deployment section
                 # of the stack file
                 for k8s_config in self.deployment_config["config"]["kubernetes"]:
