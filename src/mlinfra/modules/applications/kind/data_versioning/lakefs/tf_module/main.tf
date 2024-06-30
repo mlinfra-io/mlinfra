@@ -1,5 +1,5 @@
 module "lakefs_helmchart" {
-  source = "../../../../../cloud/aws/helm_chart"
+  source = "../../../../../local/kind/helm_chart"
 
   name             = "lakefs"
   namespace        = "lakefs"
@@ -14,7 +14,7 @@ module "lakefs_helmchart" {
     resources       = jsonencode(var.resources)
     lakefs_endpoint = var.lakefs_endpoint
   })
-  # set = concat(local.lakefs_helmchart_set, [{
+
   set = concat([], [{
     name  = "useDevPostgres"
     value = "true"
