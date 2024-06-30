@@ -4,5 +4,6 @@ inputs:
     description: mlflow Chart version. See here for more details; https://artifacthub.io/packages/helm/mlflow/mlflow
     default: "1.4.12"
 outputs:
-clouds:
-  - aws
+  - name: mlflow_endpoint
+    description: MLFlow access endpoint.
+    export: true
