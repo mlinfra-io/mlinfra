@@ -5,4 +5,4 @@ The other two candidates for deploying mlflow using helm charts are
 
 mlflow community chart has not been maintained for over a year now.
 It has better api for deployment compared to bitnami chart.
-Deploying bitnami chart was so much pain that i decided to go ahead with community chart for now.
+Deploying bitnami chart was much pain; however i decided to go ahead with bitnami chart as the community chart was really outdated and had no official support.
