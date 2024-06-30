@@ -27,6 +27,8 @@ nav:
       - Application Config:
           - user_guide/application_config/index.md
   - Examples:
+      - Local:
+          - kind: code/local/kind.md
       - AWS:
           - cloud_vm: code/aws/cloud_vm.md
           - kubernetes: code/aws/kubernetes.md
