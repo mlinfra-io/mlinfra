@@ -76,7 +76,8 @@ class AWSProvider(AbstractProvider):
 
                 # add random provider
                 with open(
-                    resources.files(modules) / "terraform_providers/random/provider.tf.json",
+                    resources.files(modules)
+                    / "cloud/aws/terraform_providers/random/provider.tf.json",
                     "r",
                 ) as random_provider:
                     random_provider_json = json.load(random_provider)

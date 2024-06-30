@@ -1,0 +1,33 @@
+inputs:
+  - name: cluster_name
+    user_facing: true
+    description: "Name of the KinD cluster"
+    default: "kind-cluster"
+  - name: k8s_version
+    user_facing: true
+    description: "KinD Cluster version"
+    default: "1.28"
+  - name: wait_for_control_plane
+    user_facing: true
+    description: "Defines wether or not the provider will wait for the control plane to be ready. Defaults to false."
+    default: false
+  - name: kubeconfig_path
+    user_facing: true
+    description: "kubeconfig path set after the the cluster is created or by the user to override defaults."
+    default: null
+  # TODO:
+  # re-enable after initial KinD cluster deployment
+  # - name: labels
+  #   user_facing: true
+  #   description: "The labels to apply to the EKS cluster and related modules."
+  #   default:
+  #     nodegroup_type: "operations"
+  # - name: taints
+  #   user_facing: true
+  #   description: "The taints to apply to the EKS cluster and related modules."
+  #   default:
+  #     operations:
+  #       key: "nodegroup_type"
+  #       value: "operations"
+  #       effect: "NO_SCHEDULE"
+outputs:

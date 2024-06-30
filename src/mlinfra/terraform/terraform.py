@@ -12,24 +12,24 @@
 
 import json
 import os
-
-# TODO: Update this section to run it more secure and
-# remove the comment
-import subprocess  # nosec
 from importlib import resources
+from typing import Tuple
 
 # import hashlib
 import boto3
 import yaml
 from botocore.config import Config
 from mlinfra import modules
+from mlinfra.enums.cloud_provider import CloudProvider
 from mlinfra.stack_processor.stack_generator import StackGenerator
 from mlinfra.terraform.state_helper import StateHelper
-from mlinfra.utils.constants import TF_PATH
+from mlinfra.utils.constants import TF_LOCAL_STATE_PATH, TF_PATH
 from mlinfra.utils.utils import (
+    check_docker_installed,
+    check_kind_installed,
+    check_terraform_installed,
     clean_tf_directory,
     create_symlinks,
-    terraform_tested_version,
 )
 
 
@@ -57,20 +57,6 @@ class Terraform:
     def __init__(self, stack_config_path: str):
         self.stack_config_path = stack_config_path
 
-    def check_terraform_installed(self):
-        """This function is responsible for checking if terraform is installed"""
-        try:
-            # TODO: Update this section to run it more secure and
-            # remove the comment
-            version = subprocess.check_output(  # nosec
-                ["terraform", "--version"], universal_newlines=True, timeout=30
-            )
-            installed_version = version.split("\n")[0]
-            if installed_version in terraform_tested_version:
-                return 0
-        except Exception as e:
-            return f"An error occurred while checking the Terraform version: {str(e)}"
-
     def check_config_file_exists(self):
         """This function is responsible for checking if the config file exists"""
         if not os.path.isfile(self.stack_config_path):
@@ -90,7 +76,7 @@ class Terraform:
             missing_keys = [key for key in required_keys if key not in data]
             raise ValueError(f"The following keys are missing: {', '.join(missing_keys)}")
 
-    def clean_mlops_infra_folder(self, delete_dir: bool = True):
+    def clean_ml_infra_folder(self, delete_dir: bool = True):
         """
         This function is responsible for cleaning the .mlops_infra folder
         if delete_dir is set to true, the folder will be deleted
@@ -132,12 +118,17 @@ class Terraform:
             raise FileNotFoundError(f"Stack config file not found: {self.stack_config_path}")
 
     # TODO: write getters for state file name and region
-    def process_config_file(self):
+    def process_config_file(self) -> Tuple[str, str, str, str]:
         """This function is responsible for processing the config file"""
         stack_processor = StackGenerator(stack_config=self.read_stack_config())
         stack_processor.generate()
 
-        return stack_processor.get_state_file_name(), stack_processor.get_region()
+        return (
+            stack_processor.get_stack_name(),
+            stack_processor.get_state_file_name(),
+            stack_processor.get_region(),
+            stack_processor.get_provider(),
+        )
 
     def check_cloud_credentials(self):
         """This function is responsible for checking if the cloud credentials are present"""
@@ -177,6 +168,12 @@ class Terraform:
 
         state_helper.manage_aws_state_storage()
 
+    def check_local_state_storage(self, state_name: str):
+        """
+        This function is responsible for checking if the local state storage is present
+        """
+        os.makedirs(f"{TF_LOCAL_STATE_PATH}/{state_name}", mode=0o777, exist_ok=True)
+
     def generate_modules_list(self):
         """
         This function is responsible for generating a list of modules
@@ -192,24 +189,31 @@ class Terraform:
                         modules_list.append(f"module.{key}")
         return modules_list
 
-    def generate_terraform_config(self) -> tuple[str, str]:
+    def generate_terraform_config(self) -> Tuple[str, str, str, str]:
         """This function is responsible for generating the terraform config file"""
-        self.check_terraform_installed()
+        check_terraform_installed()
         # TODO: perform this after the cli package has been released
-        # self.check_mlops_cli_installed()
+        # self.check_mlinfra_cli_installed()
         self.check_config_file_exists()
-        self.clean_mlops_infra_folder()
-        state_name, aws_region = self.process_config_file()
-        return state_name, aws_region
+        self.clean_ml_infra_folder()
+        stack_name, state_name, aws_region, provider_type = self.process_config_file()
+        return stack_name, state_name, aws_region, provider_type
 
     def plan(self) -> str:
         """
         This function is responsible for running terraform plan command
         along with a couple of other preliminary checks.
         """
-        state_name, aws_region = self.generate_terraform_config()
-        self.check_cloud_credentials()
-        self.check_region_has_three_azs(aws_region=aws_region)
-        self.check_terraform_state_storage(state_name=state_name, aws_region=aws_region)
+        stack_name, state_name, aws_region, provider_type = self.generate_terraform_config()
+        if provider_type is not CloudProvider.LOCAL:
+            self.check_cloud_credentials()
+            self.check_region_has_three_azs(aws_region=aws_region)
+            self.check_terraform_state_storage(state_name=state_name, aws_region=aws_region)
+        else:
+            check_kind_installed()
+            check_docker_installed()
+            # state name is set to stack as in local deployment, there is no
+            # region and hence no state name.
+            self.check_local_state_storage(state_name=stack_name)
         modules_list = self.generate_modules_list()
         return "".join(f" -target={item}" for item in modules_list)

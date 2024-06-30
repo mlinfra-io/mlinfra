@@ -1,0 +1,7 @@
+resources: ${resources}
+ingress:
+  enabled: true
+  hosts:
+    - host: ${lakefs_endpoint}
+      paths:
+        - /

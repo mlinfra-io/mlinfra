@@ -19,6 +19,7 @@ import shutil
 # remove the comment
 import subprocess  # nosec
 import sys
+from typing import List
 
 from .constants import TF_PATH
 
@@ -33,17 +34,11 @@ def generate_tf_json(module_name: str, json_module: json):
         json.dump(json_module, tf_json, ensure_ascii=False, indent=2)
 
 
-def check_terraform_version():
+def check_terraform_installed():
     try:
         # TODO: Update this section to run it more secure and
         # remove the comment
-        result = subprocess.run(  # nosec
-            ["terraform", "version"],
-            capture_output=True,
-            text=True,
-            check=True,
-            timeout=30,
-        )
+        result = check_installed_binary("terraform")
 
         # Extract the version information from the output
         output_lines = result.stdout.split("\n")
@@ -120,6 +115,51 @@ def terraform_tested_version():
 #             "Visit `https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html` "
 #             "for more information."
 #         )
+
+
+def check_installed_binary(binary: str) -> List[str]:
+    """
+    This function is responsible for checking if the given binary is installed
+    and returns the version of the binary if installed.
+
+    Args:
+        binary: The binary to check for installation
+
+    Returns:
+        The version of the binary if installed.
+    """
+    return subprocess.run(  # nosec
+        [binary, "--version"],
+        universal_newlines=True,
+        capture_output=True,
+        text=True,
+        check=True,
+        timeout=30,
+    )
+
+
+def check_docker_installed():
+    """
+    This function is responsible for checking if docker is installed
+    """
+    try:
+        version = check_installed_binary("docker")
+        if not version:
+            return 1
+    except Exception as e:
+        return f"An error occurred while checking the docker version. {str(e)}"
+
+
+def check_kind_installed():
+    """
+    This function is responsible for checking if kind is installed
+    """
+    try:
+        version = check_installed_binary("kind")
+        if not version:
+            return 1
+    except Exception as e:
+        return f"An error occurred while checking the kind version. {str(e)}"
 
 
 def safe_run(func):  # type: ignore

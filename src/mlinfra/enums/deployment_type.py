@@ -18,6 +18,15 @@ class DeploymentType(Enum):
     Enumeration that represents different types of deployments.
     """
 
+    # managed cloud providers
     CLOUD_NATIVE = "cloud_native"
     CLOUD_VM = "cloud_vm"
     KUBERNETES = "kubernetes"
+
+    # local providers
+    KIND = "kind"
+    K3S = "k3s"
+    MINIKUBE = "minikube"
+    MICROK8S = "microk8s"
+    DOCKER_COMPOSE = "docker_compose"
+    DOCKER = "docker"

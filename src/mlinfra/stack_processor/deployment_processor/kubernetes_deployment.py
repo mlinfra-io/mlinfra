@@ -71,7 +71,7 @@ class KubernetesDeployment(AbstractDeployment):
             for required_provider in required_providers:
                 with open(
                     resources.files(modules)
-                    / f"terraform_providers/{required_provider}/terraform.tf.json",
+                    / f"cloud/{self.provider.value}/terraform_providers/{required_provider}/terraform.tf.json",
                     "r",
                 ) as provider_tf:
                     provider_tf_json = json.load(provider_tf)
@@ -91,7 +91,8 @@ class KubernetesDeployment(AbstractDeployment):
 
         for provider in providers:
             with open(
-                resources.files(modules) / f"terraform_providers/{provider}/provider.tf.json",
+                resources.files(modules)
+                / f"cloud/{self.provider.value}/terraform_providers/{provider}/provider.tf.json",
                 "r",
             ) as provider_tf:
                 provider_tf_json = json.load(provider_tf)

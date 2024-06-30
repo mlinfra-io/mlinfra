@@ -1,0 +1,9 @@
+inputs:
+  - name: mlflow_chart_version
+    user_facing: true
+    description: mlflow Chart version. See here for more details; https://artifacthub.io/packages/helm/mlflow/mlflow
+    default: "1.4.12"
+outputs:
+  - name: mlflow_endpoint
+    description: MLFlow access endpoint.
+    export: true

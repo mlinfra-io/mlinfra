@@ -15,15 +15,18 @@ from mlinfra.enums.deployment_type import DeploymentType
 from mlinfra.stack_processor.deployment_processor.cloud_vm_deployment import (
     CloudVMDeployment,
 )
+from mlinfra.stack_processor.deployment_processor.kind_deployment import KindDeployment
 from mlinfra.stack_processor.deployment_processor.kubernetes_deployment import (
     KubernetesDeployment,
 )
 from mlinfra.stack_processor.provider_processor.aws_provider import (
     AWSProvider,
 )
+from mlinfra.stack_processor.provider_processor.local_provider import LocalProvider
 from mlinfra.stack_processor.stack_processor.cloud_vm_stack import (
     CloudVMStack,
 )
+from mlinfra.stack_processor.stack_processor.kind_stack import KindStack
 from mlinfra.stack_processor.stack_processor.kubernetes_stack import (
     KubernetesStack,
 )
@@ -76,7 +79,7 @@ class StackGenerator:
         # and the region
         # TODO: Throw an error if the stack name exceeds 37 characters
         self.stack_name = self.stack_config["name"]
-        self.region = self.stack_config["provider"]["region"]
+        self.region = self.stack_config["provider"].get("region", "")
         self.provider = self.configure_provider()
 
     # TODO: refactor statefile name
@@ -90,7 +93,7 @@ class StackGenerator:
         self.state_file_name = f"tfstate-{self.stack_name}-{self.region}"
         return self.state_file_name
 
-    def get_region(self):
+    def get_region(self) -> str:
         """
         Returns the region specified in the stack configuration.
 
@@ -98,6 +101,24 @@ class StackGenerator:
             str: The region.
         """
         return self.region
+
+    def get_provider(self) -> str:
+        """
+        Returns the provider type
+
+        Returns:
+            str: The provider type.
+        """
+        return self.provider
+
+    def get_stack_name(self) -> str:
+        """
+        Returns the stack name.
+
+        Returns:
+            str: The stack name.
+        """
+        return self.stack_name
 
     def generate(self):
         """
@@ -138,6 +159,24 @@ class StackGenerator:
                 deployment_type=DeploymentType.KUBERNETES,
                 stacks=self.stack_config["stack"],
             ).generate()
+
+        elif deployment_type == DeploymentType.KIND.value:
+            KindDeployment(
+                stack_name=self.stack_name,
+                provider=CloudProvider(self.stack_config["provider"]["name"]),
+                region=self.region,
+                deployment_config=self.stack_config["deployment"],
+            ).configure_deployment()
+
+            KindStack(
+                state_file_name=self.state_file_name,
+                region=self.region,
+                account_id=self.account_id,
+                provider=self.provider,
+                deployment_type=DeploymentType.KIND,
+                stacks=self.stack_config["stack"],
+            ).generate()
+
         else:
             raise ValueError(f"Deployment type {deployment_type} not supported")
 
@@ -158,5 +197,11 @@ class StackGenerator:
             )
             aws_provider.configure_provider()
             return CloudProvider.AWS
+        elif provider_name == CloudProvider.LOCAL.value:
+            local_provider = LocalProvider(
+                stack_name=self.stack_name, config=self.stack_config["provider"]
+            )
+            local_provider.configure_provider()
+            return CloudProvider.LOCAL
         else:
             raise NotImplementedError("Cloud provider not supported")
