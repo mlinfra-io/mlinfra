@@ -1,13 +1,43 @@
+resource "random_password" "mlflow_password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
 locals {
   mlflow_helmchart_values = [{
     name  = "run.persistence.enabled"
+    value = "false"
+    type  = "auto"
+    }, {
+    name  = "tracking.auth.enabled"
+    value = "false"
+    type  = "auto"
+    }, {
+    name  = "tracking.ingress.enabled"
     value = "true"
+    type  = "auto"
+    }, {
+    name  = "tracking.ingress.hostname"
+    value = var.mlflow_endpoint
+    type  = "auto"
+    }, {
+    name  = "run.enabled"
+    value = "false"
+    type  = "auto"
+    }, {
+    name  = "tracking.service.type"
+    value = "ClusterIP"
+    type  = "auto"
+    }, {
+    name  = "postgresql.auth.password"
+    value = "${random_password.mlflow_password.result}"
     type  = "auto"
   }]
 }
 
 module "mlflow_helmchart" {
-  source = "../../../../../cloud/aws/helm_chart"
+  source = "../../../../../local/kind/helm_chart"
 
   name             = "mlflow"
   namespace        = "mlflow"

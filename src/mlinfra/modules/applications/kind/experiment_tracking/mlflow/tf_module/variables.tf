@@ -35,3 +35,8 @@ variable "resources" {
     error_message = "Each resource must have 'requests' or 'limits' with 'cpu' and 'memory' along with their values. CPU should be in the format '100m' or '1' and memory should be in the format '128Mi' or '1Gi'"
   }
 }
+
+variable "mlflow_endpoint" {
+  type    = string
+  default = "mlflow.localhost"
+}
