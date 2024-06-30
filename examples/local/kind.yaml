@@ -5,10 +5,9 @@ deployment:
   type: kind
   config:
     kubernetes:
-      k8s_version: 1.28
-  #     wait_for_control_plane: false
+      k8s_version: 1.29
 stack:
   - data_versioning:
       name: lakefs
-  # - experiment_tracking:
-  #     name: mlflow
+  - experiment_tracking:
+      name: mlflow
