@@ -5,6 +5,7 @@ module "kind" {
   wait_for_control_plane = var.wait_for_control_plane
 }
 
+# TODO:
 # Keeping this better fix here unless this issue gets resolved.
 # https://github.com/hashicorp/terraform-provider-kubernetes/issues/1782
 #
