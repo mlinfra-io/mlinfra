@@ -15,6 +15,7 @@ inputs:
     user_facing: true
     description: "kubeconfig path set after the the cluster is created or by the user to override defaults."
     default: null
+  # TODO:
   # re-enable after initial KinD cluster deployment
   # - name: labels
   #   user_facing: true
@@ -30,4 +31,3 @@ inputs:
   #       value: "operations"
   #       effect: "NO_SCHEDULE"
 outputs:
-clouds:
