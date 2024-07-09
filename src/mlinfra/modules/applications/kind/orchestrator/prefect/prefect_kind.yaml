@@ -1,0 +1,9 @@
+inputs:
+  - name: prefect_chart_version
+    user_facing: true
+    description: prefect Chart version. See here for more details; https://artifacthub.io/packages/helm/prefect/prefect-server
+    default: "2024.6.28162841"
+outputs:
+  - name: prefect_server_endpoint
+    description: Prefect server access endpoint.
+    export: true

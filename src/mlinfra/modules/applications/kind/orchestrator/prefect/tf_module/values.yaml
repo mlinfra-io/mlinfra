@@ -1,0 +1,2 @@
+${prefect_deplyoment_type}:
+  resources: ${resources}
