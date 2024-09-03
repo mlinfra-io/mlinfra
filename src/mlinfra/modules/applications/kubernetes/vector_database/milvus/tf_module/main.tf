@@ -22,32 +22,42 @@ module "milvus_data_artifacts_bucket" {
 
 resource "aws_iam_policy" "milvus_s3_iam_policy" {
   count       = var.remote_tracking ? 1 : 0
-  name_prefix = "MilvusS3AccessPolicy"
-  description = "Allows milvus server access to the S3 bucket"
+  name_prefix = "MilvusS3AccessPolicy-"
+  description = "Allows Milvus server access to the S3 bucket for data storage"
 
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "milvusBucketAccess",
-      "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:ListBucket",
-        "s3:GetBucketLocation",
-        "s3:AbortMultipartUpload",
-        "s3:ListMultipartUploadParts"
-      ],
-      "Resource": [
-        "${module.milvus_data_artifacts_bucket[0].bucket_arn}",
-        "${module.milvus_data_artifacts_bucket[0].bucket_arn}/*"
-      ]
-    }
-  ]
-}
-EOF
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "MilvusBucketAccess"
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket",
+          "s3:GetBucketLocation",
+          "s3:AbortMultipartUpload",
+          "s3:ListMultipartUploadParts"
+        ]
+        Resource = [
+          module.milvus_data_artifacts_bucket[0].bucket_arn,
+          "${module.milvus_data_artifacts_bucket[0].bucket_arn}/*"
+        ]
+      },
+      {
+        Sid      = "MilvusBucketList"
+        Effect   = "Allow"
+        Action   = ["s3:ListAllMyBuckets"]
+        Resource = ["*"]
+      }
+    ]
+  })
+
+  tags = merge(var.tags, {
+    Name    = "MilvusS3AccessPolicy"
+    Purpose = "Milvus data storage"
+  })
 }
 
 resource "aws_iam_role" "milvus_iam_role" {
@@ -252,8 +262,13 @@ module "milvus_helmchart" {
   repository       = "https://milvus-io.github.io/milvus-helm"
   chart            = "milvus"
   chart_version    = var.milvus_chart_version
-  values           = templatefile("${path.module}/values.yaml", {})
-  set              = local.milvus_helmchart_set
+  values = templatefile("${path.module}/values.yaml", {
+    nodeSelector = jsonencode(var.nodeSelector)
+    tolerations  = jsonencode(var.tolerations)
+    affinity     = jsonencode(var.affinity)
+    resources    = jsonencode(var.resources)
+  })
+  set = local.milvus_helmchart_set
 
   depends_on = [kubernetes_manifest.gp3_storage_class]
 }
