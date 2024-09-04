@@ -16,7 +16,7 @@ inputs:
   - name: k8s_version
     user_facing: true
     description: "EKS Cluster version"
-    default: "1.28"
+    default: "1.29"
   - name: cluster_endpoint_private_access
     user_facing: true
     description: "Indicates whether the Amazon EKS private API server endpoint is enabled. Default is true. Read more here: https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html"
@@ -83,7 +83,7 @@ inputs:
     user_facing: true
     description: "Tags for EKS Cluster"
     default:
-      cluster_version: "1.28"
+      cluster_version: "1.29"
 outputs:
 clouds:
   - aws
