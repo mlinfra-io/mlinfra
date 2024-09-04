@@ -25,7 +25,7 @@ deployment:
         max_size: 3
         disk_size: 20
 stack:
-  - vector_database::
+  - vector_database:
       name: milvus
       params:
         remote_tracking: true
