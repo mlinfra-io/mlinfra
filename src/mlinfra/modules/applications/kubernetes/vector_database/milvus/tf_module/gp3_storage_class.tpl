@@ -9,14 +9,11 @@ volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 allowedTopologies:
   - matchLabelExpressions:
-      # check which one is used
+      # check which key is used
       - key: topology.ebs.csi.aws.com/zone
         values:
         %{~ for az in availability_zones ~}
           - ${az}
         %{~ endfor ~}
-      - key: failure-domain.beta.kubernetes.io/zone
-        values:
-          - us-east-1a
 parameters:
   type: gp3

@@ -1,14 +1,12 @@
-resource "null_resource" "unset_default_storage_class" {
-  provisioner "local-exec" {
-    command = <<-EOT
-      kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-    EOT
-  }
+data "aws_region" "current" {}
+
+data "aws_availability_zones" "available" {
+  state = "available"
 }
-resource "kubernetes_manifest" "gp3_storage_class" {
-  manifest = yamldecode(templatefile("${path.module}/gp3_storage_class.tpl", {
-    availability_zones = var.availability_zones
-  }))
+
+locals {
+  aws_region         = data.aws_region.current.name
+  availability_zones = data.aws_availability_zones.available.names
 }
 
 # TODO: possibility to bring your own bucket
@@ -44,12 +42,6 @@ resource "aws_iam_policy" "milvus_s3_iam_policy" {
           module.milvus_data_artifacts_bucket[0].bucket_arn,
           "${module.milvus_data_artifacts_bucket[0].bucket_arn}/*"
         ]
-      },
-      {
-        Sid      = "MilvusBucketList"
-        Effect   = "Allow"
-        Action   = ["s3:ListAllMyBuckets"]
-        Resource = ["*"]
       }
     ]
   })
@@ -86,6 +78,33 @@ resource "aws_iam_role" "milvus_iam_role" {
   tags = var.tags
 }
 
+resource "null_resource" "unset_default_storage_class" {
+  provisioner "local-exec" {
+    command    = <<-EOT
+      kubectl patch storageclass gp2 -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+    EOT
+    on_failure = continue
+  }
+
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+  depends_on = [aws_iam_role.milvus_iam_role]
+}
+
+resource "kubernetes_manifest" "gp3_storage_class" {
+  manifest = yamldecode(templatefile("${path.module}/gp3_storage_class.tpl", {
+    availability_zones = local.availability_zones
+  }))
+  depends_on = [aws_iam_role.milvus_iam_role]
+
+  # provider = kubernetes.eks
+}
+
 locals {
   milvus_helmchart_set = var.remote_tracking ? [{
     name  = "cluster.enabled"
@@ -113,7 +132,7 @@ locals {
     type  = "auto"
     }, {
     name  = "externalS3.host"
-    value = "s3.${var.region}.amazonaws.com"
+    value = "s3.${local.aws_region}.amazonaws.com"
     type  = "auto"
     }, {
     name  = "externalS3.port"
@@ -239,8 +258,16 @@ locals {
     name  = "service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-nlb-target-type"
     value = "ip"
     type  = "auto"
+    }, {
+    name  = "standalone.persistence.enabled"
+    value = "false"
+    type  = "auto"
     }] : [{
     name  = "cluster.enabled"
+    value = "false"
+    type  = "auto"
+    }, {
+    name  = "pulsar.enabled"
     value = "false"
     type  = "auto"
     }, {
@@ -251,6 +278,10 @@ locals {
     name  = "minio.mode"
     value = "standalone"
     type  = "auto"
+    }, {
+    name  = "attu.enabled"
+    value = "true"
+    type  = "auto"
   }]
 }
 
@@ -259,16 +290,17 @@ module "milvus_helmchart" {
   name             = "milvus"
   namespace        = var.service_account_namespace
   create_namespace = true
-  repository       = "https://milvus-io.github.io/milvus-helm"
+  repository       = "https://zilliztech.github.io/milvus-helm/"
   chart            = "milvus"
   chart_version    = var.milvus_chart_version
   values = templatefile("${path.module}/values.yaml", {
-    nodeSelector = jsonencode(var.nodeSelector)
-    tolerations  = jsonencode(var.tolerations)
-    affinity     = jsonencode(var.affinity)
-    resources    = jsonencode(var.resources)
+    remote_tracking = jsonencode(var.remote_tracking)
+    nodeSelector    = jsonencode(var.nodeSelector)
+    tolerations     = jsonencode(var.tolerations)
+    affinity        = jsonencode(var.affinity)
+    resources       = jsonencode(var.resources)
   })
   set = local.milvus_helmchart_set
 
-  depends_on = [kubernetes_manifest.gp3_storage_class]
+  depends_on = [aws_iam_role.milvus_iam_role]
 }

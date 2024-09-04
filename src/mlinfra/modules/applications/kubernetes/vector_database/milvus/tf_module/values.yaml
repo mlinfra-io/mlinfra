@@ -1,4 +1,32 @@
-nodeSelector: ${nodeSelector}
-tolerations: ${tolerations}
-affinity: ${affinity}
-resources: ${resources}
+configuration: &configuration
+  nodeSelector: ${nodeSelector}
+  tolerations: ${tolerations}
+  affinity: ${affinity}
+
+<<: *configuration
+
+etcd:
+  <<: *configuration
+
+mixCoordinator:
+  <<: *configuration
+# rootCoordinator:
+#   <<: *configuration
+
+# indexCoordinator:
+#   <<: *configuration
+
+# queryCoordinator:
+#   <<: *configuration
+
+# dataCoordinator:
+#   <<: *configuration
+
+# proxy:
+#   <<: *configuration
+
+minio:
+  <<: *configuration
+
+standalone:
+  <<: *configuration
