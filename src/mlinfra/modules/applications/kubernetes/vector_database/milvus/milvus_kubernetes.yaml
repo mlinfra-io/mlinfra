@@ -35,4 +35,8 @@ inputs:
     type: string
     description: The version of the Milvus Helm chart to use
     default: "4.0.31"
+  - name: remote_tracking
+    user_facing: true
+    description:
+    default: false
 outputs:

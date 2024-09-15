@@ -73,7 +73,7 @@ resource "aws_iam_role" "milvus_iam_role" {
       }
     ]
   })
-  managed_policy_arns = aws_iam_policy.milvus_s3_iam_policy[0].arn
+  managed_policy_arns = [aws_iam_policy.milvus_s3_iam_policy[0].arn]
 
   tags = var.tags
 }
@@ -96,14 +96,27 @@ resource "null_resource" "unset_default_storage_class" {
   depends_on = [aws_iam_role.milvus_iam_role]
 }
 
-resource "kubernetes_manifest" "gp3_storage_class" {
-  manifest = yamldecode(templatefile("${path.module}/gp3_storage_class.tpl", {
-    availability_zones = local.availability_zones
-  }))
-  depends_on = [aws_iam_role.milvus_iam_role]
-
-  # provider = kubernetes.eks
+resource "kubernetes_storage_class" "ebs_gp3_sc" {
+  metadata {
+    name = "ebs-gp3-sc"
+    annotations = {
+      "storageclass.kubernetes.io/is-default-class" = "true"
+    }
+  }
+  storage_provisioner    = "ebs.csi.aws.com"
+  volume_binding_mode    = "WaitForFirstConsumer"
+  allow_volume_expansion = true
+  allowed_topologies {
+    match_label_expressions {
+      key    = "topology.ebs.csi.aws.com/zone"
+      values = [for az in local.availability_zones : az]
+    }
+  }
+  parameters = {
+    type = "gp3"
+  }
 }
+
 
 locals {
   milvus_helmchart_set = var.remote_tracking ? [{
@@ -144,7 +157,7 @@ locals {
     type  = "auto"
     }, {
     name  = "externalS3.bucketName"
-    value = "${module.milvus_data_artifacts_bucket.bucket_id}"
+    value = "${module.milvus_data_artifacts_bucket[0].bucket_id}"
     type  = "auto"
     }, {
     name  = "externalS3.useIAM"
@@ -300,7 +313,12 @@ module "milvus_helmchart" {
     affinity        = jsonencode(var.affinity)
     resources       = jsonencode(var.resources)
   })
-  set = local.milvus_helmchart_set
+  timeout = 600
+  set     = local.milvus_helmchart_set
 
-  depends_on = [aws_iam_role.milvus_iam_role]
+  depends_on = [aws_iam_role.milvus_iam_role, kubernetes_storage_class.ebs_gp3_sc]
 }
+# - effect: NoSchedule
+#   key: nodegroup_type
+#   operator: Equal
+#   value: operations

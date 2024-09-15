@@ -5,25 +5,42 @@ configuration: &configuration
 
 <<: *configuration
 
+pulsar:
+  zookeeper:
+    <<: *configuration
+  bookkeeper:
+    <<: *configuration
+  autorecovery:
+    <<: *configuration
+  broker:
+    <<: *configuration
+  proxy:
+    <<: *configuration
+  pulsar_metadata:
+    <<: *configuration
+  pulsar_manager:
+    <<: *configuration
+
 etcd:
   <<: *configuration
 
 mixCoordinator:
   <<: *configuration
-# rootCoordinator:
-#   <<: *configuration
 
-# indexCoordinator:
-#   <<: *configuration
+rootCoordinator:
+  <<: *configuration
 
-# queryCoordinator:
-#   <<: *configuration
+indexCoordinator:
+  <<: *configuration
 
-# dataCoordinator:
-#   <<: *configuration
+queryCoordinator:
+  <<: *configuration
 
-# proxy:
-#   <<: *configuration
+dataCoordinator:
+  <<: *configuration
+
+proxy:
+  <<: *configuration
 
 minio:
   <<: *configuration
