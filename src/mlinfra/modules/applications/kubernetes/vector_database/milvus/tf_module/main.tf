@@ -318,7 +318,3 @@ module "milvus_helmchart" {
 
   depends_on = [aws_iam_role.milvus_iam_role, kubernetes_storage_class.ebs_gp3_sc]
 }
-# - effect: NoSchedule
-#   key: nodegroup_type
-#   operator: Equal
-#   value: operations
