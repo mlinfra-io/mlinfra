@@ -16,34 +16,52 @@ pulsar:
     <<: *configuration
   proxy:
     <<: *configuration
+  toolset:
+    <<: *configuration
   pulsar_metadata:
     <<: *configuration
   pulsar_manager:
     <<: *configuration
+  pulsar-init:
+    <<: *configuration
+  bookkeeper-init:
+    <<: *configuration
 
-etcd:
-  <<: *configuration
-
-mixCoordinator:
-  <<: *configuration
-
-rootCoordinator:
-  <<: *configuration
-
-indexCoordinator:
-  <<: *configuration
-
-queryCoordinator:
-  <<: *configuration
-
-dataCoordinator:
+standalone:
   <<: *configuration
 
 proxy:
   <<: *configuration
 
-minio:
+rootCoordinator:
   <<: *configuration
 
-standalone:
+queryCoordinator:
+  <<: *configuration
+
+queryNode:
+  <<: *configuration
+
+indexCoordinator:
+  <<: *configuration
+
+indexNode:
+  <<: *configuration
+
+dataCoordinator:
+  <<: *configuration
+
+dataNode:
+  <<: *configuration
+
+mixCoordinator:
+  <<: *configuration
+
+streamingNode:
+  <<: *configuration
+
+etcd:
+  <<: *configuration
+
+minio:
   <<: *configuration
