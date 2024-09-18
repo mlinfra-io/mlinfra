@@ -27,7 +27,7 @@ variable "rds_instance_class" {
 
 variable "prefect_version" {
   type    = string
-  default = "2.14.17"
+  default = "3.0.2"
 }
 
 variable "ec2_application_port" {
