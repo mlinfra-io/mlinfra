@@ -57,7 +57,7 @@ variable "rds_instance_class" {
 variable "prefect_chart_version" {
   type        = string
   description = "prefect Chart version."
-  default     = "2024.6.4205506"
+  default     = "2024.9.13174400"
 }
 
 variable "skip_final_snapshot" {
