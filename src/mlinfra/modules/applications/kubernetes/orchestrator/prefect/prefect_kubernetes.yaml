@@ -35,7 +35,7 @@ inputs:
   - name: prefect_chart_version
     user_facing: true
     description: prefect Chart version. See here for more details; https://artifacthub.io/packages/helm/prefect/prefect-server
-    default: "2024.6.4205506"
+    default: "2024.9.13174400"
   - name: service_account_namespace
     user_facing: true
     description: The namespace where the service account would be installed
