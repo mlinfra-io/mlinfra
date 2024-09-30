@@ -37,6 +37,8 @@ body:
       options:
         - New Cloud Provider
         - MLOps Stack Application
+        - Cloud module update
+        - mlinfra cli
     validations:
       required: true
 
