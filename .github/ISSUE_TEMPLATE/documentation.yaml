@@ -1,7 +1,7 @@
 name: Documentation
 description: Add or update documentation for this project
 title: "[Documentation]: "
-labels: ["type/documentation \U001D76DB"]
+labels: ["documentation"]
 body:
   - type: markdown
     attributes:
