@@ -1,0 +1,31 @@
+name: Documentation
+description: Add or update documentation for this project
+title: "[Documentation]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: "## Documentation\nPlease fill in this form to describe the documentation change in detail."
+
+  - type: textarea
+    attributes:
+      label: Describe the documentation change
+      description: "Provide a detailed description of the documentation change you're proposing."
+      placeholder: "Explain the addition or change here..."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Importance of the change
+      description: "Explain why this documentation addition or update is important. How will it benefit the project or its users?"
+      placeholder: "Describe the importance here..."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other additional context about the feature here.
+    validations:
+      required: false

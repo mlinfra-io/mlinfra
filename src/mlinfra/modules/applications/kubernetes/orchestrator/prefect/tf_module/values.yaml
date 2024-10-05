@@ -3,3 +3,8 @@ ${prefect_deplyoment_type}:
   tolerations: ${tolerations}
   affinity: ${affinity}
   resources: ${resources}
+postgresql:
+  primary:
+    nodeSelector: ${nodeSelector}
+    tolerations: ${tolerations}
+    affinity: ${affinity}

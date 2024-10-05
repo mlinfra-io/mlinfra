@@ -1,7 +1,7 @@
 name: Feature Request
 description: Suggest an idea for this project
 title: "[Feature]: "
-labels: ["type/feature \U0001F4A1"]
+labels: ["feature"]
 body:
   - type: markdown
     attributes:
@@ -37,6 +37,8 @@ body:
       options:
         - New Cloud Provider
         - MLOps Stack Application
+        - Cloud module update
+        - mlinfra cli
     validations:
       required: true
 
