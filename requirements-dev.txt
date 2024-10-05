@@ -14,7 +14,7 @@ charset-normalizer==3.3.2
     # via requests
 distlib==0.3.8
     # via virtualenv
-filelock==3.14.0
+filelock==3.16.1
     # via virtualenv
 getmac==0.9.4
     # via mlinfra (pyproject.toml)
