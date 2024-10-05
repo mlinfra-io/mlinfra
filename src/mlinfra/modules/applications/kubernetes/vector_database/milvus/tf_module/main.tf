@@ -96,9 +96,9 @@ resource "null_resource" "unset_default_storage_class" {
   depends_on = [aws_iam_role.milvus_iam_role]
 }
 
-resource "kubernetes_storage_class" "ebs_gp3_sc" {
+resource "kubernetes_storage_class" "gp3_storageclass" {
   metadata {
-    name = "ebs-gp3-sc"
+    name = "gp3"
     annotations = {
       "storageclass.kubernetes.io/is-default-class" = "true"
     }
@@ -275,6 +275,14 @@ locals {
     name  = "standalone.persistence.enabled"
     value = "false"
     type  = "auto"
+    }, {
+    name  = "log.format"
+    value = "json"
+    type  = "auto"
+    }, {
+    name  = "etcd.persistence.storageClass"
+    value = "gp3"
+    type  = "auto"
     }] : [{
     name  = "cluster.enabled"
     value = "false"
@@ -288,12 +296,24 @@ locals {
     value = "1"
     type  = "auto"
     }, {
+    name  = "etcd.persistence.storageClass"
+    value = "gp3"
+    type  = "auto"
+    }, {
     name  = "minio.mode"
     value = "standalone"
     type  = "auto"
     }, {
+    name  = "minio.persistence.storageClass"
+    value = "gp3"
+    type  = "auto"
+    }, {
     name  = "attu.enabled"
     value = "true"
+    type  = "auto"
+    }, {
+    name  = "standalone.persistence.persistentVolumeClaim.storageClass"
+    value = "gp3"
     type  = "auto"
   }]
 }
@@ -316,5 +336,5 @@ module "milvus_helmchart" {
   timeout = 600
   set     = local.milvus_helmchart_set
 
-  depends_on = [aws_iam_role.milvus_iam_role, kubernetes_storage_class.ebs_gp3_sc]
+  depends_on = [aws_iam_role.milvus_iam_role, kubernetes_storage_class.gp3_storageclass]
 }
