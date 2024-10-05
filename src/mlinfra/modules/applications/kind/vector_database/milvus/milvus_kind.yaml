@@ -2,7 +2,7 @@ inputs:
   - name: milvus_chart_version
     user_facing: true
     description: Version of the Milvus Helm chart to use-
-    default: "4.2.9"
+    default: "4.2.12"
 outputs:
   - name: milvus_endpoint
     description: Milvus access endpoint.

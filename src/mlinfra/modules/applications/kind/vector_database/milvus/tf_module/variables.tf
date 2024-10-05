@@ -1,7 +1,7 @@
 variable "milvus_chart_version" {
   type        = string
   description = "Version of the Milvus Helm chart to use"
-  default     = "4.2.9"
+  default     = "4.2.12"
 }
 
 variable "resources" {

@@ -39,7 +39,7 @@ variable "service_account_name" {
 
 variable "milvus_chart_version" {
   type    = string
-  default = "4.2.11"
+  default = "4.2.12"
 }
 
 variable "resources" {
