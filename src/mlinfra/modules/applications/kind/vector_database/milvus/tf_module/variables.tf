@@ -30,5 +30,5 @@ variable "resources" {
 
 variable "milvus_endpoint" {
   type    = string
-  default = "milvus.localhost"
+  default = "milvus-attu.localhost"
 }
