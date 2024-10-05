@@ -18,7 +18,7 @@ click==8.1.7
     # via mkdocs
 colorama==0.4.6
     # via mkdocs-material
-getmac==0.9.4
+getmac==0.9.5
     # via mlinfra (pyproject.toml)
 ghp-import==2.1.0
     # via mkdocs
