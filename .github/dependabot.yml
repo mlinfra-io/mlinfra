@@ -1,0 +1,29 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "pip" # Python package manager
+    directory: "/" # Location of the requirements file, adjust if necessary
+    schedule:
+      interval: "weekly" # Set to run checks once a week
+      time: "06:00" # Set the time to 6 am
+      day: "saturday" # Set the day to Saturday
+    rebase-strategy: "auto"
+    open-pull-requests-limit: 10
+
+    # Only update for minor versions and patches
+    versioning-strategy: "increase" # This restricts to only minor and patch updates
+
+    commit-message:
+      prefix: dependabot
+
+    # Ignore major version updates
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"] # Ignore major version updates
+
+    reviewers:
+      - aliabbasjaffri
