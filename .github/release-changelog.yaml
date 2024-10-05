@@ -18,4 +18,4 @@ changelog:
         - dependencies
     - title: Documentation Updates
       labels:
-        - docs
+        - documentation
