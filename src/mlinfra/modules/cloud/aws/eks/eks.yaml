@@ -83,7 +83,7 @@ inputs:
     user_facing: true
     description: "Tags for EKS Cluster"
     default:
-      cluster_version: "1.29"
+      cluster_version: "1.30"
 outputs:
 clouds:
   - aws
