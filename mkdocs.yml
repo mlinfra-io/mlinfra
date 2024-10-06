@@ -34,7 +34,7 @@ nav:
           - kubernetes: code/aws/kubernetes.md
   - Contributing: CONTRIBUTING.md
   - Reporting Security Vulnerabilities: SECURITY.md
-  - Release Notes: release_notes.md
+  - Release Notes: RELEASE_NOTES.md
   - Acknowledgements: acknowledgements.md
   - About Me: about_me.md
 not_in_nav: |
