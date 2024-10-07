@@ -7,7 +7,7 @@ variable "cluster_name" {
 variable "k8s_version" {
   type        = string
   description = "Defines kubernetes version for the KinD cluster"
-  default     = "1.29"
+  default     = "1.30"
 }
 
 variable "wait_for_control_plane" {
