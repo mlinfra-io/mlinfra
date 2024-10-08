@@ -47,7 +47,7 @@ locals {
 }
 
 module "milvus_helmchart" {
-  source           = "../../../../../cloud/aws/helm_chart"
+  source           = "../../../../../local/helm_chart"
   name             = "milvus"
   namespace        = "milvus"
   create_namespace = true

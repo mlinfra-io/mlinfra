@@ -19,7 +19,7 @@ locals {
 }
 
 module "prefect_server_helmchart" {
-  source = "../../../../../local/kind/helm_chart"
+  source = "../../../../../local/helm_chart"
 
   name             = "prefect-server"
   namespace        = var.namespace
@@ -57,7 +57,7 @@ locals {
 }
 
 module "prefect_worker_helmchart" {
-  source = "../../../../../local/kind/helm_chart"
+  source = "../../../../../local/helm_chart"
 
   name             = "prefect-worker"
   namespace        = var.namespace
