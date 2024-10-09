@@ -1,8 +1,9 @@
-resource "minikube_cluster" "cluster" {
-  driver             = var.driver
-  cluster_name       = var.cluster_name
-  kubernetes_version = var.k8s_version
-  nodes              = var.nodes
+module "minikube" {
+  source = "./minikube_cluster"
 
-  addons = var.add_ons
+  driver       = var.driver
+  cluster_name = var.cluster_name
+  k8s_version  = var.k8s_version
+  nodes        = var.nodes
+  add_ons      = var.add_ons
 }
