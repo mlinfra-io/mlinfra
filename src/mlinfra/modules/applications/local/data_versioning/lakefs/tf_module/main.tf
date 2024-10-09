@@ -1,5 +1,5 @@
 module "lakefs_helmchart" {
-  source = "../../../../../local/kind/helm_chart"
+  source = "../../../../../local/helm_chart"
 
   name             = "lakefs"
   namespace        = "lakefs"

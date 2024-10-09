@@ -19,6 +19,7 @@ from mlinfra.stack_processor.deployment_processor.kind_deployment import KindDep
 from mlinfra.stack_processor.deployment_processor.kubernetes_deployment import (
     KubernetesDeployment,
 )
+from mlinfra.stack_processor.deployment_processor.minikube_deployment import MiniKubeDeployment
 from mlinfra.stack_processor.provider_processor.aws_provider import (
     AWSProvider,
 )
@@ -26,10 +27,10 @@ from mlinfra.stack_processor.provider_processor.local_provider import LocalProvi
 from mlinfra.stack_processor.stack_processor.cloud_vm_stack import (
     CloudVMStack,
 )
-from mlinfra.stack_processor.stack_processor.kind_stack import KindStack
 from mlinfra.stack_processor.stack_processor.kubernetes_stack import (
     KubernetesStack,
 )
+from mlinfra.stack_processor.stack_processor.local_stack import LocalStack
 
 
 class StackGenerator:
@@ -168,12 +169,29 @@ class StackGenerator:
                 deployment_config=self.stack_config["deployment"],
             ).configure_deployment()
 
-            KindStack(
+            LocalStack(
                 state_file_name=self.state_file_name,
                 region=self.region,
                 account_id=self.account_id,
                 provider=self.provider,
                 deployment_type=DeploymentType.KIND,
+                stacks=self.stack_config["stack"],
+            ).generate()
+
+        elif deployment_type == DeploymentType.MINIKUBE.value:
+            MiniKubeDeployment(
+                stack_name=self.stack_name,
+                provider=CloudProvider(self.stack_config["provider"]["name"]),
+                region=self.region,
+                deployment_config=self.stack_config["deployment"],
+            ).configure_deployment()
+
+            LocalStack(
+                state_file_name=self.state_file_name,
+                region=self.region,
+                account_id=self.account_id,
+                provider=self.provider,
+                deployment_type=DeploymentType.MINIKUBE,
                 stacks=self.stack_config["stack"],
             ).generate()
 
@@ -199,7 +217,9 @@ class StackGenerator:
             return CloudProvider.AWS
         elif provider_name == CloudProvider.LOCAL.value:
             local_provider = LocalProvider(
-                stack_name=self.stack_name, config=self.stack_config["provider"]
+                stack_name=self.stack_name,
+                config=self.stack_config["provider"],
+                deployment=self.stack_config["deployment"],
             )
             local_provider.configure_provider()
             return CloudProvider.LOCAL

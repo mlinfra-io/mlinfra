@@ -68,10 +68,16 @@ class AbstractStack(ABC):
         Returns:
             Union[Dict, Any]: The configuration as a JSON object or YAML.
         """
-        file_path = (
-            resources.files(modules)
-            / f"applications/{self.deployment_type.value}/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}"
-        )
+        if self.provider.value == CloudProvider.LOCAL.value:
+            file_path = (
+                resources.files(modules)
+                / f"applications/{self.provider.value}/{stack_type}/{application_name}/{application_name}.{extension}"
+            )
+        else:
+            file_path = (
+                resources.files(modules)
+                / f"applications/{self.deployment_type.value}/{stack_type}/{application_name}/{application_name}_{self.deployment_type.value}.{extension}"
+            )
         with open(file_path, "r", encoding="utf-8") as config_file:
             if extension == "yaml":
                 return yaml.safe_load(config_file.read())
