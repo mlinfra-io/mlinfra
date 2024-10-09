@@ -21,9 +21,9 @@ from mlinfra.stack_processor.stack_processor.stack import (
 from mlinfra.utils.constants import TF_PATH
 
 
-class KindStack(AbstractStack):
+class LocalStack(AbstractStack):
     """
-    The KindStack class is responsible for generating the
+    The LocalStack class is responsible for generating the
     Terraform configuration files for the KinD stack.
     """
 
@@ -37,7 +37,7 @@ class KindStack(AbstractStack):
         stacks: yaml,
     ):
         """
-        Constructor for the KindStack class.
+        Constructor for the LocalStack class.
 
         :param provider: The cloud provider
         :type provider: Provider
@@ -73,7 +73,7 @@ class KindStack(AbstractStack):
                 # TODO: pickup right module source based on the deployment type
 
                 json_module["module"][name]["source"] = (
-                    f"./modules/applications/{self.deployment_type.value}/{stack_type}/{name}/tf_module"
+                    f"./modules/applications/{self.provider.value}/{stack_type}/{name}/tf_module"
                 )
 
                 # Reading inputs and outputs from the config file
