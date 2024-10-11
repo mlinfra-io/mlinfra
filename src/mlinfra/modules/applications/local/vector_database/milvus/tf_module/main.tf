@@ -21,7 +21,7 @@ locals {
     type  = "auto"
     }, {
     name  = "ingress.rules[0].host"
-    value = var.milvus_endpoint
+    value = "milvus.localhost"
     type  = "auto"
     }, {
     name  = "ingress.rules[0].path"
@@ -41,7 +41,7 @@ locals {
     type  = "auto"
     }, {
     name  = "attu.ingress.hosts[0]"
-    value = "milvus-attu.localhost"
+    value = var.milvus_endpoint
     type  = "auto"
   }]
 }
