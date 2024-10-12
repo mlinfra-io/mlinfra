@@ -31,3 +31,17 @@ variable "add_ons" {
     "ingress"
   ]
 }
+
+variable "wait_for_addons" {
+  type = list(string)
+  default = [
+    "apiserver",
+    "system_pods",
+    "apps_running"
+  ]
+}
+
+variable "wait_time" {
+  type    = number
+  default = 20
+}
