@@ -8,6 +8,10 @@ locals {
     value = "true"
     type  = "auto"
     }, {
+    name  = "postgresql.volumePermissions.enabled"
+    value = "true"
+    type  = "auto"
+    }, {
     name  = "ingress.enabled"
     value = "true"
     type  = "auto"

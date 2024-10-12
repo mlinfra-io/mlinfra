@@ -37,6 +37,14 @@ locals {
     name  = "postgresql.auth.password"
     value = "${random_password.mlflow_password.result}"
     type  = "auto"
+    }, {
+    name  = "postgresql.volumePermissions.enabled"
+    value = "true"
+    type  = "auto"
+    }, {
+    name  = "minio.volumePermissions.enabled"
+    value = "true"
+    type  = "auto"
   }]
 }
 

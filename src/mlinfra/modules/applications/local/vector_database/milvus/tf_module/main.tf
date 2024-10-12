@@ -43,6 +43,14 @@ locals {
     name  = "attu.ingress.hosts[0]"
     value = var.milvus_endpoint
     type  = "auto"
+    }, {
+    name  = "etcd.volumePermissions.enabled"
+    value = "true"
+    type  = "auto"
+    }, {
+    name  = "minio.securityContext.enabled"
+    value = "false"
+    type  = "auto"
   }]
 }
 
