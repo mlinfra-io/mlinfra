@@ -22,7 +22,7 @@ from mlinfra.stack_processor.deployment_processor.deployment import (
 from mlinfra.utils.utils import generate_tf_json
 
 
-class KindDeployment(AbstractDeployment):
+class MiniKubeDeployment(AbstractDeployment):
     def __init__(
         self,
         stack_name: str,
@@ -31,15 +31,15 @@ class KindDeployment(AbstractDeployment):
         deployment_config: yaml,
     ):
         """
-        Initialize a new instance of the KindDeployment class.
+        Initialize a new instance of the MiniKubeDeployment class.
 
         Parameters:
         - stack_name (str): The name of the stack.
         - provider (CloudProvider): The cloud provider for the deployment.
-        - region (str): The region for the deployment. Empty string for KinD Cluster
+        - region (str): The region for the deployment. Empty string for minikube Cluster
         - deployment_config (yaml): The deployment configuration.
         """
-        super(KindDeployment, self).__init__(
+        super(MiniKubeDeployment, self).__init__(
             stack_name=stack_name,
             provider=provider,
             region="",
@@ -98,27 +98,29 @@ class KindDeployment(AbstractDeployment):
                 provider_tf_json = json.load(provider_tf)
                 if provider == "kubernetes":
                     provider_tf_json["provider"]["kubernetes"]["client_certificate"] = (
-                        "${ module.kind.client_certificate }"
+                        "${ module.minikube.client_certificate }"
                     )
                     provider_tf_json["provider"]["kubernetes"]["client_key"] = (
-                        "${ module.kind.client_key }"
+                        "${ module.minikube.client_key }"
                     )
                     provider_tf_json["provider"]["kubernetes"]["cluster_ca_certificate"] = (
-                        "${ module.kind.cluster_ca_certificate }"
+                        "${ module.minikube.cluster_ca_certificate }"
                     )
-                    provider_tf_json["provider"]["kubernetes"]["host"] = "${ module.kind.endpoint }"
+                    provider_tf_json["provider"]["kubernetes"]["host"] = (
+                        "${ module.minikube.endpoint }"
+                    )
                 else:
                     provider_tf_json["provider"]["helm"]["kubernetes"]["client_certificate"] = (
-                        "${ module.kind.client_certificate }"
+                        "${ module.minikube.client_certificate }"
                     )
                     provider_tf_json["provider"]["helm"]["kubernetes"]["client_key"] = (
-                        "${ module.kind.client_key }"
+                        "${ module.minikube.client_key }"
                     )
                     provider_tf_json["provider"]["helm"]["kubernetes"]["cluster_ca_certificate"] = (
-                        "${ module.kind.cluster_ca_certificate }"
+                        "${ module.minikube.cluster_ca_certificate }"
                     )
                     provider_tf_json["provider"]["helm"]["kubernetes"]["host"] = (
-                        "${ module.kind.endpoint }"
+                        "${ module.minikube.endpoint }"
                     )
             data["provider"].update(provider_tf_json["provider"])
 
@@ -142,11 +144,11 @@ class KindDeployment(AbstractDeployment):
         """
 
         # inject k8s module
-        k8s_json_module = {"module": {"kind": {}}}
-        k8s_json_module["module"]["kind"]["source"] = (
+        k8s_json_module = {"module": {"minikube": {}}}
+        k8s_json_module["module"]["minikube"]["source"] = (
             f"./modules/{self.provider.value}/{self.deployment_config['type']}/k8s/tf_module"
         )
-        k8s_json_module["module"]["kind"]["cluster_name"] = f"{self.stack_name}-cluster"
+        k8s_json_module["module"]["minikube"]["cluster_name"] = f"{self.stack_name}-cluster"
 
         if "config" in self.deployment_config and "kubernetes" in self.deployment_config["config"]:
             # read values from the yaml config file
@@ -166,7 +168,7 @@ class KindDeployment(AbstractDeployment):
                 # iterate through the config defined in the deployment section
                 # of the stack file
                 for k8s_config in self.deployment_config["config"]["kubernetes"]:
-                    # if the application config exists in the kind config and is
+                    # if the application config exists in the minikube config and is
                     # configured to be user_facing, only then add this config
                     config_lookup = next(
                         (
@@ -177,7 +179,7 @@ class KindDeployment(AbstractDeployment):
                         None,
                     )
                     if config_lookup is not None:
-                        k8s_json_module["module"]["kind"][k8s_config] = self.deployment_config[
+                        k8s_json_module["module"]["minikube"][k8s_config] = self.deployment_config[
                             "config"
                         ]["kubernetes"].get(k8s_config, None)
                     else:
@@ -188,7 +190,7 @@ class KindDeployment(AbstractDeployment):
                             """
                         )
 
-        generate_tf_json(module_name="kind", json_module=k8s_json_module)
+        generate_tf_json(module_name="minikube", json_module=k8s_json_module)
 
     def configure_deployment(self):
         self.generate_required_provider_config()
