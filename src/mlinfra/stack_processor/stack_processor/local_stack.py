@@ -123,6 +123,10 @@ class LocalStack(AbstractStack):
                                     raise KeyError(f"{key} is not a user facing parameter")
                     json_module["module"][name].update(params)
 
+                json_module["module"][name].update(
+                    {"depends_on": [f"module.{self.deployment_type.value}"]}
+                )
+
                 with open(
                     f"./{TF_PATH}/stack_{stack_type}.tf.json", "w", encoding="utf-8"
                 ) as tf_json:
