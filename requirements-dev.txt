@@ -62,7 +62,7 @@ pyyaml==6.0.1
     #   pre-commit
 requests==2.32.3
     # via mlinfra (pyproject.toml)
-s3transfer==0.10.1
+s3transfer==0.10.3
     # via boto3
 six==1.16.0
     # via python-dateutil
