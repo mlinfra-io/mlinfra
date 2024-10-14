@@ -52,6 +52,19 @@ jobs:
         with:
           pythonVersion: "3.11"
           dependencyType: "docs"
+      - name: Append release notes to RELEASE_NOTES.md # automatically update release notes on new release
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout main
+          echo "Appending new release notes to RELEASE_NOTES.md"
+          echo -e "\n## Version ${{ github.event.release.tag_name }} - Released on ${{ github.event.release.published_at }}\n" >> RELEASE_NOTES.md
+          echo -e "**Changes:**\n" >> RELEASE_NOTES.md
+          echo "${{ github.event.release.body }}" >> RELEASE_NOTES.md
+          echo -e "\n---\n" >> RELEASE_NOTES.md
+          git add RELEASE_NOTES.md
+          git commit -m "Updated release notes for ${{ github.event.release.tag_name }}"
+          git push origin main
       - name: Publish documentation
         uses: ./.github/actions/mike-docs
         with:
