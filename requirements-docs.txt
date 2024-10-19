@@ -15,7 +15,9 @@ certifi==2024.8.30
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
-    # via mkdocs
+    # via
+    #   mkdocs
+    #   typer
 colorama==0.4.6
     # via mkdocs-material
 getmac==0.9.5
@@ -50,10 +52,14 @@ markdown==3.6
     #   mkdocs
     #   mkdocs-material
     #   pymdown-extensions
+markdown-it-py==3.0.0
+    # via rich
 markupsafe==2.1.5
     # via
     #   jinja2
     #   mkdocs
+mdurl==0.1.2
+    # via markdown-it-py
 mergedeep==1.3.4
     # via
     #   mkdocs
@@ -89,7 +95,9 @@ pathspec==0.12.1
 platformdirs==4.3.6
     # via mkdocs-get-deps
 pygments==2.18.0
-    # via mkdocs-material
+    # via
+    #   mkdocs-material
+    #   rich
 pymdown-extensions==10.8.1
     # via mkdocs-material
 pyparsing==3.2.0
@@ -118,14 +126,22 @@ requests==2.32.3
     # via
     #   mlinfra (pyproject.toml)
     #   mkdocs-material
+rich==13.9.2
+    # via typer
 s3transfer==0.10.3
     # via boto3
+shellingham==1.5.4
+    # via typer
 six==1.16.0
     # via python-dateutil
 smmap==5.0.1
     # via gitdb
+typer==0.12.5
+    # via mlinfra (pyproject.toml)
 typing-extensions==4.12.2
-    # via mypy
+    # via
+    #   mypy
+    #   typer
 urllib3==2.2.2
     # via
     #   botocore
