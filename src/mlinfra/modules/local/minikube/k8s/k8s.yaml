@@ -1,0 +1,22 @@
+inputs:
+  - name: cluster_name
+    user_facing: true
+    description: "Name of the Minikube cluster"
+    default: "minikube-cluster"
+  - name: k8s_version
+    user_facing: true
+    description: "Minikube Cluster version"
+    default: "1.30.0"
+  - name: driver
+    user_facing: true
+    description: "Driver for the Minikube cluster"
+    default: "docker"
+  - name: nodes
+    user_facing: true
+    description: "Number of nodes in the Minikube cluster"
+    default: 1
+  - name: add_ons
+    user_facing: true
+    description: "Add-ons to enable in the Minikube cluster"
+    default: []
+outputs:

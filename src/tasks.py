@@ -43,7 +43,7 @@ def generate_terraform_config(
         """
     )
     amplitude_client.send_event(
-        amplitude_client.END_GEN_TERRAFORM_EVENT,
+        amplitude_client.FINISH_GEN_TERRAFORM_EVENT,
         event_properties=current_properties,
     )
 

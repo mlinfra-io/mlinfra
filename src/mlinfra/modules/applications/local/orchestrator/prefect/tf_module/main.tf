@@ -8,6 +8,10 @@ locals {
     value = "true"
     type  = "auto"
     }, {
+    name  = "postgresql.volumePermissions.enabled"
+    value = "true"
+    type  = "auto"
+    }, {
     name  = "ingress.enabled"
     value = "true"
     type  = "auto"
@@ -19,7 +23,7 @@ locals {
 }
 
 module "prefect_server_helmchart" {
-  source = "../../../../../local/kind/helm_chart"
+  source = "../../../../../local/helm_chart"
 
   name             = "prefect-server"
   namespace        = var.namespace
@@ -57,7 +61,7 @@ locals {
 }
 
 module "prefect_worker_helmchart" {
-  source = "../../../../../local/kind/helm_chart"
+  source = "../../../../../local/helm_chart"
 
   name             = "prefect-worker"
   namespace        = var.namespace

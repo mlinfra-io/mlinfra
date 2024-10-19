@@ -10,3 +10,5 @@ stack:
       name: mlflow
   - orchestrator:
       name: prefect
+  - vector_database:
+      name: milvus

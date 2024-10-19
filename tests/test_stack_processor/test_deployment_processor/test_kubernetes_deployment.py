@@ -41,7 +41,7 @@ class TestKubernetesDeployment:
                     "subnet_cidr_blocks": ["10.0.1.0/24", "10.0.2.0/24"],
                 },
                 "kubernetes": {
-                    "cluster_version": "1.28",
+                    "cluster_version": "1.30",
                     "node_groups": [
                         {
                             "name": "worker-group",
