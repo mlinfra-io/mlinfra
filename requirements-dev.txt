@@ -6,7 +6,7 @@ botocore==1.34.122
     # via
     #   boto3
     #   s3transfer
-certifi==2024.7.4
+certifi==2024.8.30
     # via requests
 cfgv==3.4.0
     # via pre-commit
