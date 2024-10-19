@@ -96,6 +96,30 @@ class KindDeployment(AbstractDeployment):
                 "r",
             ) as provider_tf:
                 provider_tf_json = json.load(provider_tf)
+                if provider == "kubernetes":
+                    provider_tf_json["provider"]["kubernetes"]["client_certificate"] = (
+                        "${ module.kind.client_certificate }"
+                    )
+                    provider_tf_json["provider"]["kubernetes"]["client_key"] = (
+                        "${ module.kind.client_key }"
+                    )
+                    provider_tf_json["provider"]["kubernetes"]["cluster_ca_certificate"] = (
+                        "${ module.kind.cluster_ca_certificate }"
+                    )
+                    provider_tf_json["provider"]["kubernetes"]["host"] = "${ module.kind.endpoint }"
+                else:
+                    provider_tf_json["provider"]["helm"]["kubernetes"]["client_certificate"] = (
+                        "${ module.kind.client_certificate }"
+                    )
+                    provider_tf_json["provider"]["helm"]["kubernetes"]["client_key"] = (
+                        "${ module.kind.client_key }"
+                    )
+                    provider_tf_json["provider"]["helm"]["kubernetes"]["cluster_ca_certificate"] = (
+                        "${ module.kind.cluster_ca_certificate }"
+                    )
+                    provider_tf_json["provider"]["helm"]["kubernetes"]["host"] = (
+                        "${ module.kind.endpoint }"
+                    )
             data["provider"].update(provider_tf_json["provider"])
 
         generate_tf_json(module_name="k8s_provider", json_module=data)

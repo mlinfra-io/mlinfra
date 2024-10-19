@@ -1,0 +1,17 @@
+name: local-minikube-k8s
+provider:
+  name: local
+deployment:
+  type: minikube
+  config:
+    kubernetes:
+      nodes: 3
+stack:
+  - data_versioning:
+      name: lakefs
+  - experiment_tracking:
+      name: mlflow
+  - orchestrator:
+      name: prefect
+  - vector_database:
+      name: milvus

@@ -11,7 +11,7 @@ deployment:
       enable_nat_gateway: true
       one_nat_gateway_per_az: false
     kubernetes:
-      k8s_version: "1.29"
+      k8s_version: "1.30"
       cluster_endpoint_public_access: true
       spot_instance: false
       tags:
