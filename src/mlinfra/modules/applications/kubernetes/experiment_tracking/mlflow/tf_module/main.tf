@@ -11,32 +11,42 @@ module "mlflow_data_artifacts_bucket" {
 
 resource "aws_iam_policy" "mlflow_s3_iam_policy" {
   count       = var.remote_tracking ? 1 : 0
-  name_prefix = "mlflowS3AccessPolicy"
-  description = "Allows mlflow server access to the S3 bucket"
+  name_prefix = "MLFlowS3Access-"
+  description = "Allows MLflow server access to the S3 bucket for artifact storage"
 
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "mlflowBucketAccess",
-      "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:ListBucket",
-        "s3:GetBucketLocation",
-        "s3:AbortMultipartUpload",
-        "s3:ListMultipartUploadParts"
-      ],
-      "Resource": [
-        "${module.mlflow_data_artifacts_bucket[0].bucket_arn}",
-        "${module.mlflow_data_artifacts_bucket[0].bucket_arn}/*"
-      ]
-    }
-  ]
-}
-EOF
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "MLFlowBucketAccess"
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket",
+          "s3:GetBucketLocation",
+          "s3:AbortMultipartUpload",
+          "s3:ListMultipartUploadParts"
+        ]
+        Resource = [
+          module.mlflow_data_artifacts_bucket[0].bucket_arn,
+          "${module.mlflow_data_artifacts_bucket[0].bucket_arn}/*"
+        ]
+      },
+      {
+        Sid      = "MLFlowBucketList"
+        Effect   = "Allow"
+        Action   = ["s3:ListAllMyBuckets"]
+        Resource = ["*"]
+      }
+    ]
+  })
+
+  tags = merge(var.tags, {
+    Name    = "MLFlowS3AccessPolicy"
+    Purpose = "MLflow artifact storage"
+  })
 }
 
 # create rds instance

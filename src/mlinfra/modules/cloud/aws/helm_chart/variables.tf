@@ -42,6 +42,12 @@ variable "atomic" {
   default     = true
 }
 
+variable "timeout" {
+  type        = number
+  description = "Time in seconds to wait for any individual kubernetes operation. Defaults to 300 seconds."
+  default     = 300
+}
+
 variable "values" {
   type        = any
   description = "Chart values"
