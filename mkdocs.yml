@@ -29,6 +29,7 @@ nav:
   - Examples:
       - Local:
           - kind: code/local/kind.md
+          - minikube: code/local/minikube.md
       - AWS:
           - cloud_vm: code/aws/cloud_vm.md
           - kubernetes: code/aws/kubernetes.md

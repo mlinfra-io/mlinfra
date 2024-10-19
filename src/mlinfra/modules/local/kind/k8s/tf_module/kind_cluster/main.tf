@@ -33,7 +33,7 @@ resource "kind_cluster" "local_kind_cluster" {
 
 resource "time_sleep" "cluster_creation" {
   depends_on      = [kind_cluster.local_kind_cluster]
-  create_duration = "30s"
+  create_duration = "15s"
 }
 
 resource "null_resource" "ingress_controller_manifest" {
@@ -44,4 +44,9 @@ resource "null_resource" "ingress_controller_manifest" {
   }
 
   depends_on = [time_sleep.cluster_creation]
+}
+
+resource "time_sleep" "ingress_controller_creation" {
+  depends_on      = [null_resource.ingress_controller_manifest]
+  create_duration = "30s"
 }
