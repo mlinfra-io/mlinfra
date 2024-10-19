@@ -37,11 +37,19 @@ locals {
     name  = "postgresql.auth.password"
     value = "${random_password.mlflow_password.result}"
     type  = "auto"
+    }, {
+    name  = "postgresql.volumePermissions.enabled"
+    value = "true"
+    type  = "auto"
+    }, {
+    name  = "minio.volumePermissions.enabled"
+    value = "true"
+    type  = "auto"
   }]
 }
 
 module "mlflow_helmchart" {
-  source = "../../../../../local/kind/helm_chart"
+  source = "../../../../../local/helm_chart"
 
   name             = "mlflow"
   namespace        = "mlflow"

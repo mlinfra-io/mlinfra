@@ -22,22 +22,23 @@ from mlinfra.utils.constants import TF_PATH
 
 class LocalProvider(AbstractProvider):
     """
-    Represents provider for KinD Clusters (Kubernetes in Docker)
+    Represents provider for Local provider clusters
     """
 
-    def __init__(self, stack_name: str, config: dict):
+    def __init__(self, stack_name: str, config: dict, deployment: dict):
         """
-        Inits the KinD Provider
+        Inits the Local Provider
         """
         super().__init__(stack_name, config)
+        self.deployment = deployment
 
     def configure_provider(self):
         """
-        Configures KinD provider
-        This is a simple configuration which copies the existing configuration from
-        KinD provider into the TF_PATH location
+        Configures Local provider
         """
-        with open(resources.files(modules) / "local/kind/provider.tf.json", "r") as data_json:
+        with open(
+            resources.files(modules) / f"local/{self.deployment['type']}/provider.tf.json", "r"
+        ) as data_json:
             with open(f"./{TF_PATH}/provider.tf.json", "w", encoding="utf-8") as tf_json:
                 data = json.load(data_json)
                 json.dump(data, tf_json, ensure_ascii=False, indent=2)
