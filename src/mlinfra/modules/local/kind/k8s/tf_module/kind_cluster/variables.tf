@@ -6,19 +6,20 @@ variable "cluster_name" {
 
 variable "node_image" {
   type        = map(any)
-  description = "Sets Kubernetes image version for the KinD cluster"
+  description = "Sets Kubernetes image version for the KinD cluster. See versions on https://hub.docker.com/r/kindest/node/tags"
   default = {
-    "1.27" = "kindest/node:v1.27.11"
-    "1.28" = "kindest/node:v1.28.7"
-    "1.29" = "kindest/node:v1.29.2"
-    "1.30" = "kindest/node:v1.30.0"
+    "1.27" = "kindest/node:v1.27.16"
+    "1.28" = "kindest/node:v1.28.13"
+    "1.29" = "kindest/node:v1.29.8"
+    "1.30" = "kindest/node:v1.30.4"
+    "1.31" = "kindest/node:v1.31.0"
   }
 }
 
 variable "k8s_version" {
   type        = string
   description = "Defines kubernetes version for the KinD cluster"
-  default     = "1.29"
+  default     = "1.30"
 }
 
 variable "wait_for_control_plane" {

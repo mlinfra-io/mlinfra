@@ -7,6 +7,7 @@ resource "helm_release" "helm_chart" {
   version          = var.chart_version
   cleanup_on_fail  = var.cleanup_on_fail
   atomic           = true
+  timeout          = var.timeout
   values           = [var.values]
 
   dynamic "set" {

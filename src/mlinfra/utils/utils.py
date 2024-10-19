@@ -38,7 +38,7 @@ def check_terraform_installed():
     try:
         # TODO: Update this section to run it more secure and
         # remove the comment
-        result = check_installed_binary("terraform")
+        result = check_installed_binary(["terraform", "--version"])
 
         # Extract the version information from the output
         output_lines = result.stdout.split("\n")
@@ -117,7 +117,7 @@ def terraform_tested_version():
 #         )
 
 
-def check_installed_binary(binary: str) -> List[str]:
+def check_installed_binary(command: List[str]) -> List[str]:
     """
     This function is responsible for checking if the given binary is installed
     and returns the version of the binary if installed.
@@ -129,7 +129,7 @@ def check_installed_binary(binary: str) -> List[str]:
         The version of the binary if installed.
     """
     return subprocess.run(  # nosec
-        [binary, "--version"],
+        command,
         universal_newlines=True,
         capture_output=True,
         text=True,
@@ -143,7 +143,7 @@ def check_docker_installed():
     This function is responsible for checking if docker is installed
     """
     try:
-        version = check_installed_binary("docker")
+        version = check_installed_binary(["docker", "--version"])
         if not version:
             return 1
     except Exception as e:
@@ -155,11 +155,23 @@ def check_kind_installed():
     This function is responsible for checking if kind is installed
     """
     try:
-        version = check_installed_binary("kind")
+        version = check_installed_binary(["kind", "--version"])
         if not version:
             return 1
     except Exception as e:
         return f"An error occurred while checking the kind version. {str(e)}"
+
+
+def check_minikube_installed():
+    """
+    This function is responsible for checking if minikube cli is installed
+    """
+    try:
+        version = check_installed_binary(["minikube", "version"])
+        if not version:
+            return 1
+    except Exception as e:
+        return f"An error occurred while checking the minikube version. {str(e)}"
 
 
 def safe_run(func):  # type: ignore

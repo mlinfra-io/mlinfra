@@ -6,7 +6,7 @@ inputs:
   - name: k8s_version
     user_facing: true
     description: "KinD Cluster version"
-    default: "1.28"
+    default: "1.30"
   - name: wait_for_control_plane
     user_facing: true
     description: "Defines wether or not the provider will wait for the control plane to be ready. Defaults to false."
