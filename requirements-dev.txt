@@ -16,7 +16,7 @@ distlib==0.3.8
     # via virtualenv
 filelock==3.16.1
     # via virtualenv
-getmac==0.9.4
+getmac==0.9.5
     # via mlinfra (pyproject.toml)
 gitdb==4.0.11
     # via gitpython
