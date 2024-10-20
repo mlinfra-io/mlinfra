@@ -17,7 +17,10 @@ import typer
 app = typer.Typer()
 app.add_typer(terraform.app, name="terraform", help="Terraform tasks on config file")
 app.add_typer(
-    utilities.app, name="utils", help="Utilities to help users perform actions on config file"
+    utilities.app,
+    name="utils",
+    help="Utilities to help users perform actions on config file",
+    rich_help_panel="Utilities",
 )
 
 
