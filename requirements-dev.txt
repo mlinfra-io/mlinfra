@@ -34,6 +34,10 @@ jmespath==1.0.1
     # via
     #   boto3
     #   botocore
+markdown-it-py==3.0.0
+    # via rich
+mdurl==0.1.2
+    # via markdown-it-py
 mypy==1.12.0
     # via mlinfra (pyproject.toml)
 mypy-extensions==1.0.0
@@ -48,6 +52,8 @@ pluggy==1.5.0
     # via pytest
 pre-commit==3.7.1
     # via mlinfra (pyproject.toml)
+pygments==2.18.0
+    # via rich
 pytest==8.2.2
     # via
     #   mlinfra (pyproject.toml)
@@ -61,6 +67,8 @@ pyyaml==6.0.2
     #   mlinfra (pyproject.toml)
     #   pre-commit
 requests==2.32.3
+    # via mlinfra (pyproject.toml)
+rich==13.9.3
     # via mlinfra (pyproject.toml)
 s3transfer==0.10.3
     # via boto3
