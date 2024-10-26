@@ -1,7 +1,6 @@
-`cloud_vm` deploys MLOps `stack` on top of Cloud provider VMs.
-# ☁️ Cloud Infrastructure Examples
+# ☁️ Cloud VM Examples
 
-Welcome to the **Cloud Infrastructure** examples! This section contains ready-to-use configurations to help you deploy scalable MLOps stacks on cloud platforms like AWS. Each example is designed to showcase a different tool or workflow, making it easier for you to find and deploy the infrastructure that fits your needs.
+Welcome to the **Cloud VM** examples! This section contains ready-to-use configurations to help you deploy scalable MLOps stacks on cloud platforms like AWS. Each example is designed to showcase a different tool or workflow, making it easier for you to find and deploy the infrastructure that fits your needs.
 
 ## 🚀 Getting Started
 
@@ -26,16 +25,16 @@ Before you begin, ensure you have the following:
 3. **Choose an Example**:
     Navigate to the example you want to deploy:
     ```bash
-    cd examples/cloud_infra/dagster
+    cd examples/cloud_vm/dagster
     ```
 
 4. **Configure AWS Credentials**:
-    Modify the `terraform.tfvars` file to update your AWS account details. Make sure your AWS credentials are correctly configured.
+    Modify the YAML configuration file (e.g., `aws-dagster.yaml`) to update your AWS account details. Ensure your AWS credentials are correctly configured.
 
 5. **Deploy**:
     Use `mlinfra` to apply the configuration:
     ```bash
-    mlinfra terraform --action apply --stack-config-path ./config/aws-config.yaml
+    mlinfra terraform --action apply --stack-config-path examples/cloud_vm/dagster/aws-dagster.yaml
     ```
 
 ## 📂 Examples Available
@@ -86,7 +85,7 @@ Before you begin, make sure you have:
 To deploy the basic infrastructure, use the following command:
 
 ```bash
-aws cloudformation deploy --template-file aws-complete.yaml --stack-name basic-aws-stack
+aws cloudformation deploy --template-file aws-complete.yaml --stack-name aws-mlops-stack-complete
 ```
 
 ### 3. Advanced Deployment
@@ -94,7 +93,7 @@ aws cloudformation deploy --template-file aws-complete.yaml --stack-name basic-a
 For a more comprehensive setup with additional features, execute:
 
 ```bash
-aws cloudformation deploy --template-file aws-complete-advanced.yaml --stack-name advanced-aws-stack
+mlinfra terraform --action apply --stack-config-path examples/cloud_vm/complete/aws-complete-advanced.yaml
 ```
 
 ### 4. Verifying Deployment
@@ -102,13 +101,13 @@ aws cloudformation deploy --template-file aws-complete-advanced.yaml --stack-nam
 To verify that your infrastructure has been set up correctly, check the status of your CloudFormation stack:
 
 ```bash
-aws cloudformation describe-stacks --stack-name basic-aws-stack
+aws cloudformation describe-stacks --stack-name aws-mlops-stack-complete
 ```
 
 Or for the advanced setup:
 
 ```bash
-aws cloudformation describe-stacks --stack-name advanced-aws-stack
+aws cloudformation describe-stacks --stack-name aws-mlops-stack-complete-advanced
 ```
 
 ### 5. Managing Resources
@@ -149,12 +148,12 @@ To use these configurations, ensure you have the following prerequisites:
 
 ### 📦 Installation
 
-To install the `platinfra` package, you can use pip. It's recommended to create a Python virtual environment first:
+To install the `mlinfra` package, you can use pip. It's recommended to create a Python virtual environment first:
 
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-pip install platinfra
+pip install mlinfra
 ```
 
 ## 🌐 Deployment Instructions
@@ -166,7 +165,7 @@ The `aws-lakefs.yaml` file provides a straightforward setup for deploying LakeFS
 **To deploy:** 
 
 ```bash
-platinfra terraform --action apply --stack-config-path aws-lakefs.yaml
+mlinfra terraform --action apply --stack-config-path examples/cloud_vm/lakefs/aws-lakefs.yaml
 ```
 
 This command will create the necessary AWS resources and deploy LakeFS.
@@ -182,26 +181,24 @@ The `aws-lakefs-advanced.yaml` file contains a more comprehensive configuration,
 **To deploy:** 
 
 ```bash
-platinfra terraform --action apply --stack-config-path aws-lakefs-advanced.yaml
+mlinfra terraform --action apply --stack-config-path examples/cloud_vm/lakefs/aws-lakefs-advanced.yaml
 ```
-
-Feel free to modify the advanced configuration according to your specific use cases and resource requirements.
 
 ## 🔧 Customization Tips
 
 - **IAM Roles**: Ensure that the necessary IAM roles and policies are in place to allow LakeFS to access required AWS resources, such as S3.
 - **Environment Variables**: Adjust environment variables in the YAML files for configuring LakeFS settings.
-- **Storage Configuration**: Make sure to configure persistent storage options if needed.
+- **Storage Configuration**: Configure persistent storage options as needed.
 
 ## 📦 Managing Your Deployment
 
 - **Update Configuration**: To apply changes, use:
   ```bash
-  platinfra terraform --action apply --stack-config-path <your-updated-file>.yaml
+  mlinfra terraform --action apply --stack-config-path <your-updated-file>.yaml
   ```
-- **Check Status**: Monitor the deployment using:
+- **Check Status**: Monitor the deployment status using:
   ```bash
-  aws cloudformation describe-stacks --stack-name lakefs-stack
+  aws cloudformation describe-stacks --stack-name aws-mlops-stack-lakefs
   ```
 - **Logs**: View logs for troubleshooting in the AWS Console.
 
@@ -210,8 +207,8 @@ Feel free to modify the advanced configuration according to your specific use ca
 To remove the LakeFS deployment, execute:
 
 ```bash
-platinfra terraform --action destroy --stack-config-path aws-lakefs.yaml
-platinfra terraform --action destroy --stack-config-path aws-lakefs-advanced.yaml
+mlinfra terraform --action destroy --stack-config-path aws-lakefs.yaml
+mlinfra terraform --action destroy --stack-config-path aws-lakefs-advanced.yaml
 ```
 
 ## 📞 Support & Resources
@@ -250,10 +247,9 @@ Before you start, ensure you have the following:
    source venv/bin/activate
    ```
 
-2. **Install the Required Packages:**
-
+2. **Install the Required Packages:** 
    ```bash
-   pip install platinfra
+   pip install mlinfra
    ```
 
 ## Deployment Configuration
@@ -267,7 +263,7 @@ You can choose between two deployment configurations based on your needs:
 This configuration is suitable for a simple MLflow deployment with essential features. To deploy:
 
 ```bash
-platinfra terraform --action apply --stack-config-path <path-to-your-config>/aws-mlflow.yaml
+mlinfra terraform --action apply --stack-config-path examples/cloud_vm/mlflow/aws-mlflow.yaml
 ```
 
 ### 2. Advanced MLflow Deployment
@@ -277,7 +273,7 @@ platinfra terraform --action apply --stack-config-path <path-to-your-config>/aws
 This configuration includes additional features for a more robust MLflow deployment. To deploy:
 
 ```bash
-platinfra terraform --action apply --stack-config-path <path-to-your-config>/aws-mlflow-advanced.yaml
+mlinfra terraform --action apply --stack-config-path examples/cloud_vm/mlflow/aws-mlflow-advanced.yaml
 ```
 
 ## Configuration
@@ -321,12 +317,12 @@ Before deploying, ensure you have the following:
 
 ### 📦 Installation
 
-To install the `platinfra` package, you can use pip. It's recommended to create a Python virtual environment first:
+To install the `mlinfra` package, you can use pip. It's recommended to create a Python virtual environment first:
 
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-pip install platinfra
+pip install mlinfra
 ```
 
 ### 2. Basic Deployment
@@ -334,7 +330,7 @@ pip install platinfra
 To deploy using the basic configuration, run:
 
 ```bash
-platinfra terraform --action apply --stack-config-path aws-wand.yaml
+mlinfra terraform --action apply --stack-config-path examples/cloud_vm/wandb/aws-wandb.yaml
 ```
 
 ### 3. Advanced Deployment
@@ -342,7 +338,7 @@ platinfra terraform --action apply --stack-config-path aws-wand.yaml
 For an advanced setup with additional features, execute:
 
 ```bash
-platinfra terraform --action apply --stack-config-path aws-wand-advanced.yaml
+mlinfra terraform --action apply --stack-config-path examples/cloud_vm/wandb/aws-wandb-advanced.yaml
 ```
 
 ### 4. Verifying Deployment
@@ -350,7 +346,7 @@ platinfra terraform --action apply --stack-config-path aws-wand-advanced.yaml
 After applying the configurations, check the status of the Weights and Biases services:
 
 ```bash
-aws cloudformation describe-stacks --stack-name wand-stack
+aws cloudformation describe-stacks --stack-name aws-mlops-stack-mlflow
 ```
 
 ### 5. Accessing Weights and Biases UI
@@ -397,7 +393,7 @@ Before you start, ensure you have the following:
 
 2. **Install the Required Python Package:**
    ```bash
-   pip install platinfra
+   pip install mlinfra
    ```
 
 ## Deployment Configuration 📄
@@ -423,9 +419,9 @@ To deploy Prefect on AWS, follow these steps:
 2. **Deploy the Configuration:**
    Run the following command to apply the configuration:
    ```bash
-   platinfra terraform --action apply --stack-config-path <path-to-your-config-file>
+   mlinfra terraform --action apply --stack-config-path examples/cloud_vm/prefect/aws-prefect-advanced.yaml
    ```
-   Replace `<path-to-your-config-file>` with the path to either `aws-prefect.yaml` or `aws-prefect-advanced.yaml`.
+   
 
 ## Conclusion 🎉
 
@@ -472,7 +468,7 @@ Before deploying Dagster on AWS, make sure you have:
     ```
 2. **Deploy the infrastructure:**
     ```bash
-    aws cloudformation deploy --template-file aws-dagster.yaml --stack-name DagsterBasicSetup
+    aws cloudformation deploy --template-file aws-dagster.yaml --stack-name aws-mlops-stack-dagster
     ```
 3. 🎉 **You're all set!** Access Dagster via the provided endpoint.
 
@@ -483,7 +479,7 @@ Before deploying Dagster on AWS, make sure you have:
     ```
 2. **Deploy the infrastructure:**
     ```bash
-    aws cloudformation deploy --template-file aws-dagster-advanced.yaml --stack-name DagsterAdvancedSetup
+    aws cloudformation deploy --template-file aws-dagster-advanced.yaml --stack-name aws-mlops-stack-dagster
     ```
 3. **Customize the parameters if needed:**
     Modify the `.yaml` file to suit your specific needs, including scaling options, security settings, and more.

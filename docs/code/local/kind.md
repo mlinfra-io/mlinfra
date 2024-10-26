@@ -1,5 +1,3 @@
-`kind` deploys MLOps `stack` on top of [kind cluster](https://kind.sigs.k8s.io/) on your machine. Please ensure that docker is installed and running on your machine, along with the latest version of kind.
-
 # Kind Deployment in Local Environment 🖥️
 
 This directory contains YAML configurations for deploying applications using **Kind** (Kubernetes IN Docker). Kind allows you to run Kubernetes clusters in Docker containers, making it an excellent tool for local development and testing.

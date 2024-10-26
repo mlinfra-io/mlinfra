@@ -1,5 +1,3 @@
-`kubernetes` deploys MLOps `stack` on top of Cloud provider's kubernetes. In case of AWS, its EKS.
-
 # 🐳 Kubernetes Examples
 
 Welcome to the **Kubernetes** examples! This section provides configurations and guides to help you deploy scalable MLOps stacks on Kubernetes clusters. Kubernetes is ideal for managing containerized applications, and these examples will help you harness its power for your machine learning workflows.
@@ -16,7 +14,8 @@ Before deploying the examples, make sure you have:
 ### 📦 Installation
 
 1. **Set Up Kubernetes Cluster**:
-    - If you don’t have a cluster, create one using your preferred platform. For example, using **minikube**:
+    - For cloud-based deployment, create a cluster using your preferred platform (e.g., EKS, GKE, AKS).
+    - For local development, you can use Minikube:
       ```bash
       minikube start
       ```
@@ -34,23 +33,19 @@ Before deploying the examples, make sure you have:
 
 4. **Deploy to Kubernetes**:
     Use `mlinfra` to deploy the chosen configuration:
-    ```bash
-    mlinfra terraform --action apply --stack-config-path ./config/k8s-config.yaml
-    ```
+ ```bash
+    mlinfra terraform --action apply --stack-config-path examples/kubernetes/lakefs/aws-lakefs.yaml
+  ```
 
-## 📂 Available Examples
-
-| Example File            | Description |
-| ------------------------| ----------- |
 ## 📂 Available Examples
 
 | Example File            | Description                                                   |
-| ------------------------| ------------------------------------------------------------- |
-| `Complete`              | Complete configuration for deploying ML projects on Kubernetes |
-| `LakeFS`                | Basic configuration for deploying LakeFS on Kubernetes       |
-| `LakeFS Advanced`       | Advanced configuration for LakeFS with additional cloud database storage options |
-| `MLflow`                | Configuration for deploying MLflow on Kubernetes             |
-| `Prefect`               | Configuration for deploying Prefect on Kubernetes            |
+| ----------------------- | ------------------------------------------------------------- |
+| `Complete`              | Comprehensive configuration for deploying ML projects on Kubernetes.       |
+| `LakeFS`                | Configuration for deploying LakeFS on Kubernetes.                  |
+| `MLflow`                | Configuration for deploying MLflow on Kubernetes.                      |
+| `Prefect`               | Configuration for deploying Prefect on Kubernetes.                      |
+
 
 
 ### ℹ️ Note:

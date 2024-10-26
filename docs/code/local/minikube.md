@@ -1,5 +1,3 @@
-`minikube` deploys MLOps `stack` on top of [minikube cluster](https://minikube.sigs.k8s.io/) on your machine. Please ensure that docker is installed and running on your machine, along with the latest version of minikube.
-
 # Minikube Deployment in Local Environment 🚀
 
 This directory contains YAML configurations for deploying applications using **Minikube**. Minikube is a tool that enables you to run Kubernetes clusters locally, making it an excellent choice for development and testing.
