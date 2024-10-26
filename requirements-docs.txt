@@ -4,7 +4,7 @@ babel==2.15.0
     # via
     #   mkdocs-git-revision-date-localized-plugin
     #   mkdocs-material
-boto3==1.34.136
+boto3==1.35.49
     # via mlinfra (pyproject.toml)
 botocore==1.34.136
     # via
