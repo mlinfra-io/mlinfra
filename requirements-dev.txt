@@ -74,5 +74,5 @@ urllib3==2.2.2
     # via
     #   botocore
     #   requests
-virtualenv==20.26.2
+virtualenv==20.27.0
     # via pre-commit
