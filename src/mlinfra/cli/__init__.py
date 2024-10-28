@@ -9,3 +9,9 @@
 #     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 #     or implied. See the License for the specific language governing
 #     permissions and limitations under the License.
+
+from mlinfra.utils.constants import ENABLE_RICH_TRACEBACK
+from mlinfra.utils.utils import setup_rich_traceback
+
+if ENABLE_RICH_TRACEBACK:
+    setup_rich_traceback()

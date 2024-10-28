@@ -34,7 +34,8 @@ dependencies = [
     "GitPython",
     "mypy",
     "getmac",
-    "requests"
+    "requests",
+    "rich"
 ]
 
 [tool.setuptools]

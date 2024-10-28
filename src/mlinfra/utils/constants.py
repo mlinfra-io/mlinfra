@@ -29,3 +29,5 @@ SESSION_ID: Final = int(time() * 1000)
 VERSION: Final = version("mlinfra")
 
 EXECUTABLE_PATH = "/usr/local/bin"
+
+ENABLE_RICH_TRACEBACK = True
