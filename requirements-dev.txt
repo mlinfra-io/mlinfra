@@ -94,3 +94,5 @@ urllib3==2.2.2
     #   requests
 virtualenv==20.26.2
     # via pre-commit
+zipp==3.20.2
+    # via mlinfra (pyproject.toml)
