@@ -1,0 +1,53 @@
+name: aws-complete-k8s
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: kubernetes
+  config:
+    vpc:
+      create_database_subnets: true
+      enable_nat_gateway: true
+      one_nat_gateway_per_az: false
+    kubernetes:
+      k8s_version: "1.30"
+      cluster_endpoint_public_access: true
+      spot_instance: false
+      tags:
+        data_versioning: "lakefs"
+    node_groups:
+      - name: k8s-node-group
+        instance_types:
+          - t3.medium
+        desired_size: 1
+        min_size: 1
+        max_size: 3
+        disk_size: 20
+stack:
+  - data_versioning:
+      name: lakefs
+      params:
+        remote_tracking: true
+        database_type: "postgres"
+        tags:
+          database_type: "postgres"
+          data_versioning: "lakefs"
+          remote_tracking: true
+  - experiment_tracking:
+      name: mlflow
+      params:
+        remote_tracking: true
+        mlflow_data_bucket_name: "mlflow-bucket"
+        tags:
+          database_type: "postgres"
+          experiment_tracking: "mlflow"
+          remote_tracking: true
+  - orchestrator:
+      name: prefect
+      params:
+        remote_tracking: true
+        tags:
+          database_type: "postgres"
+          orchestrator: "prefect"
+          remote_tracking: true
