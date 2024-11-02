@@ -126,8 +126,10 @@ requests==2.32.3
     # via
     #   mlinfra (pyproject.toml)
     #   mkdocs-material
-rich==13.9.2
-    # via typer
+rich==13.9.3
+    # via
+    #   mlinfra (pyproject.toml)
+    #   typer
 s3transfer==0.10.3
     # via boto3
 shellingham==1.5.4
