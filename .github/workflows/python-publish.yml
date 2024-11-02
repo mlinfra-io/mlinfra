@@ -59,8 +59,7 @@ jobs:
           git config --local user.name "GitHub Actions"
           git checkout main
           echo "Appending new release notes to RELEASE_NOTES.md"
-          echo -e "\n## Version ${{ github.event.release.tag_name }} - Released on ${{ github.event.release.published_at }}\n" >> RELEASE_NOTES.md
-          echo -e "**Changes:**\n" >> RELEASE_NOTES.md
+          echo -e "\n## $(echo "${{ github.event.release.published_at }}" | cut -d'T' -f1) - version ${{ github.event.release.tag_name }}\n" >> RELEASE_NOTES.md
           echo "${{ github.event.release.body }}" >> RELEASE_NOTES.md
           echo -e "\n---\n" >> RELEASE_NOTES.md
           git add RELEASE_NOTES.md
