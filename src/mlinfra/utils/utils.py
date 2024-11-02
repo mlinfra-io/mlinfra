@@ -123,7 +123,7 @@ def run_command(
     capture_output: bool = True,
     text: bool = True,
     check: bool = True,
-    timeout: int = 30,
+    timeout: float | None = None,
 ) -> List[str]:
     """
     This function runs a command in the subprocess and returns the result.
