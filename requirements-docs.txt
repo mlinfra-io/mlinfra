@@ -152,5 +152,5 @@ verspec==0.1.0
     # via mike
 watchdog==4.0.1
     # via mkdocs
-zipp==3.19.2
+zipp==3.20.2
     # via importlib-metadata
