@@ -23,7 +23,9 @@ app = typer.Typer()
 
 @app.command("plan", help="Plan the terraform stack config")
 def plan(
-    stack_config_path: Annotated[str, typer.Argument(help="Path to the stack configuration file")],
+    stack_config_path: Annotated[
+        str, typer.Option("--config-file", help="Path to the stack configuration file")
+    ],
     # args: Annotated[List[str], typer.Argument(help="Additional arguments to pass")],
 ):
     """
@@ -51,7 +53,9 @@ def plan(
 
 @app.command("apply", help="Apply the terraform stack config")
 def apply(
-    stack_config_path: Annotated[str, typer.Argument(help="Path to the stack configuration file")],
+    stack_config_path: Annotated[
+        str, typer.Option("--config-file", help="Path to the stack configuration file")
+    ],
     # args: Annotated[List[str], typer.Argument(help="Additional arguments to pass")],  # = ["-lock=false", "-input=false", "-compact-warnings"],
 ):
     """
@@ -83,7 +87,9 @@ def apply(
 
 @app.command("destroy", help="Tear down the deployed terraform stack")
 def destroy(
-    stack_config_path: Annotated[str, typer.Argument(help="Path to the stack configuration file")],
+    stack_config_path: Annotated[
+        str, typer.Option("--config-file", help="Path to the stack configuration file")
+    ],
     # args: Annotated[List[str], typer.Argument(help="Additional arguments to pass")],
 ):
     """

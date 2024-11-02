@@ -14,9 +14,16 @@ import mlinfra.cli.terraform as terraform
 import mlinfra.cli.utilities as utilities
 import typer
 
-app = typer.Typer()
-app.add_typer(terraform.app, name="terraform", help="Terraform tasks on config file")
-app.add_typer(
+cli = typer.Typer(
+    name="mlinfra",
+    help="Welcome to mlinfra",
+    add_completion=False,
+    pretty_exceptions_show_locals=False,
+    no_args_is_help=True,
+    short_help=["h"],
+)
+cli.add_typer(terraform.app, name="terraform", help="Terraform tasks on config file")
+cli.add_typer(
     utilities.app,
     name="utils",
     help="Utilities to help users perform actions on config file",
@@ -25,4 +32,4 @@ app.add_typer(
 
 
 if __name__ == "__main__":
-    app()
+    cli()
