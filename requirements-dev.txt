@@ -12,6 +12,8 @@ cfgv==3.4.0
     # via pre-commit
 charset-normalizer==3.3.2
     # via requests
+click==8.1.7
+    # via typer
 distlib==0.3.8
     # via virtualenv
 filelock==3.16.1
@@ -69,18 +71,28 @@ pyyaml==6.0.2
 requests==2.32.3
     # via mlinfra (pyproject.toml)
 rich==13.9.3
-    # via mlinfra (pyproject.toml)
+    # via
+    #   mlinfra (pyproject.toml)
+    #   typer
 s3transfer==0.10.3
     # via boto3
+shellingham==1.5.4
+    # via typer
 six==1.16.0
     # via python-dateutil
 smmap==5.0.1
     # via gitdb
+typer==0.12.5
+    # via mlinfra (pyproject.toml)
 typing-extensions==4.12.2
-    # via mypy
+    # via
+    #   mypy
+    #   typer
 urllib3==2.2.2
     # via
     #   botocore
     #   requests
 virtualenv==20.26.2
     # via pre-commit
+zipp==3.20.2
+    # via mlinfra (pyproject.toml)

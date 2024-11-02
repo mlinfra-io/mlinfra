@@ -41,7 +41,7 @@ def check_terraform_installed():
     try:
         # TODO: Update this section to run it more secure and
         # remove the comment
-        result = check_installed_binary(["terraform", "--version"])
+        result = run_command(["terraform", "--version"])
 
         # Extract the version information from the output
         output_lines = result.stdout.split("\n")
@@ -120,24 +120,35 @@ def terraform_tested_version():
 #         )
 
 
-def check_installed_binary(command: List[str]) -> List[str]:
+def run_command(
+    command: List[str],
+    universal_newlines: bool = True,
+    capture_output: bool = True,
+    text: bool = True,
+    check: bool = True,
+    timeout: float | None = None,
+) -> List[str]:
     """
-    This function is responsible for checking if the given binary is installed
-    and returns the version of the binary if installed.
+    This function runs a command in the subprocess and returns the result.
 
     Args:
-        binary: The binary to check for installation
+        command: List of command arguments to run.
+        universal_newlines: Whether to use universal newlines mode.
+        capture_output: Whether to capture the output of the command.
+        text: Whether to treat the output as text.
+        check: Whether to raise an exception if the command exits with a non-zero status.
+        timeout: Timeout in seconds for the command.
 
     Returns:
-        The version of the binary if installed.
+        The result of the command execution.
     """
     return subprocess.run(  # nosec
         command,
-        universal_newlines=True,
-        capture_output=True,
-        text=True,
-        check=True,
-        timeout=30,
+        universal_newlines=universal_newlines,
+        capture_output=capture_output,
+        text=text,
+        check=check,
+        timeout=timeout,
     )
 
 
@@ -146,7 +157,7 @@ def check_docker_installed():
     This function is responsible for checking if docker is installed
     """
     try:
-        version = check_installed_binary(["docker", "--version"])
+        version = run_command(["docker", "--version"])
         if not version:
             return 1
     except Exception as e:
@@ -158,7 +169,7 @@ def check_kind_installed():
     This function is responsible for checking if kind is installed
     """
     try:
-        version = check_installed_binary(["kind", "--version"])
+        version = run_command(["kind", "--version"])
         if not version:
             return 1
     except Exception as e:
@@ -170,7 +181,7 @@ def check_minikube_installed():
     This function is responsible for checking if minikube cli is installed
     """
     try:
-        version = check_installed_binary(["minikube", "version"])
+        version = run_command(["minikube", "version"])
         if not version:
             return 1
     except Exception as e:
