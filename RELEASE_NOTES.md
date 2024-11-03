@@ -6,8 +6,8 @@
 
 
 [**Full Changelog**](https://github.com/mlinfra-io/mlinfra/compare/0.0.22...0.0.23)
----
 
+---
 
 ## 2024-11-03 - version 0.0.22
 
