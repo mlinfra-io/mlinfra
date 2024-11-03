@@ -1,0 +1,17 @@
+name: local-kind-k8s-complete
+provider:
+  name: local
+deployment:
+  type: kind
+  config:
+    kubernetes:
+      k8s_version: "1.30"
+stack:
+  - data_versioning:
+      name: lakefs
+  - experiment_tracking:
+      name: mlflow
+  - orchestrator:
+      name: prefect
+  - vector_database:
+      name: milvus
