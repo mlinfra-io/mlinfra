@@ -55,6 +55,11 @@ jobs:
           dependencyType: "docs"
       - name: Append release notes to RELEASE_NOTES.md # automatically update release notes on new release
         run: |
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git checkout main
+          git fetch origin
+
           RELEASE_NOTES_FILE="RELEASE_NOTES.md"
           HEADING="# Release Notes"
 
@@ -67,11 +72,8 @@ jobs:
               { print }
           ' "$RELEASE_NOTES_FILE" > temp.md && mv --force temp.md "$RELEASE_NOTES_FILE"
           echo "Release notes updated successfully."
-      - name: Commit changes
-        run: |
-          git config --local user.email "github-actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add RELEASE_NOTES.md
+
+          git add "$RELEASE_NOTES_FILE"
           git commit -m "Updated release notes for ${{ github.event.release.tag_name }}"
           git push origin main
       - name: Publish documentation
