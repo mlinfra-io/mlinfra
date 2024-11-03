@@ -30,8 +30,6 @@ idna==3.10
     # via requests
 iniconfig==2.0.0
     # via pytest
-invoke==2.2.0
-    # via mlinfra (pyproject.toml)
 jmespath==1.0.1
     # via
     #   boto3

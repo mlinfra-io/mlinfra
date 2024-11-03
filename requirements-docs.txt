@@ -36,8 +36,6 @@ importlib-metadata==8.0.0
     # via mike
 importlib-resources==6.4.0
     # via mike
-invoke==2.2.0
-    # via mlinfra (pyproject.toml)
 jinja2==3.1.4
     # via
     #   mike

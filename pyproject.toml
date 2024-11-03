@@ -28,7 +28,6 @@ classifiers = [
 ]
 
 dependencies = [
-    "invoke",
     "boto3",
     "pyyaml",
     "GitPython",
