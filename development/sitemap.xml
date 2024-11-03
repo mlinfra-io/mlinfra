@@ -3,91 +3,73 @@
     <url>
          <loc>https://mlinfra.io/latest/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/CONTRIBUTING/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/RELEASE_NOTES/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/SECURITY/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/about_me/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/acknowledgements/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/roadmap/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/code/aws/cloud_vm/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/code/aws/kubernetes/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/code/local/kind/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/code/local/minikube/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/application_config/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/cloud_config/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/stack_config/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/stack_config/deployment/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/stack_config/provider/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/stack_config/stack/</loc>
          <lastmod>2024-11-03</lastmod>
-         <changefreq>daily</changefreq>
     </url>
 </urlset>
