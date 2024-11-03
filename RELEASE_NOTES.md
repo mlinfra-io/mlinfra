@@ -1,5 +1,18 @@
 # Release Notes
 
+## 2024-11-03 - version 0.0.22
+
+* fix: update-release-notes-formatting by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/154
+* dependabot: bump mkdocs-material from 9.5.27 to 9.5.43 by @dependabot in https://github.com/mlinfra-io/mlinfra/pull/148
+* dependabot: bump mkdocs from 1.6.0 to 1.6.1 by @dependabot in https://github.com/mlinfra-io/mlinfra/pull/136
+* dependabot: bump virtualenv from 20.26.2 to 20.27.1 by @dependabot in https://github.com/mlinfra-io/mlinfra/pull/147
+* dependabot: bump babel from 2.15.0 to 2.16.0 by @dependabot in https://github.com/mlinfra-io/mlinfra/pull/138
+* dependabot: bump pytz from 2024.1 to 2024.2 by @dependabot in https://github.com/mlinfra-io/mlinfra/pull/135
+* chore: bumped-dev-dependencies by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/155
+
+
+[**Full Changelog**](https://github.com/mlinfra-io/mlinfra/compare/0.0.21...0.0.22)
+
 ## 2024-11-03 - version 0.0.21
 
 * fix: broken-release-for pypa1.11 by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/153
