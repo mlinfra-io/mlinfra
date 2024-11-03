@@ -137,7 +137,7 @@ stack:
 - This project relies on terraform for IaC code and python to glue it all together.
 - To get started, install terraform and python.
 - You can install the required python packages by running `pip install -r requirements-dev.txt`
-- You can run any of the available examples from the `examples` folder by running `cd src` and `invoke terraform --stack-config-path examples/<application>/<cloud>-<application>.yaml --action <action>` where `<action>` corresponds to terraform actions such as `plan`, `apply` and `destroy`.
+- You can run any of the available examples from the `examples` folder by running the following command in root directory `python src/mlinfra/cli/cli.py terraform <action> --config-file examples/<application>/<cloud>-<application>.yaml` where `<action>` corresponds to terraform actions such as `plan`, `apply` and `destroy`.
 
 For more information, please refer to the Engineering Wiki of the project (https://mlinfra.io/user_guide/) regarding what are the different components of the project and how they work together.
 
