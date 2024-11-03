@@ -53,18 +53,18 @@ jobs:
         with:
           pythonVersion: "3.11"
           dependencyType: "docs"
-      - name: Append release notes to RELEASE_NOTES.md # automatically update release notes on new release
-        run: |
-          git config --local user.email "github-actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git checkout main
-          echo "Appending new release notes to RELEASE_NOTES.md"
-          echo -e "\n## $(echo "${{ github.event.release.published_at }}" | cut -d'T' -f1) - version ${{ github.event.release.tag_name }}\n" >> RELEASE_NOTES.md
-          echo "${{ github.event.release.body }}" >> RELEASE_NOTES.md
-          echo -e "\n---\n" >> RELEASE_NOTES.md
-          git add RELEASE_NOTES.md
-          git commit -m "Updated release notes for ${{ github.event.release.tag_name }}"
-          git push origin main
+      # - name: Append release notes to RELEASE_NOTES.md # automatically update release notes on new release
+      #   run: |
+      #     git config --local user.email "github-actions@github.com"
+      #     git config --local user.name "GitHub Actions"
+      #     git checkout main
+      #     echo "Appending new release notes to RELEASE_NOTES.md"
+      #     echo -e "\n## $(echo "${{ github.event.release.published_at }}" | cut -d'T' -f1) - version ${{ github.event.release.tag_name }}\n" >> RELEASE_NOTES.md
+      #     echo "${{ github.event.release.body }}" >> RELEASE_NOTES.md
+      #     echo -e "\n---\n" >> RELEASE_NOTES.md
+      #     git add RELEASE_NOTES.md
+      #     git commit -m "Updated release notes for ${{ github.event.release.tag_name }}"
+      #     git push origin main
       - name: Publish documentation
         uses: ./.github/actions/mike-docs
         with:
@@ -88,8 +88,12 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           skip-existing: true # tolerate release package file duplicates
+          attestations: false
           repository-url: https://test.pypi.org/legacy/
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          verbose: true
+          print-hash: true
+          # Temp workaround since attestations are on by default as of gh-action-pypi-publish v1.11.0
           attestations: false
