@@ -64,7 +64,7 @@ jobs:
           HEADING="# Release Notes"
 
           # Get release notes from GitHub Actions variable
-          RELEASE_NOTES="\n## $(echo "${{ github.event.release.published_at }}" | cut -d'T' -f1) - version ${{ github.event.release.tag_name }}\n${{ github.event.release.body }}\n---\n"
+          RELEASE_NOTES="\n## $(echo "${{ github.event.release.published_at }}" | cut -d'T' -f1) - version ${{ github.event.release.tag_name }}\n${{ github.event.release.body }}\n\n---"
 
           # Insert release notes below the heading
           awk -v heading="$HEADING" -v notes="$RELEASE_NOTES" '
