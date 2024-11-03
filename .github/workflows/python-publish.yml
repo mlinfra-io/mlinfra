@@ -47,6 +47,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # for documentation builds
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
         with:
@@ -54,14 +55,22 @@ jobs:
           dependencyType: "docs"
       - name: Append release notes to RELEASE_NOTES.md # automatically update release notes on new release
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout main
-          echo "Appending new release notes to RELEASE_NOTES.md"
-          echo -e "\n## Version ${{ github.event.release.tag_name }} - Released on ${{ github.event.release.published_at }}\n" >> RELEASE_NOTES.md
-          echo -e "**Changes:**\n" >> RELEASE_NOTES.md
-          echo "${{ github.event.release.body }}" >> RELEASE_NOTES.md
-          echo -e "\n---\n" >> RELEASE_NOTES.md
+          RELEASE_NOTES_FILE="RELEASE_NOTES.md"
+          HEADING="# Release Notes"
+
+          # Get release notes from GitHub Actions variable
+          RELEASE_NOTES="\n## $(echo "${{ github.event.release.published_at }}" | cut -d'T' -f1) - version ${{ github.event.release.tag_name }}\n${{ github.event.release.body }}\n---\n"
+
+          # Insert release notes below the heading
+          awk -v heading="$HEADING" -v notes="$RELEASE_NOTES" '
+              $0 == heading { print; print notes; next }
+              { print }
+          ' "$RELEASE_NOTES_FILE" > temp.md && mv --force temp.md "$RELEASE_NOTES_FILE"
+          echo "Release notes updated successfully."
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "GitHub Actions"
           git add RELEASE_NOTES.md
           git commit -m "Updated release notes for ${{ github.event.release.tag_name }}"
           git push origin main
@@ -88,6 +97,12 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           skip-existing: true # tolerate release package file duplicates
+          attestations: false
           repository-url: https://test.pypi.org/legacy/
       - name: Publish distribution 📦 to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
+          print-hash: true
+          # Temp workaround since attestations are on by default as of gh-action-pypi-publish v1.11.0
+          attestations: false

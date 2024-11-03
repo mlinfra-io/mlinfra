@@ -10,26 +10,26 @@
 #     or implied. See the License for the specific language governing
 #     permissions and limitations under the License.
 
-import tasks
-from invoke import Collection, Program
-from mlinfra.utils.constants import VERSION
+import mlinfra.cli.terraform as terraform
+import mlinfra.cli.utilities as utilities
+import typer
 
-namespace = Collection()
-namespace.add_task(tasks.terraform)
-namespace.add_task(tasks.estimate_cost)
-namespace.add_task(tasks.generate_terraform_config)
-
-program = Program(version=VERSION, namespace=namespace, name="mlinfra")
-
-
-def cli() -> None:
-    """Welcome to mlinfra cli! Deploy any MLOps tooling at the click of a button.
-
-    Github: https://github.com/mlinfra-io/mlinfra
-    Documentation: https://mlinfra.io/
-    """
-    program.run()
+cli = typer.Typer(
+    name="mlinfra",
+    help="Welcome to mlinfra",
+    add_completion=False,
+    pretty_exceptions_show_locals=False,
+    no_args_is_help=True,
+    short_help=["h"],
+)
+cli.add_typer(terraform.app, name="terraform", help="Terraform tasks on config file")
+cli.add_typer(
+    utilities.app,
+    name="utils",
+    help="Utilities to help users perform actions on config file",
+    rich_help_panel="Utilities",
+)
 
 
 if __name__ == "__main__":
-    program.cli()
+    cli()
