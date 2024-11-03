@@ -1,5 +1,14 @@
 # Release Notes
 
+## 2024-11-03 - version 0.0.21
+
+* fix: broken-release-for pypa1.11 by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/153
+
+
+[**Full Changelog**](https://github.com/mlinfra-io/mlinfra/compare/0.0.20...0.0.21)
+
+---
+
 ## 2024-11-02 - version 0.0.20
 
 * fix: Set attestation as false in pypi release by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/152
