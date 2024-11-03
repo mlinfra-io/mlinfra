@@ -106,7 +106,7 @@ python-dateutil==2.9.0.post0
     # via
     #   botocore
     #   ghp-import
-pytz==2024.1
+pytz==2024.2
     # via mkdocs-git-revision-date-localized-plugin
 pyyaml==6.0.2
     # via
