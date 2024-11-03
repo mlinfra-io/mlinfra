@@ -22,6 +22,8 @@
 
 [**Full Changelog**](https://github.com/mlinfra-io/mlinfra/compare/0.0.21...0.0.22)
 
+---
+
 ## 2024-11-03 - version 0.0.21
 
 * fix: broken-release-for pypa1.11 by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/153
