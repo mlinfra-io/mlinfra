@@ -21,7 +21,6 @@ import subprocess  # nosec
 import sys
 from typing import List
 
-import invoke
 from rich.traceback import install as rich_tr_install
 
 from .constants import TF_PATH
@@ -206,4 +205,4 @@ def setup_rich_traceback(debug_mode: bool = False):
     if debug_mode:
         rich_tr_install(show_locals=True)
     else:
-        rich_tr_install(show_locals=False, suppress=[invoke, subprocess])
+        rich_tr_install(show_locals=False, suppress=[subprocess])
