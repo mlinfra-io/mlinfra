@@ -1,0 +1,10 @@
+name: aws-mlops-stack-prefect
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: cloud_vm
+stack:
+  - orchestrator:
+      name: prefect
