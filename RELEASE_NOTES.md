@@ -1,5 +1,14 @@
 # Release Notes
 
+## 2024-11-04 - version 0.0.24
+
+* fix: updated-cli-for-utils by @aliabbasjaffri in [#157](https://github.com/mlinfra-io/mlinfra/pull/157)
+
+
+[**Full Changelog**](https://github.com/mlinfra-io/mlinfra/compare/0.0.23...0.0.24)
+
+---
+
 ## 2024-11-03 - version 0.0.23
 
 * fix: update-release-notes-gh-action by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/156
