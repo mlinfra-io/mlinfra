@@ -24,7 +24,9 @@ app = typer.Typer()
     "generate-terraform-config", help=f"Generates the terraform config in the {TF_PATH} folder path"
 )
 def generate_terraform_config(
-    stack_config_path: Annotated[str, typer.Argument(help="Path to the stack configuration file")],
+    stack_config_path: Annotated[
+        str, typer.Option("--config-file", help="Path to the stack configuration file")
+    ],
 ):
     f"""
     Generates the terraform config in the {TF_PATH} folder path
@@ -54,7 +56,9 @@ def generate_terraform_config(
 
 @app.command("estimate-cost", help="Estimate the cost of your stack config")
 def estimate_cost(
-    stack_config_path: Annotated[str, typer.Argument(help="Path to the stack configuration file")],
+    stack_config_path: Annotated[
+        str, typer.Option("--config-file", help="Path to the stack configuration file")
+    ],
 ):
     """
     Estimate cost of the contents of the config file.
