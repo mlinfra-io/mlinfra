@@ -84,7 +84,7 @@ mypy==1.13.0
     # via mlinfra (pyproject.toml)
 mypy-extensions==1.0.0
     # via mypy
-packaging==24.1
+packaging==24.2
     # via mkdocs
 paginate==0.5.7
     # via mkdocs-material
