@@ -6,7 +6,7 @@ babel==2.16.0
     #   mkdocs-material
 boto3==1.35.54
     # via mlinfra (pyproject.toml)
-botocore==1.35.54
+botocore==1.35.63
     # via
     #   boto3
     #   s3transfer
