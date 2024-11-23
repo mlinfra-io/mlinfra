@@ -72,7 +72,7 @@ rich==13.9.4
     # via
     #   mlinfra (pyproject.toml)
     #   typer
-s3transfer==0.10.3
+s3transfer==0.10.4
     # via boto3
 shellingham==1.5.4
     # via typer
