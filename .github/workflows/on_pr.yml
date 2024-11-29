@@ -33,9 +33,9 @@ jobs:
             ${{ env.MYPY_CACHE_DIR }}
             ${{ env.RUFF_CACHE_DIR }}
             ${{ env.PRE_COMMIT_HOME }}
-          key: ${{ runner.os }}-${{ hashFiles('requirements-dev.txt', '.pre-commit-config.yaml') }}-linter-cache
+          key: ${{ runner.os }}-${{ hashFiles('uv.lock', '.pre-commit-config.yaml') }}-linter-cache
       - name: Run pre-commit checks
-        run: pre-commit run --all-files --verbose --show-diff-on-failure
+        uses: pre-commit/action@v3.0.1
   test:
     name: Test mlinfra on ubuntu-latest
     runs-on: ubuntu-latest

@@ -23,5 +23,4 @@ runs:
     - name: Install dependencies
       run: |
         uv sync
-        pre-commit install --install-hooks
       shell: bash
