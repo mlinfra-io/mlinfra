@@ -24,9 +24,7 @@ jobs:
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
       - name: Install build tools
-        run: |
-          pip install build
-          python -m build
+        run: uv build
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4.4.1
         with:
