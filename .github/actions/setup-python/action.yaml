@@ -17,22 +17,14 @@ runs:
         python-version: ${{ inputs.pythonVersion }}
         cache: "pip"
         cache-dependency-path: |
-          requirements-dev.txt
-          requirements-docs.txt
-          pyproject.toml
+          uv.lock
     - name: Install uv
       run: |
-        pip install uv && uv venv venv && source venv/bin/activate
+        pip install uv && uv venv --seed .venv && source .venv/bin/activate
       shell: bash
-    - run: echo "VIRTUAL_ENV=venv" >> $GITHUB_ENV
+    - run: echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
       shell: bash
     - name: Install dependencies
       run: |
-        uv pip install --upgrade --system pip && uv pip install --system pip-tools
-        if [[ "${{ inputs.dependencyType }}" == "dev" ]]; then
-          uv pip install --system -r requirements-dev.txt
-        elif [[ "${{ inputs.dependencyType }}" == "docs" ]]; then
-          uv pip install --system -r requirements-docs.txt
-        fi
-        uv pip install --system -e . --no-deps
+        uv sync
       shell: bash
