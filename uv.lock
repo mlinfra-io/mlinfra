@@ -538,7 +538,7 @@ wheels = [
 
 [[package]]
 name = "mlinfra"
-version = "0.0.25.dev20+g9910d4a.d20241129"
+version = "0.0.25.dev26+g98ef64c.d20241129"
 source = { editable = "." }
 dependencies = [
     { name = "boto3" },
@@ -551,16 +551,18 @@ dependencies = [
     { name = "typer" },
 ]
 
-[package.dev-dependencies]
+[package.optional-dependencies]
 dev = [
-    { name = "mike" },
-    { name = "mkdocs-git-revision-date-localized-plugin" },
-    { name = "mkdocs-material" },
-    { name = "mkdocs-section-index" },
     { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-mock" },
     { name = "zipp" },
+]
+docs = [
+    { name = "mike" },
+    { name = "mkdocs-git-revision-date-localized-plugin" },
+    { name = "mkdocs-material" },
+    { name = "mkdocs-section-index" },
 ]
 
 [package.metadata]
@@ -568,23 +570,19 @@ requires-dist = [
     { name = "boto3" },
     { name = "getmac" },
     { name = "gitpython" },
+    { name = "mike", marker = "extra == 'docs'" },
+    { name = "mkdocs-git-revision-date-localized-plugin", marker = "extra == 'docs'" },
+    { name = "mkdocs-material", marker = "extra == 'docs'" },
+    { name = "mkdocs-section-index", marker = "extra == 'docs'" },
     { name = "mypy" },
+    { name = "pre-commit", marker = "extra == 'dev'" },
+    { name = "pytest", marker = "extra == 'dev'" },
+    { name = "pytest-mock", marker = "extra == 'dev'" },
     { name = "pyyaml" },
     { name = "requests" },
     { name = "rich" },
     { name = "typer" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mike" },
-    { name = "mkdocs-git-revision-date-localized-plugin" },
-    { name = "mkdocs-material" },
-    { name = "mkdocs-section-index" },
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-mock" },
-    { name = "zipp", specifier = ">=3.20.2" },
+    { name = "zipp", marker = "extra == 'dev'", specifier = ">=3.20.2" },
 ]
 
 [[package]]

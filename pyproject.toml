@@ -49,12 +49,14 @@ Homepage = "https://github.com/mlinfra-io/mlinfra"
 Repository = "https://github.com/mlinfra-io/mlinfra.git"
 Documentation = "https://mlinfra.io/"
 
-[tool.uv]
-dev-dependencies = [
+[project.optional-dependencies]
+dev = [
     "pre-commit",
     "pytest",
     "pytest-mock",
-    "zipp>=3.20.2",
+    "zipp>=3.20.2"
+]
+docs = [
     "mkdocs-material",
     "mkdocs-git-revision-date-localized-plugin",
     "mike",
