@@ -538,7 +538,7 @@ wheels = [
 
 [[package]]
 name = "mlinfra"
-version = "0.0.25.dev3+g3a0b545.d20241129"
+version = "0.0.25.dev7+g7d9dd92.d20241129"
 source = { editable = "." }
 dependencies = [
     { name = "boto3" },
@@ -581,7 +581,7 @@ dev = [
     { name = "mkdocs-git-revision-date-localized-plugin" },
     { name = "mkdocs-material" },
     { name = "mkdocs-section-index" },
-    { name = "pre-commit", specifier = ">=3.3.3" },
+    { name = "pre-commit" },
     { name = "pytest" },
     { name = "pytest-mock" },
     { name = "zipp", specifier = ">=3.20.2" },

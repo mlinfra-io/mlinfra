@@ -51,10 +51,6 @@ repos:
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
-  - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.5.5
-    hooks:
-      - id: uv-lock
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.5.5
     hooks:
@@ -65,3 +61,11 @@ repos:
           - LICENSE_HEADER.txt
           - --use-current-year
           - --no-extra-eol
+  - repo: local
+    hooks:
+      - id: uv-lock
+        name: uv-lock
+        entry: uv lock
+        language: system
+        files: ^uv.lock$
+        pass_filenames: false
