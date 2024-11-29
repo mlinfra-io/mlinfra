@@ -18,5 +18,5 @@ runs:
     - run: echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
       shell: bash
     - name: Install the project
-      run: uv sync --all-extras --dev
+      run: uv sync --all-extras
       shell: bash
