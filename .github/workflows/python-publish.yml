@@ -23,13 +23,8 @@ jobs:
           fetch-depth: 0 # for documentation builds
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
-        with:
-          pythonVersion: "3.11"
-          dependencyType: "dev"
       - name: Install build tools
-        run: |
-          pip install build
-          python -m build
+        run: uv build
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4.4.1
         with:
@@ -50,9 +45,6 @@ jobs:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
-        with:
-          pythonVersion: "3.11"
-          dependencyType: "docs"
       - name: Append release notes to RELEASE_NOTES.md # automatically update release notes on new release
         run: |
           git config --local user.email "github-actions@github.com"

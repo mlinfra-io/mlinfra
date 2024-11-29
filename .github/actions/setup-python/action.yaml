@@ -1,38 +1,22 @@
 name: Install Python dependencies
 description: Install all core and optional Python dependencies
-inputs:
-  pythonVersion:
-    description: Python version to set up (see actions/setup-python@v4)
-    required: true
-  dependencyType:
-    description: The type of dependencies to install (dev or docs)
-    required: true
-    default: "dev"
 runs:
   using: "composite"
   steps:
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        # Install a specific version of uv.
+        version: "0.4.30"
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ inputs.pythonVersion }}
+        python-version-file: ".python-version"
         cache: "pip"
         cache-dependency-path: |
-          requirements-dev.txt
-          requirements-docs.txt
-          pyproject.toml
-    - name: Install uv
-      run: |
-        pip install uv && uv venv venv && source venv/bin/activate
+          uv.lock
+    - run: echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
       shell: bash
-    - run: echo "VIRTUAL_ENV=venv" >> $GITHUB_ENV
-      shell: bash
-    - name: Install dependencies
-      run: |
-        uv pip install --upgrade --system pip && uv pip install --system pip-tools
-        if [[ "${{ inputs.dependencyType }}" == "dev" ]]; then
-          uv pip install --system -r requirements-dev.txt
-        elif [[ "${{ inputs.dependencyType }}" == "docs" ]]; then
-          uv pip install --system -r requirements-docs.txt
-        fi
-        uv pip install --system -e . --no-deps
+    - name: Install the project
+      run: uv sync --all-extras
       shell: bash

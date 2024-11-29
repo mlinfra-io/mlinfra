@@ -24,9 +24,6 @@ jobs:
           fetch-depth: 0 # for documentation builds
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
-        with:
-          pythonVersion: "3.11"
-          dependencyType: "dev"
       - name: Cache pre-commit tools
         uses: actions/cache@v4
         with:
@@ -34,9 +31,9 @@ jobs:
             ${{ env.MYPY_CACHE_DIR }}
             ${{ env.RUFF_CACHE_DIR }}
             ${{ env.PRE_COMMIT_HOME }}
-          key: ${{ runner.os }}-${{ hashFiles('requirements-dev.txt', '.pre-commit-config.yaml') }}-linter-cache
+          key: ${{ runner.os }}-${{ hashFiles('uv.lock', '.pre-commit-config.yaml') }}-linter-cache
       - name: Run pre-commit checks
-        run: pre-commit run --all-files --verbose --show-diff-on-failure
+        uses: pre-commit/action@v3.0.1
   test:
     name: Test mlinfra on ubuntu-latest
     runs-on: ubuntu-latest
@@ -46,13 +43,9 @@ jobs:
           fetch-depth: 0
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
-        with:
-          pythonVersion: "3.11"
-          dependencyType: "dev"
       - name: Run Tests
         run: |
-          pytest
-
+          uv run pytest
   docs:
     name: Build documentation for mlinfra
     runs-on: ubuntu-latest
@@ -62,9 +55,6 @@ jobs:
           fetch-depth: 0
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
-        with:
-          pythonVersion: "3.11"
-          dependencyType: "docs"
       - name: Build documentation using mike
         uses: ./.github/actions/mike-docs
         with:
