@@ -61,11 +61,9 @@ repos:
           - LICENSE_HEADER.txt
           - --use-current-year
           - --no-extra-eol
-  - repo: local
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.5.5
     hooks:
+      # Update the uv lockfile
       - id: uv-lock
-        name: uv-lock
-        entry: uv lock
-        language: system
-        files: ^uv.lock$
-        pass_filenames: false
