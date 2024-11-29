@@ -538,7 +538,7 @@ wheels = [
 
 [[package]]
 name = "mlinfra"
-version = "0.0.25.dev7+g7d9dd92.d20241129"
+version = "0.0.25.dev18+gacd394e.d20241129"
 source = { editable = "." }
 dependencies = [
     { name = "boto3" },
