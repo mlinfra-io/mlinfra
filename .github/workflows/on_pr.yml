@@ -24,8 +24,6 @@ jobs:
           fetch-depth: 0 # for documentation builds
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
-        with:
-          pythonVersion: "3.11"
       - name: Cache pre-commit tools
         uses: actions/cache@v4
         with:
