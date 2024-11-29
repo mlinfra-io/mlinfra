@@ -1,26 +1,22 @@
 name: Install Python dependencies
 description: Install all core and optional Python dependencies
-inputs:
-  pythonVersion:
-    description: Python version to set up (see actions/setup-python@v4)
-    required: true
 runs:
   using: "composite"
   steps:
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        # Install a specific version of uv.
+        version: "0.4.30"
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ inputs.pythonVersion }}
+        python-version-file: ".python-version"
         cache: "pip"
         cache-dependency-path: |
           uv.lock
-    - name: Install uv
-      run: |
-        pip install uv && uv venv --seed .venv && source .venv/bin/activate
-      shell: bash
     - run: echo "VIRTUAL_ENV=.venv" >> $GITHUB_ENV
       shell: bash
-    - name: Install dependencies
-      run: |
-        uv sync
+    - name: Install the project
+      run: uv sync --all-extras --dev
       shell: bash

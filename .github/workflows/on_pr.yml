@@ -45,12 +45,9 @@ jobs:
           fetch-depth: 0
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
-        with:
-          pythonVersion: "3.11"
       - name: Run Tests
         run: |
-          pytest
-
+          uv run pytest
   docs:
     name: Build documentation for mlinfra
     runs-on: ubuntu-latest
@@ -60,8 +57,6 @@ jobs:
           fetch-depth: 0
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
-        with:
-          pythonVersion: "3.11"
       - name: Build documentation using mike
         uses: ./.github/actions/mike-docs
         with:
