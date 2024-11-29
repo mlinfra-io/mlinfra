@@ -67,5 +67,3 @@ repos:
     hooks:
       # Update the uv lockfile
       - id: uv-lock
-        args:
-          - --upgrade
