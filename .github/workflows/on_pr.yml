@@ -47,7 +47,6 @@ jobs:
         uses: ./.github/actions/setup-python
         with:
           pythonVersion: "3.11"
-          dependencyType: "dev"
       - name: Run Tests
         run: |
           pytest

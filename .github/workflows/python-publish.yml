@@ -25,7 +25,6 @@ jobs:
         uses: ./.github/actions/setup-python
         with:
           pythonVersion: "3.11"
-          dependencyType: "dev"
       - name: Install build tools
         run: |
           pip install build
@@ -52,7 +51,6 @@ jobs:
         uses: ./.github/actions/setup-python
         with:
           pythonVersion: "3.11"
-          dependencyType: "docs"
       - name: Append release notes to RELEASE_NOTES.md # automatically update release notes on new release
         run: |
           git config --local user.email "github-actions@github.com"
