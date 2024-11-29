@@ -4,10 +4,6 @@ inputs:
   pythonVersion:
     description: Python version to set up (see actions/setup-python@v4)
     required: true
-  dependencyType:
-    description: The type of dependencies to install (dev or docs)
-    required: true
-    default: "dev"
 runs:
   using: "composite"
   steps:
