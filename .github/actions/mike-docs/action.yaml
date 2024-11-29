@@ -33,6 +33,6 @@ runs:
         fi
         uv run mike deploy "${MIKE_OPTIONS[@]}" ${{ inputs.version }} ${{ inputs.alias }}
         if [ "true" = "${{ inputs.push }}" ]; then
-          mike set-default --push latest
+          uv run mike set-default --push latest
         fi
       shell: bash
