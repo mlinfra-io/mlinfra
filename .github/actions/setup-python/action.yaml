@@ -8,15 +8,14 @@ runs:
       with:
         # Install a specific version of uv.
         version: "0.4.30"
-    - name: Install terraform
+    - name: Get Terraform Version
+      id: tf_version
       run: |
-        TERRAFORM_VERSION=1.10.2
-        git clone https://github.com/tfutils/tfenv.git ${HOME}/.tfenv
-        export PATH="${HOME}/.tfenv/bin:${PATH}"
-        echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ${HOME}/.profile
-        tfenv install $TERRAFORM_VERSION
-        tfenv use $TERRAFORM_VERSION
+        echo "value=$(cat .terraform-version)" >> $GITHUB_OUTPUT
       shell: bash
+    - uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ steps.env_name.outputs.value }}
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
