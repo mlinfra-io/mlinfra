@@ -13,7 +13,7 @@ runs:
         TERRAFORM_VERSION=1.10.2
         git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv
         echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile
-        TFENV_ARCH=arm64 tfenv install $TERRAFORM_VERSION
+        tfenv install $TERRAFORM_VERSION
         tfenv use $TERRAFORM_VERSION
       shell: bash
     - name: Set up Python
