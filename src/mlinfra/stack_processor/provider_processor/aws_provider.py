@@ -97,7 +97,7 @@ class AWSProvider(AbstractProvider):
         #                 "config": {
         #                     "bucket": self.get_statefile_name(),
         #                     "key": "ultimate-mlops-stack",
-        #                     "dynamodb_table": self.get_statefile_name(),
+        #                     "use_lockfile": True,
         #                     "region": self.region,
         #                 },
         #             }

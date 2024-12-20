@@ -88,7 +88,7 @@ def create_symlinks(source: str, destination: str) -> None:
 
 def terraform_tested_version():
     # TODO: read from a file and then populate this field
-    return "1.6.3"
+    return "1.10.2"
 
 
 # def _verify_aws_cloud_credentials(self) -> None:
