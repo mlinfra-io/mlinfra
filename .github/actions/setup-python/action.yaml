@@ -11,8 +11,9 @@ runs:
     - name: Install terraform
       run: |
         TERRAFORM_VERSION=1.10.2
-        git clone --depth=1 https://github.com/tfutils/tfenv.git ~/.tfenv
-        echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ~/.bash_profile
+        git clone https://github.com/tfutils/tfenv.git ${HOME}/.tfenv
+        export PATH="${HOME}/.tfenv/bin:${PATH}"
+        echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> ${HOME}/.profile
         tfenv install $TERRAFORM_VERSION
         tfenv use $TERRAFORM_VERSION
       shell: bash
