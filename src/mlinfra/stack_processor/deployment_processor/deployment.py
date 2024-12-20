@@ -78,7 +78,7 @@ class AbstractDeployment(ABC):
                     "s3": {
                         "bucket": self.get_statefile_name(),
                         "key": "ultimate-mlops-stack",
-                        "dynamodb_table": self.get_statefile_name(),
+                        "use_lockfile": True,
                         "region": self.region,
                         "encrypt": True,
                     }
