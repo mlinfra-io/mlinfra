@@ -29,7 +29,7 @@
 </div>
 </br>
 
-`mlinfra` is the swiss army knife for deploying scalable MLOps infrastructure. It aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
+`mlinfra` is the swiss army knife for deploying MLOps tooling anywhere. It aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
 
 Contribute to the project by opening a issue or joining project roadmap and design related discussion on [discord](https://discord.gg/8eYWVvEYmR). Complete roadmap will be released soon!
 
@@ -38,19 +38,19 @@ Contribute to the project by opening a issue or joining project roadmap and desi
 ### Requirements
 `mlinfra` requires the following to run perfectly:
 
-- `terraform` >= `1.8.0` should be installed on the system.
+- `terraform` >= `1.10.2` should be installed on the system.
 
 `mlinfra` can be installed simply by creating a python virtual environment and installing `mlinfra` pip package
 ```bash
-python -m venv venv
-source venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 pip install mlinfra
 ```
 
 Copy a deployment config from the [examples](https://github.com/mlinfra-io/mlinfra/tree/4d21aa465fa8d40aabcf9877f3f99c4ede687459/examples) folder, change your AWS account in the config file, configure your AWS credentials and deploy the configuration using
 
 ```bash
-mlinfra terraform --action apply --stack-config-path <path-to-your-config>
+mlinfra terraform apply --config-file <path-to-your-config>
 ```
 
 For more information, read the [mlinfra user guide](https://mlinfra.io/user_guide/)
@@ -59,22 +59,35 @@ For more information, read the [mlinfra user guide](https://mlinfra.io/user_guid
 
 The core purpose is to build for all cloud and deployment platforms out there. Any user should be able to just change the cloud provider or runtime environment (whether it be linux or windows) and have the capability to deploy the same tools.
 
-Currently a lot of work has been done around AWS
+mlinfra will be supporting the following providers:
 
-This project will be supporting the following providers:
+#### Local machine (for development)
+  - [x] [kind](https://kind.sigs.k8s.io/)
+  - [x] [minikube](https://minikube.sigs.k8s.io/)
+  - [ ] [k3s](https://k3s.io/)
+  - [ ] [docker compose](https://docs.docker.com/compose/)
+
+#### Cloud Providers (for deployment and production ready)
 - [x] [AWS](https://aws.amazon.com/)
 - [ ] [GCP](https://cloud.google.com/)
 - [ ] [Azure](https://azure.microsoft.com/en-us)
+- [ ] [DigitalOcean](https://www.digitalocean.com/)
+- [ ] Bare metal (such as [Hetzner](https://www.hetzner.com/de))
+- [ ] [Openstack](https://www.openstack.org/)
+
+## Supported deployment types
+
+The following deployment types are supported on cloud providers
+
+- [ ] Virtual Machines
+  - [x] [EC2](https://aws.amazon.com/eks/)
+  - [ ] [Google Virtual machine instance](https://cloud.google.com/compute/docs/instances)
+  - [ ] [Azure Virtual Machine](https://azure.microsoft.com/en-us/products/virtual-machines)
 - [ ] [Kubernetes](https://kubernetes.io/)
   - [x] [EKS](https://aws.amazon.com/eks/)
   - [ ] [GKE](https://cloud.google.com/kubernetes-engine)
   - [ ] [AKS](https://azure.microsoft.com/en-us/products/kubernetes-service)
-- [ ] [DigitalOcean](https://www.digitalocean.com/)
-- [ ] Bare metal (such as [Hetzner](https://www.hetzner.com/de))
-- [ ] [Openstack](https://www.openstack.org/)
-- [ ] [docker compose](https://docs.docker.com/compose/)
-- [ ] [k3s](https://k3s.io/)
-- [x] [kind](https://kind.sigs.k8s.io/)
+
 
 ## Supported MLOps Tools
 
@@ -82,7 +95,6 @@ This project will be supporting the following providers:
 - data_versioning
 - experiment_tracker
 - orchestrator
-- artifact_tracker / model_registry
 - model_inference
 - monitoring
 - alerting
