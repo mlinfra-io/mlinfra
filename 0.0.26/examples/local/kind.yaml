@@ -1,0 +1,14 @@
+name: local-kind-k8s
+provider:
+  name: local
+deployment:
+  type: kind
+stack:
+  - data_versioning:
+      name: lakefs
+  - experiment_tracking:
+      name: mlflow
+  - orchestrator:
+      name: prefect
+  - vector_database:
+      name: milvus
