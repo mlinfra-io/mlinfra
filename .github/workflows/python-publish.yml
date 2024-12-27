@@ -49,6 +49,7 @@ jobs:
         run: |
           git config --local user.email "github-actions@github.com"
           git config --local user.name "GitHub Actions"
+          git config --local core.autocrlf input
           git checkout main
           git fetch origin
 

@@ -1,7 +1,6 @@
+![MLInfra Github Banner](docs/_images/mlinfra-banner-wide.png)
+
 <div align="center">
-
-  ![Banner Logo](docs/_images/mlinfra-banner-wide.png)
-
   <h3>
     Open source MLOps infrastructure deployment on Public Cloud providers
   </h3>
@@ -9,7 +8,7 @@
     <strong>Open source MLOps:</strong> Open source tools for different stages in an MLOps lifecycle.
   </div>
   <div>
-    <strong>Public Cloud Providers:</strong> Supporting all major cloud providers including AWS, GCP, Azure and AliBaba
+    <strong>Public Cloud Providers:</strong> Supporting all major cloud providers including AWS, GCP, Azure and Oracle Cloud
   </div>
   </br>
   <div>
@@ -29,7 +28,7 @@
 </div>
 </br>
 
-`mlinfra` is the swiss army knife for deploying scalable MLOps infrastructure. It aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
+`mlinfra` is the swiss army knife for deploying MLOps tooling anywhere. It aims to make MLOps infrastructure deployment easy and accessible to all ML teams by liberating IaC logic for creating MLOps stacks which is usually tied to other frameworks.
 
 Contribute to the project by opening a issue or joining project roadmap and design related discussion on [discord](https://discord.gg/8eYWVvEYmR). Complete roadmap will be released soon!
 
@@ -38,58 +37,26 @@ Contribute to the project by opening a issue or joining project roadmap and desi
 ### Requirements
 `mlinfra` requires the following to run perfectly:
 
-- `terraform` >= `1.8.0` should be installed on the system.
+- `terraform` >= `1.10.2` should be installed on the system.
 
 `mlinfra` can be installed simply by creating a python virtual environment and installing `mlinfra` pip package
 ```bash
-python -m venv venv
-source venv/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 pip install mlinfra
 ```
 
 Copy a deployment config from the [examples](https://github.com/mlinfra-io/mlinfra/tree/4d21aa465fa8d40aabcf9877f3f99c4ede687459/examples) folder, change your AWS account in the config file, configure your AWS credentials and deploy the configuration using
 
 ```bash
-mlinfra terraform --action apply --stack-config-path <path-to-your-config>
+mlinfra terraform apply --config-file <path-to-your-config>
 ```
 
 For more information, read the [mlinfra user guide](https://mlinfra.io/user_guide/)
 
-## Supported Providers
-
-The core purpose is to build for all cloud and deployment platforms out there. Any user should be able to just change the cloud provider or runtime environment (whether it be linux or windows) and have the capability to deploy the same tools.
-
-Currently a lot of work has been done around AWS
-
-This project will be supporting the following providers:
-- [x] [AWS](https://aws.amazon.com/)
-- [ ] [GCP](https://cloud.google.com/)
-- [ ] [Azure](https://azure.microsoft.com/en-us)
-- [ ] [Kubernetes](https://kubernetes.io/)
-  - [x] [EKS](https://aws.amazon.com/eks/)
-  - [ ] [GKE](https://cloud.google.com/kubernetes-engine)
-  - [ ] [AKS](https://azure.microsoft.com/en-us/products/kubernetes-service)
-- [ ] [DigitalOcean](https://www.digitalocean.com/)
-- [ ] Bare metal (such as [Hetzner](https://www.hetzner.com/de))
-- [ ] [Openstack](https://www.openstack.org/)
-- [ ] [docker compose](https://docs.docker.com/compose/)
-- [ ] [k3s](https://k3s.io/)
-- [x] [kind](https://kind.sigs.k8s.io/)
-
-## Supported MLOps Tools
-
-`mlinfra` intends to support as many [MLOps tools](https://github.com/EthicalML/awesome-production-machine-learning/) deployable in a platform in their standalone as well as high availability across different layers of an MLOps stack:
-- data_versioning
-- experiment_tracker
-- orchestrator
-- artifact_tracker / model_registry
-- model_inference
-- monitoring
-- alerting
-
 ## Deployment Config
 
-- `mlinfra` deploys infrastructure using declarative approach. It requires resources to be defined in a `yaml` file with the following format
+`mlinfra` deploys infrastructure using declarative approach. It requires resources to be defined in a `yaml` file with the following format
 
 ```yaml
 name: aws-mlops-stack
@@ -102,42 +69,70 @@ deployment:
 stack:
   data_versioning:
     - lakefs # can also be pachyderm or lakefs or neptune and so on
-  secrets_manager:
-    - secrets_manager # can also be vault or any other
   experiment_tracker:
     - mlflow # can be weights and biases or determined, or neptune or clearml and so on...
   orchestrator:
-    - zenml # can also be argo, or luigi, or airflow, or dagster, or prefect or flyte or kubeflow and so on...
-  orchestrator:
-    - aws-batch # can also be aws step functions or aws-fargate or aws-eks or azure-aks and so on...
-  runtime_engine:
-    - ray # can also be horovod or apache spark
-  artifact_tracker:
-    - mlflow # can also be neptune or clearml or lakefs or pachyderm or determined or wandb and so on...
-  # model registry and serving are quite close, need to think about them...
-  model_registry:
-    - bentoml # can also be  mlflow or neptune or determined and so on...
-  model_serving:
-    - nvidia triton # can also be bentoml or fastapi or cog or ray or seldoncore or tf serving
+    - zenml # can also be argo, or luigi, or airflow, or dagster, or prefect or flyte or kubeflow or ray and so on...
+  model_inference:
+    - bentoml # can also be ray or KF serving or seldoncore or tf serving
   monitoring:
-    - nannyML # can be grafana or alibi or evidently or neptune or mlflow or prometheus or weaveworks and so on...
+    - nannyML # can be grafana or alibi or evidently or neptune or prometheus or weaveworks and so on...
   alerting:
     - mlflow # can be mlflow or neptune or determined or weaveworks or prometheus or grafana and so on...
 ```
 
-- This was minimal spec for aws cloud as infra with custom applications. Other stacks such as feature_store, event streamers, loggers or [cost dashboards](https://www.kubecost.com/) can be added via community requests.
-- For more information, please [check out the docs](https://mlinfra.io/) for detailed documentation.
+- For examples, check out the [documentation](https://mlinfra.io/latest/code/local/kind/).
 
-## Vision
+- _*NOTE*_: This was minimal spec for aws cloud as infra with custom applications. Other stacks such as feature_store, event streamers, loggers or [cost dashboards](https://www.kubecost.com/) can be added via community requests. For more information, please [check out the docs](https://mlinfra.io/).
 
-- I realised MLOps infrastructure deployment is not as easy and common over the years of creating and deploying ML platforms for multiple teams. A lot of the times, teams start on wrong foot, leading to months of planning and implementation of MLOps infrastructure. This project is an attempt to create a common MLOps infrastructure deployment framework that can be used by any ML team to deploy their MLOps stack in a single command.
+## Supported Providers
+
+The core purpose is to build for all cloud and deployment platforms out there. Any user should be able to just change the cloud provider or runtime environment (whether it be linux or windows) and have the capability to deploy the same tools.
+
+mlinfra will be supporting the following providers:
+
+#### Local machine (for development)
+  - [x] [kind](https://kind.sigs.k8s.io/)
+  - [x] [minikube](https://minikube.sigs.k8s.io/)
+  - [ ] [k3s](https://k3s.io/)
+  - [ ] [docker compose](https://docs.docker.com/compose/)
+  - [ ] [k0s](https://k0sproject.io/) (for a more hybrid approach)
+
+#### Cloud Providers (for deployment and production ready)
+- [x] [AWS](https://aws.amazon.com/)
+- [ ] [GCP](https://cloud.google.com/)
+- [ ] [Azure](https://azure.microsoft.com/en-us)
+- [ ] [AliBaba](https://www.alibabacloud.com/)
+- [ ] [Openstack](https://www.openstack.org/)
+- [ ] [Oracle Cloud](https://www.oracle.com/cloud/)
+- [ ] Bare metal (such as [Hetzner](https://www.hetzner.com/de) or [DigitalOcean](https://www.digitalocean.com/))
+
+## Supported deployment types
+
+When deploying on managed cloud providers, users can deploy their infrastructure on top of either:
+- `Virtual Machines` such as [EC2](https://aws.amazon.com/ec2/) on AWS Cloud, [Google Virtual machine](https://cloud.google.com/compute/docs/instances) instances on GCP Cloud and [Azure Virtual Machine](https://azure.microsoft.com/en-us/products/virtual-machines) on Azure Cloud.
+- or [Kubernetes](https://kubernetes.io/) such as [EKS](https://aws.amazon.com/eks/) on AWS Cloud, [GKE](https://cloud.google.com/kubernetes-engine) on GCP Cloud and [AKS](https://azure.microsoft.com/en-us/products/kubernetes-service) on Azure Cloud.
+
+
+## Supported MLOps Tools
+
+`mlinfra` intends to support as many [MLOps tools](https://github.com/EthicalML/awesome-production-machine-learning/) deployable in a platform in their standalone as well as high availability across different layers of an MLOps stack:
+- `data_ingestion`
+- `data_versioning`
+- `data_processing`
+- `vector_database`
+- `experiment_tracker`
+- `orchestrator`
+- `model_inference`
+- `monitoring`
+- `alerting`
 
 ## Development
 
 - This project relies on terraform for IaC code and python to glue it all together.
 - To get started, install terraform and python.
-- You can install the required python packages by running `pip install -r requirements-dev.txt`
-- You can run any of the available examples from the `examples` folder by running the following command in root directory `python src/mlinfra/cli/cli.py terraform <action> --config-file examples/<application>/<cloud>-<application>.yaml` where `<action>` corresponds to terraform actions such as `plan`, `apply` and `destroy`.
+- You can install the required python packages by running `uv sync`
+- You can run any of the available examples from the `examples/` folder by running the following command in root directory `python src/mlinfra/cli/cli.py terraform <action> --config-file examples/<deployment-type>/<file>.yaml` where `<action>` corresponds to terraform actions such as `plan`, `apply` and `destroy`.
 
 For more information, please refer to the Engineering Wiki of the project (https://mlinfra.io/user_guide/) regarding what are the different components of the project and how they work together.
 
