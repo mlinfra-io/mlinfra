@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=45", "setuptools-scm[toml]>=7.1", "wheel"]
+requires = ["setuptools>=75.6.0", "setuptools-scm[toml]>=8.1.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,7 +7,7 @@ name = "mlinfra"
 description = "A tool to deploy mlops tooling at the click of a button."
 dynamic = ["version"]
 keywords = ["mlinfra"]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Ali Abbas Jaffri", email = "ali.abbasjaffri@live.com" }]
