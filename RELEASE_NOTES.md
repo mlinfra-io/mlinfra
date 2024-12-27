@@ -1,5 +1,13 @@
 # Release Notes
 
+## 2024-12-27 - version 0.0.27
+* minor-fixes by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/178
+
+
+[**Full Changelog**](https://github.com/mlinfra-io/mlinfra/compare/0.0.26...0.0.27)
+
+---
+
 ## 2024-12-27 - version 0.0.26
 
 * update-readme by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/176
