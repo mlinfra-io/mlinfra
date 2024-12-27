@@ -1,0 +1,36 @@
+name: aws-lakefs-k8s
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: kubernetes
+  config:
+    vpc:
+      create_database_subnets: true
+      enable_nat_gateway: true
+      one_nat_gateway_per_az: false
+    kubernetes:
+      k8s_version: "1.30"
+      cluster_endpoint_public_access: true
+      spot_instance: false
+      tags:
+        data_versioning: "lakefs"
+    node_groups:
+      - name: lakefs-node-group
+        instance_types:
+          - t3.medium
+        desired_size: 1
+        min_size: 1
+        max_size: 3
+        disk_size: 20
+stack:
+  - data_versioning:
+      name: lakefs
+      params:
+        remote_tracking: true
+        database_type: "postgres"
+        tags:
+          database_type: "postgres"
+          data_versioning: "lakefs"
+          remote_tracking: true
