@@ -50,6 +50,8 @@ repos:
     rev: v1.96.1
     hooks:
       - id: terraform_fmt
+        args:
+          - --args=-recursive
       - id: terraform_validate
   - repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.5.5
