@@ -1,5 +1,15 @@
 # Release Notes
 
+## 2024-12-27 - version 0.0.26
+## What's Changed
+* update-readme by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/176
+* updated python version and dependencies by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/177
+
+
+**Full Changelog**: https://github.com/mlinfra-io/mlinfra/compare/0.0.25...0.0.26
+
+---
+
 ## 2024-12-26 - version 0.0.25
 ## What's Changed
 * 173-feature-setup-uv-lock by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/174
