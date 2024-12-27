@@ -1,5 +1,15 @@
 # Release Notes
 
+## 2024-12-26 - version 0.0.25
+## What's Changed
+* 173-feature-setup-uv-lock by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/174
+* Changed terraform s3 backend from dynamodb to s3 lockfile by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/175
+
+
+**Full Changelog**: https://github.com/mlinfra-io/mlinfra/compare/0.0.24...0.0.25
+
+---
+
 ## 2024-11-04 - version 0.0.24
 
 * fix: updated-cli-for-utils by @aliabbasjaffri in [#157](https://github.com/mlinfra-io/mlinfra/pull/157)
