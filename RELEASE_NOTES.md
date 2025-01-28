@@ -1,5 +1,14 @@
 # Release Notes
 
+## 2025-01-28 - version 0.0.28
+## What's Changed
+* Removed hyperlint by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/179
+* mlflow update by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/180
+
+[**Full Changelog**](https://github.com/mlinfra-io/mlinfra/compare/0.0.27...0.0.28)
+
+---
+
 ## 2024-12-27 - version 0.0.27
 * minor-fixes by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/178
 
