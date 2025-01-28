@@ -1,7 +1,7 @@
 variable "mlflow_chart_version" {
   type        = string
   description = "mlflow Chart version."
-  default     = "2.0.5"
+  default     = "2.3.4"
 }
 
 variable "resources" {
