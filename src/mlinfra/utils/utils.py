@@ -20,8 +20,8 @@ import shutil
 import subprocess  # nosec
 import sys
 from typing import List
-
 from rich.traceback import install as rich_tr_install
+from logger_config import log
 
 from .constants import TF_PATH
 
@@ -50,9 +50,11 @@ def check_terraform_installed():
                 print(f"Terraform is installed. Version: {version_info}")
 
     except subprocess.CalledProcessError as e:
-        print(f"Error: {e}")
-        print("Terraform is not installed or an error occurred.")
-        print("Please install Terraform and try again.")
+        log.error(f"Terraform is not installed or an error occurred. "
+                    "Please install Terraform and try again.", error=str(e), error_type=type(e).__name__)
+        # print(f"Error: {e}")
+        # print("Terraform is not installed or an error occurred.")
+        # print("Please install Terraform and try again.")
         exit(1)
 
 
@@ -160,6 +162,7 @@ def check_docker_installed():
         if not version:
             return 1
     except Exception as e:
+        log.error("An error occurred while checking the docker version. ", error=str(e), error_type=type(e).__name__)
         return f"An error occurred while checking the docker version. {str(e)}"
 
 
@@ -172,6 +175,7 @@ def check_kind_installed():
         if not version:
             return 1
     except Exception as e:
+        log.error("An error occurred while checking the kind version. ", error=str(e), error_type=type(e).__name__)
         return f"An error occurred while checking the kind version. {str(e)}"
 
 
@@ -184,6 +188,7 @@ def check_minikube_installed():
         if not version:
             return 1
     except Exception as e:
+        log.error("An error occured while checking the minikube version. ", error=str(e), error_type=type(e).__name__)
         return f"An error occurred while checking the minikube version. {str(e)}"
 
 
@@ -195,7 +200,7 @@ def safe_run(func):  # type: ignore
             if hasattr(sys, "_called_from_test"):
                 raise e
             else:
-                print(e)
+                log.error("Unexpected error occurred", error=str(e), error_type=type(e).__name__)
                 return None
 
     return func_wrapper

@@ -16,6 +16,7 @@ import random
 import string
 import sys
 from typing import Optional
+from logger_config import log
 
 from getmac import get_mac_address
 from git.config import GitConfigParser
@@ -61,7 +62,8 @@ class AmplitudeClient:
         user_properties: Optional[dict] = None,
     ) -> None:
         if hasattr(sys, "_called_from_test") or VERSION == DEV_VERSION:
-            print("Not sending amplitude cause we think we're in a pytest or in dev")
+            # print("Not sending amplitude cause we think we're in a pytest or in dev")
+            log.info("Not sending amplitude cause we think we're in a pytest or in dev")
             return
         event_properties = event_properties or {}
         user_properties = user_properties or {}
@@ -69,6 +71,7 @@ class AmplitudeClient:
             random.SystemRandom().choices(string.ascii_letters + string.digits, k=16)
         )
         if event_type not in self.VALID_EVENTS:
+            log.exception("Invalid event type", event_type=event_type, valid_events=self.VALID_EVENTS)
             raise Exception(f"Invalid event type: {event_type}")
         body = {
             "api_key": self.api_key,
@@ -100,6 +103,8 @@ class AmplitudeClient:
                     timeout=10,
                 )
                 if r.status_code != codes.ok:
+                    log.error("Analytics request failed",status_code=r.status_code,response_body=r.text)
+
                     raise Exception(
                         "Hey, we're trying to send some analytics over to our devs for the "
                         f"product usage and we got a {r.status_code} response back. Could "
@@ -107,7 +112,7 @@ class AmplitudeClient:
                         f"failure with the aforementioned code and this response body: {r.text}"
                     )
             except Exception as err:
-                print(f"Unexpected error when connecting to amplitude {err=}, {type(err)=}")
-
+                #print(f"Unexpected error when connecting to amplitude {err=}, {type(err)=}")
+                log.error( "Unexpected error when connecting to Amplitude",error=str(err),error_type=type(err).__name__)
 
 amplitude_client = AmplitudeClient()
