@@ -14,6 +14,7 @@ import json
 import os
 from importlib import resources
 from typing import Tuple
+from logger_config import log
 
 # import hashlib
 import boto3
@@ -60,13 +61,14 @@ class Terraform:
     def check_config_file_exists(self):
         """This function is responsible for checking if the config file exists"""
         if not os.path.isfile(self.stack_config_path):
+            log.error(f"The file {self.stack_config_path} does not exist.")
             raise FileNotFoundError(f"The file {self.stack_config_path} does not exist.")
 
         with open(self.stack_config_path, "r") as stream:
             try:
                 data = yaml.safe_load(stream)
             except yaml.YAMLError as exc:
-                print(exc)
+                log.error("YAML parsing error",error=str(exc), error_type=type(exc).__name__)
                 raise ValueError(f"{exc}")
 
         # check if all required keys are present in the config file
@@ -74,6 +76,7 @@ class Terraform:
 
         if not all(key in data for key in required_keys):
             missing_keys = [key for key in required_keys if key not in data]
+            log.error("Missing keys!", missing_keys = missing_keys)
             raise ValueError(f"The following keys are missing: {', '.join(missing_keys)}")
 
     def clean_ml_infra_folder(self, delete_dir: bool = True):
@@ -84,8 +87,8 @@ class Terraform:
         if delete_dir:
             clean_tf_directory()
         else:
-            print("The param delete_dir is set as false, skipping the directory deletion")
-
+            log.info("The param delete_dir is set as false, skipping the directory deletion")
+            
     def read_stack_config(self) -> yaml:
         # clean the generated files directory
         clean_tf_directory()
@@ -113,8 +116,8 @@ class Terraform:
             # os.makedirs(f"{TF_PATH}/{stack_file_digest}", mode=0o777)
 
             return config
-
         except FileNotFoundError:
+            log.error("Stack config file not found", stack_config_path=self.stack_config_path)
             raise FileNotFoundError(f"Stack config file not found: {self.stack_config_path}")
 
     # TODO: write getters for state file name and region

@@ -45,13 +45,16 @@ class StateHelper:
                 Bucket=self.bucket_name,
             )
         except ClientError as e:
+
             if e.response["Error"]["Code"] == "AuthFailure":
+                log.error("AWS Authentication Failure", error_code=e.response["Error"]["Code"], error_message=e.response['Error']['Message'])
                 raise Exception(
                     "The AWS Credentials are not configured properly.\n"
                     "https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html#configuration"
                     "for more information."
                 )
             elif e.response["Error"]["Code"] == "AccessDenied":
+                log.error("Access Denied to S3 bucket", error_code=e.response['Error']['Code'], error_message=e.response['Error']['Message'], bucket_name=self.bucket_name)
                 raise Exception(
                     f"We were unable to access the S3 bucket, {self.bucket_name} on your AWS account.\n"
                     "Possible Issues: \n"
@@ -61,7 +64,7 @@ class StateHelper:
                     "Please fix these issues and try again!"
                 )
             elif e.response["Error"]["Code"] == "404":
-                print("S3 bucket for terraform state not found, creating a new one")
+                log.info("S3 bucket for Terraform state not found, creating a new one", bucket_name=self.bucket_name)
                 self._setup_bucket(
                     s3_client=s3,
                     region=self.region,
@@ -69,6 +72,7 @@ class StateHelper:
                     bucket_exists=False,
                 )
             else:
+                log.error("AWS S3 Error", error_code=e.response['Error']['Code'], error_message=e.response['Error']['Message'])
                 raise Exception(
                     f"{e.response['Error']['Code']} error with the message "
                     f"{e.response['Error']['Message']}"
@@ -88,12 +92,14 @@ class StateHelper:
             dynamodb.describe_table(TableName=self.dynamodb_table)
         except ClientError as e:
             if e.response["Error"]["Code"] != "ResourceNotFoundException":
+                log.error("DynamoDB error", error_code = e.response['Error']['Code'], error_message = e.response['Error']['Message'])
                 raise Exception(
                     "When trying to determine the status of the state dynamodb table, we got an "
                     f"{e.response['Error']['Code']} error with the message "
                     f"{e.response['Error']['Message']}"
                 )
-            print("Dynamodb table for terraform state not found, creating a new one")
+            # print("Dynamodb table for terraform state not found, creating a new one")
+            log.info("DynamoDB table for terraform state not found, creating a new one")
             dynamodb.create_table(
                 TableName=self.dynamodb_table,
                 KeySchema=[{"AttributeName": "LockID", "KeyType": "HASH"}],
@@ -121,6 +127,7 @@ class StateHelper:
                     )
                 time.sleep(10)
             except ClientError as e:
+                log.error("AWS S3 error", error_code = e.response['Error']['Code'], error_message = e.response['Error']['Message'])
                 raise Exception(
                     f"When trying to create a new bucket with name {bucket_name}, we got an "
                     f"{e.response['Error']['Code']} error with the message "
@@ -135,32 +142,33 @@ class StateHelper:
         try:
             response = s3_client.get_bucket_versioning(Bucket=bucket_name).get("Status")
             if response == "Enabled":
-                print("Versioning is already enabled on state bucket")
+                log.info("Versioning is already enabled on state bucket")
             else:
-                print("Versioning is not yet enabled on state bucket")
+                log.info("Versioning is not yet enabled on state bucket")
                 s3_client.put_bucket_versioning(
                     Bucket=bucket_name,
                     VersioningConfiguration={"Status": "Enabled"},
                 )
-                print("Versioning is now enabled on state bucket")
+                log.info("Versioning is now enabled on state bucket")
         except ClientError as e:
             if e.response["Error"]["Code"] != "NoSuchBucket":
+                log.error("Versioning Error", error_code = e.response['Error']['Code'], error_message = e.response['Error']['Message'])
                 raise Exception(
                     f"When trying to check if versioning is enabled on the state bucket, we got an "
                     f"{e.response['Error']['Code']} error with the message "
                     f"{e.response['Error']['Message']}"
                 )
-            print("State bucket does not exist")
+            log.info("State bucket does not exist")
 
         # checking for bucket lifecycle configuration
         # enable if it does not exist
         try:
             response = s3_client.get_bucket_lifecycle_configuration(Bucket=bucket_name).get("Rules")
             if response is not None:
-                print("Bucket lifecycle configuration already exists on state bucket")
+                log.info("Bucket lifecycle configuration already exists on state bucket")
         except ClientError as e:
             if e.response["Error"]["Code"] == "NoSuchLifecycleConfiguration":
-                print("Bucket lifecycle configuration does not exists on state bucket")
+                log.info("Bucket lifecycle configuration does not exists on state bucket")
                 s3_client.put_bucket_lifecycle(
                     Bucket=bucket_name,
                     LifecycleConfiguration={
@@ -179,4 +187,4 @@ class StateHelper:
                         ]
                     },
                 )
-                print("Bucket lifecycle configuration now exsits on state bucket")
+                log.info("Bucket lifecycle configuration now exsits on state bucket")
