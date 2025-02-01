@@ -20,7 +20,7 @@ from mlinfra.stack_processor.deployment_processor.deployment import (
     AbstractDeployment,
 )
 from mlinfra.utils.utils import generate_tf_json
-
+from logger_config import log
 
 class KindDeployment(AbstractDeployment):
     def __init__(
@@ -181,11 +181,8 @@ class KindDeployment(AbstractDeployment):
                             "config"
                         ]["kubernetes"].get(k8s_config, None)
                     else:
-                        print(
-                            """
-                            WARNING: The config value {k8s_config} is not user facing.
-                            Please check the k8s.yaml config file to see if this is a valid config value.
-                            """
+                        log.warning("The config value is not user-facing. Please check eks.yaml for validity.",
+                            config_value=k8s_config
                         )
 
         generate_tf_json(module_name="kind", json_module=k8s_json_module)
