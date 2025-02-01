@@ -20,6 +20,7 @@ from mlinfra.stack_processor.stack_processor.stack import (
 )
 from mlinfra.utils.constants import TF_PATH
 
+from logger_config import log
 
 class CloudVMStack(AbstractStack):
     """Class representing the CloudVMStack class."""
@@ -192,6 +193,7 @@ class CloudVMStack(AbstractStack):
 
     def generate(self):
         # logger.info("Processing Cloud Infrastructure")
+        log.info("Processing Cloud Infrastructure")
         self.process_stack_config()
         self.process_stack_inputs()
         self.process_stack_modules()

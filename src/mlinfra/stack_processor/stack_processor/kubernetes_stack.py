@@ -19,6 +19,7 @@ from mlinfra.stack_processor.stack_processor.stack import (
     AbstractStack,
 )
 from mlinfra.utils.constants import TF_PATH
+from logger_confing import log
 
 
 class KubernetesStack(AbstractStack):
@@ -207,7 +208,7 @@ class KubernetesStack(AbstractStack):
                 json.dump(json_output, tf_json, ensure_ascii=False, indent=2)
 
     def generate(self):
-        # logger.info("Processing Kubernetes Infrastructure")
+        log.info("Processing Kubernetes Infrastructure")
         self.process_stack_config()
         self.process_stack_inputs()
         self.process_stack_modules()

@@ -32,6 +32,7 @@ from mlinfra.stack_processor.stack_processor.kubernetes_stack import (
 )
 from mlinfra.stack_processor.stack_processor.local_stack import LocalStack
 
+from logger_confing import log
 
 class StackGenerator:
     """
@@ -73,6 +74,7 @@ class StackGenerator:
             or "deployment" not in self.stack_config
             or "stack" not in self.stack_config
         ):
+            log.exception("Stack config component is misssing")
             raise Exception("Stack config component is missing")
 
         # this has to be done now as the stack config is read
@@ -196,6 +198,7 @@ class StackGenerator:
             ).generate()
 
         else:
+            log.error("Deployment type not supported", deployment_type=deployment_type)
             raise ValueError(f"Deployment type {deployment_type} not supported")
 
     def configure_provider(self) -> CloudProvider:
@@ -224,4 +227,5 @@ class StackGenerator:
             local_provider.configure_provider()
             return CloudProvider.LOCAL
         else:
+            log.error("Cloud provider not supported")
             raise NotImplementedError("Cloud provider not supported")
