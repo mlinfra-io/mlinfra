@@ -16,6 +16,7 @@ from mlinfra.terraform.terraform import Terraform
 from mlinfra.utils.constants import TF_PATH
 from mlinfra.utils.utils import run_command
 from typing_extensions import Annotated
+from logger_config import log
 
 app = typer.Typer()
 
@@ -43,11 +44,8 @@ def generate_terraform_config(
     )
 
     run_command(["terraform", f"-chdir={TF_PATH}", "init"], capture_output=False)
-    print(
-        f"""
-            Terraform config has been generated in the {TF_PATH} folder.
-        """
-    )
+    log.info("Terraform config has been generated", folder_path = TF_PATH)
+    
     amplitude_client.send_event(
         amplitude_client.FINISH_GEN_TERRAFORM_EVENT,
         event_properties=current_properties,
