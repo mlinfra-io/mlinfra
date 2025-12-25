@@ -39,3 +39,5 @@ terraform.rc
 .mlinfra_stack/
 .mlinfra_local_state/
 site/
+.qodo
+.idea
