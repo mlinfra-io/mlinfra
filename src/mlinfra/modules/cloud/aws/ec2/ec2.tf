@@ -40,7 +40,7 @@ data "aws_ami" "amazon_linux_2023" {
 
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "~> 5.0.0"
+  version = "~> 6.0"
 
   subnet_id              = var.ec2_subnet_id
   vpc_security_group_ids = [var.default_vpc_sg, resource.aws_security_group.ec2_security_group.id]
@@ -55,13 +55,11 @@ module "ec2_instance" {
 
   iam_instance_profile = var.iam_instance_profile
 
-  root_block_device = [
-    {
-      encrypted   = true
-      volume_type = "gp3"
-      volume_size = 10
-    }
-  ]
+  root_block_device = {
+    encrypted = true
+    type      = "gp3"
+    size      = 10
+  }
 
   user_data = var.ec2_user_data
 
