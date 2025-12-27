@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # for documentation builds
       - name: Set up Python and dependencies
@@ -26,7 +26,7 @@ jobs:
       - name: Install build tools
         run: uv build
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: dist
           path: dist
@@ -39,7 +39,7 @@ jobs:
       pages: write
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0 # for documentation builds
           ssh-key: ${{ secrets.DEPLOY_KEY }}
@@ -84,7 +84,7 @@ jobs:
       id-token: write
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v4.3.0
+        uses: actions/download-artifact@v7.0.0
         with:
           name: dist
           path: dist

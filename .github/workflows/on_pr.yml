@@ -19,13 +19,13 @@ jobs:
       RUFF_CACHE_DIR: "${{ github.workspace }}/.cache/ruff"
       PRE_COMMIT_HOME: "${{ github.workspace }}/.cache/pre-commit"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0 # for documentation builds
       - name: Set up Python and dependencies
         uses: ./.github/actions/setup-python
       - name: Cache pre-commit tools
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ env.MYPY_CACHE_DIR }}
@@ -38,7 +38,7 @@ jobs:
     name: Test mlinfra on ubuntu-latest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Set up Python and dependencies
@@ -50,7 +50,7 @@ jobs:
     name: Build documentation for mlinfra
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Set up Python and dependencies
