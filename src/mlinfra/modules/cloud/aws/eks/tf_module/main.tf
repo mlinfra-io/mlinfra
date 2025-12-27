@@ -25,31 +25,31 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
 
-  cluster_name    = var.cluster_name
-  cluster_version = var.k8s_version
+  name               = var.cluster_name
+  kubernetes_version = var.k8s_version
 
   vpc_id                   = var.vpc_id
   subnet_ids               = var.subnet_ids
-  cluster_ip_family        = var.cluster_ip_family
+  ip_family                = var.cluster_ip_family
   control_plane_subnet_ids = var.subnet_ids
 
-  cluster_endpoint_private_access = var.cluster_endpoint_private_access
-  cluster_endpoint_public_access  = var.cluster_endpoint_public_access
+  endpoint_private_access = var.cluster_endpoint_private_access
+  endpoint_public_access  = var.cluster_endpoint_public_access
 
   create_kms_key = false
-  cluster_encryption_config = {
+  encryption_config = {
     provider_key_arn = aws_kms_key.eks.arn
     resources        = ["secrets"]
   }
 
-  cluster_addons = {
+  addons = {
     vpc-cni = {
       # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
       before_compute              = var.vpc_cni_addon.before_compute
       most_recent                 = var.vpc_cni_addon.most_recent
       resolve_conflicts_on_create = var.vpc_cni_addon.resolve_conflicts_on_create
       resolve_conflicts_on_update = var.vpc_cni_addon.resolve_conflicts_on_update
-      service_account_role_arn    = module.vpc_cni_irsa.iam_role_arn
+      service_account_role_arn    = module.vpc_cni_irsa.arn
       configuration_values        = jsonencode(var.vpc_cni_addon_configuration_values)
     }
     coredns = {
@@ -67,20 +67,13 @@ module "eks" {
       most_recent                 = var.ebs_csi_driver_addon.most_recent
       resolve_conflicts_on_create = var.ebs_csi_driver_addon.resolve_conflicts_on_create
       resolve_conflicts_on_update = var.ebs_csi_driver_addon.resolve_conflicts_on_update
-      service_account_role_arn    = module.ebs_csi_driver_irsa.iam_role_arn
+      service_account_role_arn    = module.ebs_csi_driver_irsa.arn
       configuration_values        = jsonencode(var.ebs_csi_driver_addon_configuration_values)
     }
   }
 
-  cluster_security_group_additional_rules = var.cluster_security_group_additional_rules
-  node_security_group_additional_rules    = var.node_security_group_additional_rules
-
-  # TODO: cannot pass it as a variable
-  # eks_managed_node_group_defaults = var.eks_managed_node_group_defaults
-  eks_managed_node_group_defaults = {
-    ebs_optimized                         = true
-    attach_cluster_primary_security_group = true
-  }
+  security_group_additional_rules      = var.cluster_security_group_additional_rules
+  node_security_group_additional_rules = var.node_security_group_additional_rules
 
   # Default node group that comes with the cluster
   eks_managed_node_groups = {
@@ -94,8 +87,10 @@ module "eks" {
       max_size     = var.max_size
       desired_size = var.desired_size
 
-      capacity_type  = var.spot_instance ? "SPOT" : "ON_DEMAND"
-      instance_types = var.instance_types
+      capacity_type                         = var.spot_instance ? "SPOT" : "ON_DEMAND"
+      instance_types                        = var.instance_types
+      attach_cluster_primary_security_group = true
+      ebs_optimized                         = true
 
       labels = var.labels
       taints = var.taints
@@ -107,11 +102,10 @@ module "eks" {
 }
 
 module "vpc_cni_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 6.2.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.2.3"
 
   # TODO: add support for ipv6
-  role_name_prefix      = var.vpc_cni_irsa_role_name_prefix
   attach_vpc_cni_policy = var.vpc_cni_irsa.attach_vpc_cni_policy
   vpc_cni_enable_ipv4   = var.vpc_cni_irsa.vpc_cni_enable_ipv4
 
@@ -126,10 +120,9 @@ module "vpc_cni_irsa" {
 }
 
 module "ebs_csi_driver_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 6.2.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
+  version = "~> 6.2.3"
 
-  role_name_prefix      = var.ebs_csi_driver_irsa_role_name_prefix
   attach_ebs_csi_policy = true
 
   oidc_providers = {
