@@ -23,7 +23,7 @@ resource "aws_kms_alias" "eks_key_alias" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 20.0"
+  version = "~> 21.0"
 
   cluster_name    = var.cluster_name
   cluster_version = var.k8s_version
@@ -108,7 +108,7 @@ module "eks" {
 
 module "vpc_cni_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.60.0"
+  version = "~> 6.2.0"
 
   # TODO: add support for ipv6
   role_name_prefix      = var.vpc_cni_irsa_role_name_prefix
@@ -127,7 +127,7 @@ module "vpc_cni_irsa" {
 
 module "ebs_csi_driver_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.60.0"
+  version = "~> 6.2.0"
 
   role_name_prefix      = var.ebs_csi_driver_irsa_role_name_prefix
   attach_ebs_csi_policy = true

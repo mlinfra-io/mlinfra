@@ -30,7 +30,7 @@ module "rds" {
   # which then breaks the aws kms and prevents the cluster to be created
   # see: # https://github.com/hashicorp/terraform-provider-aws/issues/34538
   # version            = "~> 6.3.0"
-  version = "~> 5.0"
+  version = "~> 6.0"
 
   identifier                     = "${var.rds_identifier}-default"
   instance_use_identifier_prefix = true
