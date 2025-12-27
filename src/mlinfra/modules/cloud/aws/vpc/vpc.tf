@@ -43,7 +43,7 @@ module "vpc_module" {
   # this breaks the aws provider as it has troubles with kms key creation
   # see: https://github.com/terraform-aws-modules/terraform-aws-vpc/pull/1023
   # and https://github.com/hashicorp/terraform-provider-aws/issues/34538
-  version = "~> 5.21.0"
+  version = "~> 6.5.0"
 
   depends_on = [aws_s3_bucket.vpc_logs_bucket]
 

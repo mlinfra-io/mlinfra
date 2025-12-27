@@ -21,16 +21,10 @@ module "rds_security_group" {
   tags = var.tags
 }
 
-# update module.rds version to 6.0
 module "rds" {
   create_db_instance = var.create_rds
   source             = "terraform-aws-modules/rds/aws"
-  # TODO: update provider version when this issue gets fixed
-  # cannot update module version as it updates the aws provider version
-  # which then breaks the aws kms and prevents the cluster to be created
-  # see: # https://github.com/hashicorp/terraform-provider-aws/issues/34538
-  # version            = "~> 6.3.0"
-  version = "~> 5.0"
+  version            = "~> 6.0"
 
   identifier                     = "${var.rds_identifier}-default"
   instance_use_identifier_prefix = true
@@ -64,4 +58,9 @@ module "rds" {
   backup_retention_period = var.backup_retention_period
 
   tags = var.tags
+}
+
+data "aws_secretsmanager_secret_version" "db_password" {
+  count     = var.create_rds ? 1 : 0
+  secret_id = module.rds.db_instance_master_user_secret_arn
 }

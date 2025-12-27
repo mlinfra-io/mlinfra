@@ -9,13 +9,13 @@ locals {
 # https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest/submodules/eks-managed-node-group
 module "eks_managed_node_group" {
   source  = "terraform-aws-modules/eks/aws//modules/eks-managed-node-group"
-  version = "~> 20.0"
+  version = "~> 21.0"
 
   for_each = { for k, v in var.node_groups : k => v }
 
-  name            = each.value.name
-  cluster_name    = each.value.cluster_name
-  cluster_version = each.value.cluster_version
+  name               = each.value.name
+  cluster_name       = each.value.cluster_name
+  kubernetes_version = each.value.cluster_version
 
   subnet_ids = each.value.subnet_ids
 
