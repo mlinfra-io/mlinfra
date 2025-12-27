@@ -9,12 +9,7 @@ resource "helm_release" "helm_chart" {
   atomic           = true
   values           = [var.values]
 
-  dynamic "set" {
-    for_each = var.set
-    content {
-      name  = set.value.name
-      value = set.value.value
-      type  = "auto"
-    }
-  }
+  set           = var.set
+  set_sensitive = var.set_sensitive
+  set_list      = var.set_list
 }

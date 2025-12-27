@@ -1,0 +1,56 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "dependencyDashboard": true,
+  "extends": [
+    "config:base"
+  ],
+  "lockFileMaintenance": {
+    "automerge": true,
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "automerge": true,
+      "matchCurrentVersion": "!/^0/",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "groupName": "python dependencies",
+      "matchManagers": [
+        "pep621",
+        "uv"
+      ],
+      "matchPackageNames": [
+        "*"
+      ]
+    },
+    {
+      "groupName": "terraform dependencies",
+      "matchManagers": [
+        "terraform",
+        "terraform-version"
+      ]
+    },
+    {
+      "groupName": "github actions",
+      "matchManagers": [
+        "github-actions"
+      ]
+    }
+  ],
+  "terraform": {
+    "enabled": true
+  },
+  "terraform-version": {
+    "enabled": true
+  },
+  "vulnerabilityAlerts": {
+    "automerge": true,
+    "labels": [
+      "security"
+    ]
+  }
+}

@@ -58,8 +58,27 @@ variable "set" {
   type = list(object({
     name  = string
     value = string
-    type  = string
+    type  = optional(string, "auto")
   }))
   description = "Setting values within the helm chart"
+  default     = []
+}
+
+variable "set_sensitive" {
+  type = list(object({
+    name  = string
+    value = string
+    type  = optional(string, "auto")
+  }))
+  description = "Setting sensitive values within the helm chart"
+  default     = []
+}
+
+variable "set_list" {
+  type = list(object({
+    name  = string
+    value = list(string)
+  }))
+  description = "Setting list values within the helm chart"
   default     = []
 }
