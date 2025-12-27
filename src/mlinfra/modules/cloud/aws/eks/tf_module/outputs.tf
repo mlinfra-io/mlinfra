@@ -10,6 +10,10 @@ output "cluster_endpoint" {
   value = module.eks.cluster_endpoint
 }
 
+output "cluster_service_cidr" {
+  value = module.eks.cluster_service_cidr
+}
+
 output "cluster_certificate_authority_data" {
   value = module.eks.cluster_certificate_authority_data
 }
