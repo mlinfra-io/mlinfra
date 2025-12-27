@@ -2,74 +2,74 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://mlinfra.io/latest/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/CONTRIBUTING/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/RELEASE_NOTES/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/SECURITY/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/about_me/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/acknowledgements/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/roadmap/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/code/aws/cloud_vm/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/code/aws/kubernetes/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/code/local/kind/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/code/local/minikube/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/application_config/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/cloud_config/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/stack_config/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/stack_config/deployment/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/stack_config/provider/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
     <url>
          <loc>https://mlinfra.io/latest/user_guide/stack_config/stack/</loc>
-         <lastmod>2025-01-28</lastmod>
+         <lastmod>2025-12-27</lastmod>
     </url>
 </urlset>
