@@ -6,7 +6,7 @@ terraform {
   required_providers {
     kind = {
       source  = "tehcyx/kind"
-      version = "~> 0.5"
+      version = "~> 0.10"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
@@ -14,7 +14,7 @@ terraform {
     }
     time = {
       source  = "hashicorp/time"
-      version = "~> 0.11"
+      version = "~> 0.13"
     }
   }
 }
