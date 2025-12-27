@@ -1,5 +1,22 @@
 # Release Notes
 
+## 2025-12-27 - version 0.0.29
+## What's Changed
+* deps: bumping outdated versions by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/183
+* Aliaj/added renovate by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/184
+* chore(deps): update github actions by @renovate[bot] in https://github.com/mlinfra-io/mlinfra/pull/186
+* chore(deps): update github actions (major) by @renovate[bot] in https://github.com/mlinfra-io/mlinfra/pull/189
+* chore(deps): lock file maintenance by @renovate[bot] in https://github.com/mlinfra-io/mlinfra/pull/191
+* chore(deps): lock file maintenance terraform dependencies by @renovate[bot] in https://github.com/mlinfra-io/mlinfra/pull/192
+* chore(config): migrate Renovate config by @renovate[bot] in https://github.com/mlinfra-io/mlinfra/pull/193
+
+## New Contributors
+* @renovate[bot] made their first contribution in https://github.com/mlinfra-io/mlinfra/pull/186
+
+**Full Changelog**: https://github.com/mlinfra-io/mlinfra/compare/0.0.28...0.0.29
+
+---
+
 ## 2025-01-28 - version 0.0.28
 ## What's Changed
 * Removed hyperlint by @aliabbasjaffri in https://github.com/mlinfra-io/mlinfra/pull/179
