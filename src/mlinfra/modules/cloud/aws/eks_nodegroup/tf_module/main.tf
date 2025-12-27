@@ -13,9 +13,9 @@ module "eks_managed_node_group" {
 
   for_each = { for k, v in var.node_groups : k => v }
 
-  name            = each.value.name
-  cluster_name    = each.value.cluster_name
-  cluster_version = each.value.cluster_version
+  name               = each.value.name
+  cluster_name       = each.value.cluster_name
+  kubernetes_version = each.value.cluster_version
 
   subnet_ids = each.value.subnet_ids
 
