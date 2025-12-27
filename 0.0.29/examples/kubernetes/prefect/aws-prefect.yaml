@@ -1,0 +1,10 @@
+name: aws-prefect-k8s
+provider:
+  name: aws
+  account_id: "793009824629"
+  region: "eu-central-1"
+deployment:
+  type: kubernetes
+stack:
+  - orchestrator:
+      name: prefect
