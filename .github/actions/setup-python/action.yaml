@@ -15,7 +15,7 @@ runs:
       shell: bash
     - uses: hashicorp/setup-terraform@v3
       with:
-        terraform_version: ${{ steps.env_name.outputs.value }}
+        terraform_version: ${{ steps.tf_version.outputs.value }}
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
