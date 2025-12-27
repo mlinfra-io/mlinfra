@@ -20,6 +20,10 @@ inputs:
     user_facing: false
     description: "EKS Cluster version"
     default: module.eks.cluster_version
+  - name: cluster_service_cidr
+    user_facing: false
+    description: "The CIDR block for the cluster service IP range."
+    default: module.eks.cluster_service_cidr
 outputs:
 clouds:
   - aws

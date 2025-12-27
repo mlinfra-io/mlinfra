@@ -209,6 +209,9 @@ class KubernetesDeployment(AbstractDeployment):
                     nodegroup_object["node_security_group_id"] = (
                         "${ module.eks.node_security_group_id }"
                     )
+                    nodegroup_object["cluster_service_cidr"] = (
+                        "${ module.eks.cluster_service_cidr }"
+                    )
 
                     nodegroups_json_module["module"]["eks_nodegroup"]["node_groups"].append(
                         nodegroup_object
