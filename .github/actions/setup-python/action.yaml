@@ -4,10 +4,10 @@ runs:
   using: "composite"
   steps:
     - name: Install uv
-      uses: astral-sh/setup-uv@v4
+      uses: astral-sh/setup-uv@v7
       with:
         # Install a specific version of uv.
-        version: "0.4.30"
+        version: "0.9.18"
     - name: Get Terraform Version
       id: tf_version
       run: |
@@ -15,7 +15,7 @@ runs:
       shell: bash
     - uses: hashicorp/setup-terraform@v3
       with:
-        terraform_version: ${{ steps.env_name.outputs.value }}
+        terraform_version: ${{ steps.tf_version.outputs.value }}
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
