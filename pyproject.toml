@@ -51,7 +51,7 @@ Documentation = "https://mlinfra.io/"
 
 [project.optional-dependencies]
 dev = [
-    "pre-commit",
+    "prek",
     "pytest",
     "pytest-mock",
     "zipp>=3.20.2"
