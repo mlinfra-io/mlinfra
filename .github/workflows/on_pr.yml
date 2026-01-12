@@ -33,7 +33,7 @@ jobs:
             ${{ env.PRE_COMMIT_HOME }}
           key: ${{ runner.os }}-${{ hashFiles('uv.lock', '.pre-commit-config.yaml') }}-linter-cache
       - name: Run pre-commit checks
-        uses: pre-commit/action@v3.0.1
+        uses: j178/prek-action@v1
   test:
     name: Test mlinfra on ubuntu-latest
     runs-on: ubuntu-latest
