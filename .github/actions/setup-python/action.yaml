@@ -7,7 +7,7 @@ runs:
       uses: astral-sh/setup-uv@v7
       with:
         # Install a specific version of uv.
-        version: "0.9.18"
+        version: "0.9.27"
     - name: Get Terraform Version
       id: tf_version
       run: |
