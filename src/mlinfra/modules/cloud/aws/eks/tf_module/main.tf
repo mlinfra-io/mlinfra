@@ -103,7 +103,7 @@ module "eks" {
 
 module "vpc_cni_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "~> 6.2.3"
+  version = "~> 6.4.0"
 
   # TODO: add support for ipv6
   attach_vpc_cni_policy = var.vpc_cni_irsa.attach_vpc_cni_policy
@@ -121,7 +121,7 @@ module "vpc_cni_irsa" {
 
 module "ebs_csi_driver_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts"
-  version = "~> 6.2.3"
+  version = "~> 6.4.0"
 
   attach_ebs_csi_policy = true
 
