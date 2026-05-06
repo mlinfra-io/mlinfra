@@ -115,6 +115,14 @@ resource "kubernetes_secret_v1" "prefect_secret" {
   metadata {
     name      = var.prefect_secret
     namespace = var.service_account_namespace
+    annotations = {
+      "meta.helm.sh/release-name"      = "prefect-server"
+      "meta.helm.sh/release-namespace" = var.service_account_namespace
+    }
+    labels = {
+      "app.kubernetes.io/managed-by" = "Helm"
+      "name"                         = var.prefect_secret
+    }
   }
   data = local.rds_connection_secret
   type = "Opaque"
