@@ -4,7 +4,7 @@ runs:
   using: "composite"
   steps:
     - name: Install uv
-      uses: astral-sh/setup-uv@v8.1.0
+      uses: astral-sh/setup-uv@v10.0.1
       with:
         # Install a specific version of uv.
         version: "0.11.10"
@@ -17,7 +17,7 @@ runs:
       with:
         terraform_version: ${{ steps.tf_version.outputs.value }}
     - name: Set up Python
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version-file: ".python-version"
         cache: "pip"
