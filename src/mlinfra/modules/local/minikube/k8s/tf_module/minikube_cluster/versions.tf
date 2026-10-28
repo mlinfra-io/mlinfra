@@ -6,7 +6,7 @@ terraform {
   required_providers {
     minikube = {
       source  = "scott-the-programmer/minikube"
-      version = "~> 0.7"
+      version = "~> 0.8"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
